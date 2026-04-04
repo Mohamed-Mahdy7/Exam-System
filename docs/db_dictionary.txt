@@ -1,0 +1,640 @@
+================================================================================
+  DATABASE DICTIONARY
+  ITI Student Examination Management System
+  Primary Database: PostgreSQL  |  15 Tables
+  All columns, data types, constraints, and descriptions
+================================================================================
+
+TABLE OWNERSHIP
+---------------
+  Mahdy   -->  Exams, ExamQuestion, StudentExam
+  Samy    -->  Departments, Track, TrackCourse, Course
+  Mariam  -->  Instructor, InstructorCourse, Student, StudentTrack
+  Omar    -->  Questions, Choice, ModelAnswer, StudentAnswer
+
+COLUMN LEGEND
+-------------
+  PK  = Primary Key
+  FK  = Foreign Key
+  NN  = NOT NULL
+  UQ  = UNIQUE
+  DEF = Default Value
+  CHK = Check Constraint
+
+================================================================================
+  CONTENTS
+================================================================================
+
+   1.  Departments          [Samy]
+   2.  Track                [Samy]
+   3.  TrackCourse          [Samy]
+   4.  Course               [Samy]
+   5.  Instructor           [Mariam]
+   6.  InstructorCourse     [Mariam]
+   7.  Student              [Mariam]
+   8.  StudentTrack         [Mariam]
+   9.  Questions            [Omar]
+  10.  Choice               [Omar]
+  11.  ModelAnswer          [Omar]
+  12.  StudentAnswer        [Omar]
+  13.  Exams                [Mahdy]
+  14.  ExamQuestion         [Mahdy]
+  15.  StudentExam          [Mahdy]
+
+  Appendix A  --  Foreign Key Reference Map
+  Appendix B  --  Stored Procedures Reference
+
+
+================================================================================
+  1. DEPARTMENTS                                                        [Samy]
+================================================================================
+  Stores ITI branch/department information.
+  Top-level entity in the organisational hierarchy.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | DepartmentID     | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented    |
+  |                  |          |    |    |    |    |         |                  | by the database.                       |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | DepartmentName   | TEXT     |    |    | Y  |    |         |                  | Full name of the department or branch  |
+  |                  |          |    |    |    |    |         |                  | (e.g. Software Development).           |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English (ar-x-icu).  |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Location         | TEXT     |    |    |    |    |         |                  | Physical location or city of the       |
+  |                  |          |    |    |    |    |         |                  | department. Optional field.            |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English.             |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  2. TRACK                                                              [Samy]
+================================================================================
+  Represents a specialisation track within a department
+  (e.g. Back-End, Data Analysis).
+  Each track belongs to exactly one department.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | TrackID          | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented.   |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | TrackName        | TEXT     |    |    | Y  |    |         |                  | Name of the track                      |
+  |                  |          |    |    |    |    |         |                  | (e.g. Back-End Development).           |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English.             |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | DepartmentID     | INT      |    | Y  | Y  |    |         |                  | FK --> Departments.DepartmentID.       |
+  |                  |          |    |    |    |    |         |                  | Links this track to its parent         |
+  |                  |          |    |    |    |    |         |                  | department. ON DELETE RESTRICT.        |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  3. TRACKCOURSE                                                        [Samy]
+================================================================================
+  Junction table linking tracks to courses.
+  A track can include many courses; a course can belong to many tracks.
+  Composite PK (TrackID, CourseID) -- no SERIAL column.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | TrackID          | INT      | Y  | Y  | Y  |    |         |                  | FK --> Track.TrackID.                  |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | CourseID         | INT      | Y  | Y  | Y  |    |         |                  | FK --> Course.CourseID.                |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  4. COURSE                                                             [Samy]
+================================================================================
+  Represents an academic course offered within the system.
+  Courses are linked to tracks via TrackCourse
+  and to instructors via InstructorCourse.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | CourseID         | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented.   |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | CourseName       | TEXT     |    |    | Y  |    |         |                  | Full name of the course                |
+  |                  |          |    |    |    |    |         |                  | (e.g. Database Design).                |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English.             |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | MinDegree        | INT      |    |    | Y  |    |         | MinDegree >= 0   | Minimum passing score for this course. |
+  |                  |          |    |    |    |    |         |                  | Used for pass/fail status in reports.  |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | MaxDegree        | INT      |    |    | Y  |    |         | MaxDegree >      | Maximum attainable score. Used in      |
+  |                  |          |    |    |    |    |         | MinDegree        | Percentage = TotalGrade::FLOAT /       |
+  |                  |          |    |    |    |    |         |                  | MaxDegree * 100.                       |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  5. INSTRUCTOR                                                       [Mariam]
+================================================================================
+  Stores instructor profiles.
+  Each instructor belongs to a department and can be assigned
+  to multiple courses via InstructorCourse.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | InstructorID     | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented.   |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Name             | TEXT     |    |    | Y  |    |         |                  | Full name of the instructor.           |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English (ar-x-icu).  |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Email            | TEXT     |    |    | Y  | Y  |         |                  | Unique email address for the           |
+  |                  |          |    |    |    |    |         |                  | instructor. Used for authentication    |
+  |                  |          |    |    |    |    |         |                  | and contact. UNIQUE at DB level.       |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | DepartmentNo     | INT      |    | Y  | Y  |    |         |                  | FK --> Departments.DepartmentID.       |
+  |                  |          |    |    |    |    |         |                  | Department this instructor belongs to. |
+  |                  |          |    |    |    |    |         |                  | ON DELETE RESTRICT.                    |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  6. INSTRUCTORCOURSE                                                 [Mariam]
+================================================================================
+  Junction table assigning instructors to courses.
+  An instructor can teach many courses; a course can have multiple instructors.
+  Composite PK (InstructorID, CourseID) -- no SERIAL column.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | InstructorID     | INT      | Y  | Y  | Y  |    |         |                  | FK --> Instructor.InstructorID.        |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | CourseID         | INT      | Y  | Y  | Y  |    |         |                  | FK --> Course.CourseID.                |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  7. STUDENT                                                          [Mariam]
+================================================================================
+  Stores student profiles.
+  Students are assigned to tracks via StudentTrack
+  and take exams recorded in StudentExam.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | StudentID        | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented.   |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Name             | TEXT     |    |    | Y  |    |         |                  | Full name of the student.              |
+  |                  |          |    |    |    |    |         |                  | Supports Arabic + English (ar-x-icu).  |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Email            | TEXT     |    |    | Y  | Y  |         |                  | Unique email address for the student.  |
+  |                  |          |    |    |    |    |         |                  | Used for identification and contact.   |
+  |                  |          |    |    |    |    |         |                  | UNIQUE constraint at DB level.         |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Phone            | TEXT     |    |    |    |    |         |                  | Student phone number. Optional.        |
+  |                  |          |    |    |    |    |         |                  | Stored as TEXT to accommodate country  |
+  |                  |          |    |    |    |    |         |                  | codes and formatting variations.       |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  8. STUDENTTRACK                                                     [Mariam]
+================================================================================
+  Junction table enrolling students in tracks.
+  A student can be enrolled in one or more tracks.
+  Composite PK (StudentID, TrackID) -- no SERIAL column.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | StudentID        | INT      | Y  | Y  | Y  |    |         |                  | FK --> Student.StudentID.              |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | TrackID          | INT      | Y  | Y  | Y  |    |         |                  | FK --> Track.TrackID.                  |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE RESTRICT.                    |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  9. QUESTIONS                                                          [Omar]
+================================================================================
+  Stores the question bank for all courses.
+  Supports two question types:
+    MCQ = Multiple Choice (4 options)
+    TF  = True/False (2 options)
+  Each question carries a point value used by CorrectExam.
+
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | Column Name      | Type        | PK | FK | NN | UQ | Default | Check                 | Description                      |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | QuestionID       | SERIAL      | Y  |    | Y  |    | auto    |                       | Unique identifier.               |
+  |                  |             |    |    |    |    |         |                       | Auto-incremented.                |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | CourseID         | INT         |    | Y  | Y  |    |         |                       | FK --> Course.CourseID.          |
+  |                  |             |    |    |    |    |         |                       | Course this question belongs to. |
+  |                  |             |    |    |    |    |         |                       | ON DELETE RESTRICT.              |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | QuestionText     | TEXT        |    |    | Y  |    |         |                       | Full question text.              |
+  |                  |             |    |    |    |    |         |                       | Supports Arabic + English.       |
+  |                  |             |    |    |    |    |         |                       | Use TEXT, not VARCHAR.           |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | Type             | TEXT        |    |    | Y  |    |         | Type IN ('MCQ','TF')  | Question type. Must be exactly   |
+  |                  |             |    |    |    |    |         |                       | 'MCQ' or 'TF'. Enforced by CHECK |
+  |                  |             |    |    |    |    |         |                       | constraint at column level.      |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+  | Points           | INT         |    |    | Y  |    |         | Points > 0            | Score for a correct answer.      |
+  |                  |             |    |    |    |    |         |                       | Must be positive. Used by        |
+  |                  |             |    |    |    |    |         |                       | CorrectExam to compute           |
+  |                  |             |    |    |    |    |         |                       | TotalGrade.                      |
+  +------------------+-------------+----+----+----+----+---------+-----------------------+----------------------------------+
+
+
+================================================================================
+  10. CHOICE                                                            [Omar]
+================================================================================
+  Stores answer options for each question.
+    MCQ questions must have exactly 4 Choice rows.
+    TF  questions must have exactly 2 Choice rows (True / False).
+  The correct choice is recorded in ModelAnswer.
+
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check                     | Description                        |
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+  | OptionID         | SERIAL   | Y  |    | Y  |    | auto    |                           | Unique identifier.                 |
+  |                  |          |    |    |    |    |         |                           | Auto-incremented.                  |
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+  | QuestionID       | INT      |    | Y  | Y  |    |         |                           | FK --> Questions.QuestionID.       |
+  |                  |          |    |    |    |    |         |                           | Question this choice belongs to.   |
+  |                  |          |    |    |    |    |         |                           | ON DELETE CASCADE.                 |
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+  | OptionText       | TEXT     |    |    | Y  |    |         |                           | Text of the answer option          |
+  |                  |          |    |    |    |    |         |                           | (e.g. 'True', 'SELECT * FROM ...'  |
+  |                  |          |    |    |    |    |         |                           | Supports Arabic + English.         |
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+  | OptionOrder      | INT      |    |    | Y  |    |         | OptionOrder BETWEEN 1     | Display order within its question. |
+  |                  |          |    |    |    |    |         | AND 4                     | 1-4 for MCQ, 1-2 for TF.          |
+  |                  |          |    |    |    |    |         |                           | Enforced by CHECK constraint.      |
+  +------------------+----------+----+----+----+----+---------+---------------------------+------------------------------------+
+
+
+================================================================================
+  11. MODELANSWER                                                       [Omar]
+================================================================================
+  Stores the single correct answer for each question.
+  UNIQUE on QuestionID enforces exactly one model answer per question.
+  HIDDEN from the student role at the database level (REVOKE ALL).
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | QuestionID       | INT      | Y  | Y  | Y  | Y  |         |                  | FK --> Questions.QuestionID.           |
+  |                  |          |    |    |    |    |         |                  | Also acts as PK (one row per           |
+  |                  |          |    |    |    |    |         |                  | question). ON DELETE CASCADE.          |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | CorrectOptionID  | INT      |    | Y  | Y  |    |         |                  | FK --> Choice.OptionID.                |
+  |                  |          |    |    |    |    |         |                  | The correct answer option.             |
+  |                  |          |    |    |    |    |         |                  | SetModelAnswer must validate that      |
+  |                  |          |    |    |    |    |         |                  | this OptionID belongs to the same      |
+  |                  |          |    |    |    |    |         |                  | QuestionID. ON DELETE RESTRICT.        |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  12. STUDENTANSWER                                                     [Omar]
+================================================================================
+  Records which answer option the student chose for each question
+  in an exam attempt. One row per answered question.
+  Unanswered questions have NO row and score 0.
+  Populated by SubmitExamAnswers stored procedure.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | StudentAnswerID  | SERIAL   | Y  |    | Y  |    | auto    |                  | Unique identifier. Auto-incremented.   |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | StudentExamID    | INT      |    | Y  | Y  |    |         |                  | FK --> StudentExam.StudentExamID.      |
+  |                  |          |    |    |    |    |         |                  | Exam attempt this answer belongs to.   |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | QuestionID       | INT      |    | Y  | Y  |    |         |                  | FK --> Questions.QuestionID.           |
+  |                  |          |    |    |    |    |         |                  | The question that was answered.        |
+  |                  |          |    |    |    |    |         |                  | ON DELETE RESTRICT.                    |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | ChosenOptionID   | INT      |    | Y  |    |    |         |                  | FK --> Choice.OptionID.                |
+  |                  |          |    |    |    |    |         |                  | The option the student selected.       |
+  |                  |          |    |    |    |    |         |                  | NULL allowed (unanswered question).    |
+  |                  |          |    |    |    |    |         |                  | CorrectExam scores NULL as 0.          |
+  |                  |          |    |    |    |    |         |                  | ON DELETE RESTRICT.                    |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  13. EXAMS                                                            [Mahdy]
+================================================================================
+  Represents a generated exam instance for a course.
+  Created by the GenerateExam stored procedure.
+  Each exam has a fixed pool of randomly selected questions
+  stored in ExamQuestion.
+
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | Column Name      | Type        | PK | FK | NN | UQ | Default  | Check              | Description                      |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | ExamID           | SERIAL      | Y  |    | Y  |    | auto     |                    | Unique identifier.               |
+  |                  |             |    |    |    |    |          |                    | Auto-incremented.                |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | ExamName         | TEXT        |    |    | Y  |    |          |                    | Name or title of the exam        |
+  |                  |             |    |    |    |    |          |                    | (e.g. 'Midterm Exam 2025').      |
+  |                  |             |    |    |    |    |          |                    | Supports Arabic + English.       |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | CourseID         | INT         |    | Y  | Y  |    |          |                    | FK --> Course.CourseID.          |
+  |                  |             |    |    |    |    |          |                    | Course this exam is for.         |
+  |                  |             |    |    |    |    |          |                    | ON DELETE RESTRICT.              |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | CreatedDate      | TIMESTAMP   |    |    | Y  |    | NOW()    |                    | Timestamp of exam creation.      |
+  |                  |             |    |    |    |    |          |                    | Defaults to current date/time    |
+  |                  |             |    |    |    |    |          |                    | when GenerateExam inserts the    |
+  |                  |             |    |    |    |    |          |                    | row.                             |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+  | TotalQuestions   | INT         |    |    | Y  |    |          | TotalQuestions > 0 | Total number of questions        |
+  |                  |             |    |    |    |    |          |                    | (NumMCQ + NumTF). Set by         |
+  |                  |             |    |    |    |    |          |                    | GenerateExam. Must be > 0.       |
+  +------------------+-------------+----+----+----+----+----------+--------------------+----------------------------------+
+
+
+================================================================================
+  14. EXAMQUESTION                                                     [Mahdy]
+================================================================================
+  Junction table linking exams to their randomly selected questions.
+  Populated entirely by GenerateExam stored procedure.
+  Composite PK (ExamID, QuestionID) prevents a question from appearing
+  twice in the same exam.
+
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | Column Name      | Type     | PK | FK | NN | UQ | Default | Check            | Description                            |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | ExamID           | INT      | Y  | Y  | Y  |    |         |                  | FK --> Exams.ExamID.                   |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE CASCADE.                     |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | QuestionID       | INT      | Y  | Y  | Y  |    |         |                  | FK --> Questions.QuestionID.           |
+  |                  |          |    |    |    |    |         |                  | Part of composite PK.                  |
+  |                  |          |    |    |    |    |         |                  | ON DELETE RESTRICT.                    |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+  | OrderNo          | INT      |    |    | Y  |    |         | OrderNo >= 1     | Display order of the question within   |
+  |                  |          |    |    |    |    |         |                  | the exam (1-based). Presents questions |
+  |                  |          |    |    |    |    |         |                  | in a consistent sequence.              |
+  +------------------+----------+----+----+----+----+---------+------------------+----------------------------------------+
+
+
+================================================================================
+  15. STUDENTEXAM                                                      [Mahdy]
+================================================================================
+  Records each student's attempt at an exam.
+  One row per student per exam attempt.
+  TotalGrade is populated by CorrectExam stored procedure
+  after answers are submitted and graded.
+
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | Column Name      | Type        | PK | FK | NN | UQ | Default | Check            | Description                      |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | StudentExamID    | SERIAL      | Y  |    | Y  |    | auto    |                  | Unique identifier.               |
+  |                  |             |    |    |    |    |         |                  | Auto-incremented.                |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | StudentID        | INT         |    | Y  | Y  |    |         |                  | FK --> Student.StudentID.        |
+  |                  |             |    |    |    |    |         |                  | Student who took the exam.       |
+  |                  |             |    |    |    |    |         |                  | ON DELETE CASCADE.               |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | ExamID           | INT         |    | Y  | Y  |    |         |                  | FK --> Exams.ExamID.             |
+  |                  |             |    |    |    |    |         |                  | The exam that was taken.         |
+  |                  |             |    |    |    |    |         |                  | ON DELETE RESTRICT.              |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | StartTime        | TIMESTAMP   |    |    | Y  |    |         |                  | When the student started the     |
+  |                  |             |    |    |    |    |         |                  | exam. Supplied by               |
+  |                  |             |    |    |    |    |         |                  | SubmitExamAnswers.               |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | EndTime          | TIMESTAMP   |    |    | Y  |    |         |                  | When the student submitted the   |
+  |                  |             |    |    |    |    |         |                  | exam. Supplied by               |
+  |                  |             |    |    |    |    |         |                  | SubmitExamAnswers.               |
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+  | TotalGrade       | INT         |    |    |    |    | 0       |                  | Total score earned by student.   |
+  |                  |             |    |    |    |    |         |                  | Defaults to 0 on insert.         |
+  |                  |             |    |    |    |    |         |                  | Updated by CorrectExam after     |
+  |                  |             |    |    |    |    |         |                  | comparing answers vs ModelAnswer.|
+  +------------------+-------------+----+----+----+----+---------+------------------+----------------------------------+
+
+
+================================================================================
+  APPENDIX A -- FOREIGN KEY REFERENCE MAP
+================================================================================
+  All 20 foreign key relationships in the schema.
+  ON DELETE behaviour:
+    CASCADE  = dependent rows are automatically deleted
+    RESTRICT = deletion of parent is blocked if children exist
+
+  +---------------------------------+-------------------------------+----------+----------------------------------------+
+  | Source Column                   | References                    | ON DELETE| Rationale                              |
+  +---------------------------------+-------------------------------+----------+----------------------------------------+
+  | Track.DepartmentID              | Departments.DepartmentID      | RESTRICT | Cannot delete a dept that has tracks   |
+  | TrackCourse.TrackID             | Track.TrackID                 | CASCADE  | Deleting a track removes course links  |
+  | TrackCourse.CourseID            | Course.CourseID               | CASCADE  | Deleting a course removes track links  |
+  | Instructor.DepartmentNo         | Departments.DepartmentID      | RESTRICT | Cannot delete a dept with instructors  |
+  | InstructorCourse.InstructorID   | Instructor.InstructorID       | CASCADE  | Deleting instructor removes assignments|
+  | InstructorCourse.CourseID       | Course.CourseID               | CASCADE  | Deleting course removes assignments    |
+  | StudentTrack.StudentID          | Student.StudentID             | CASCADE  | Deleting student removes enrolments    |
+  | StudentTrack.TrackID            | Track.TrackID                 | RESTRICT | Cannot delete track with students      |
+  | Questions.CourseID              | Course.CourseID               | RESTRICT | Cannot delete course with questions    |
+  | Choice.QuestionID               | Questions.QuestionID          | CASCADE  | Deleting question removes its choices  |
+  | ModelAnswer.QuestionID          | Questions.QuestionID          | CASCADE  | Deleting question removes model answer |
+  | ModelAnswer.CorrectOptionID     | Choice.OptionID               | RESTRICT | Cannot delete the correct-answer choice|
+  | Exams.CourseID                  | Course.CourseID               | RESTRICT | Cannot delete course that has exams    |
+  | ExamQuestion.ExamID             | Exams.ExamID                  | CASCADE  | Deleting exam removes question links   |
+  | ExamQuestion.QuestionID         | Questions.QuestionID          | RESTRICT | Cannot delete question used in exam    |
+  | StudentExam.StudentID           | Student.StudentID             | CASCADE  | Deleting student removes exam records  |
+  | StudentExam.ExamID              | Exams.ExamID                  | RESTRICT | Cannot delete exam students have taken |
+  | StudentAnswer.StudentExamID     | StudentExam.StudentExamID     | CASCADE  | Deleting attempt removes its answers   |
+  | StudentAnswer.QuestionID        | Questions.QuestionID          | RESTRICT | Cannot delete question with answers    |
+  | StudentAnswer.ChosenOptionID    | Choice.OptionID               | RESTRICT | Cannot delete a chosen answer option   |
+  +---------------------------------+-------------------------------+----------+----------------------------------------+
+
+
+================================================================================
+  APPENDIX B -- STORED PROCEDURES REFERENCE
+================================================================================
+  All critical and CRUD stored procedures required by the SRS.
+  Every procedure must include:
+    - Full COMMENT block: purpose, parameters, returns, exceptions
+    - BEGIN ... COMMIT transaction (where marked Required)
+    - EXCEPTION WHEN OTHERS THEN ROLLBACK (where marked Required)
+
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | Procedure                    | Owner  | Type      | Txn Reqd  | Signature                                           |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  |                                                                                                                      |
+  |  CRITICAL PROCEDURES                                                                                                 |
+  |                                                                                                                      |
+  | GenerateExam                 | Mahdy  | CRITICAL  | YES       | GenerateExam(                                       |
+  |                              |        |           |           |   CourseID      INT,                                |
+  |                              |        |           |           |   ExamName      TEXT,                               |
+  |                              |        |           |           |   NumMCQ        INT,                                |
+  |                              |        |           |           |   NumTF         INT                                 |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | Raises exception if insufficient questions.         |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | SubmitExamAnswers            | Samy   | CRITICAL  | YES       | SubmitExamAnswers(                                  |
+  |                              |        |           |           |   StudentID     INT,                                |
+  |                              |        |           |           |   ExamID        INT,                                |
+  |                              |        |           |           |   StartTime     TIMESTAMP,                          |
+  |                              |        |           |           |   EndTime       TIMESTAMP,                          |
+  |                              |        |           |           |   Answers       JSONB                               |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | JSONB: [{"question_id":1,"chosen_option_id":4},...] |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | CorrectExam                  | Samy   | CRITICAL  | YES       | CorrectExam(                                        |
+  |                              |        |           |           |   StudentExamID INT                                 |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | Updates StudentExam.TotalGrade.                     |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  |                                                                                                                      |
+  |  MANDATORY REPORTS                                                                                                   |
+  |                                                                                                                      |
+  | Report_StudentsByDepartment  | Mariam | Report    | --        | Report_StudentsByDepartment(                        |
+  |                              |        |           |           |   DepartmentNo  INT                                 |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | Returns: StudentID, Name, Email, Phone,             |
+  |                              |        |           |           |          TrackName, BranchName                      |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | Report_StudentGrades         | Mariam | Report    | --        | Report_StudentGrades(                               |
+  |                              |        |           |           |   StudentID     INT                                 |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | Returns: CourseName, ExamName, TotalGrade,          |
+  |                              |        |           |           |          MaxDegree, Percentage                      |
+  |                              |        |           |           | Percentage = TotalGrade::FLOAT / MaxDegree * 100    |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | Report_InstructorCourses     | Omar   | Report    | --        | Report_InstructorCourses(                           |
+  |                              |        |           |           |   InstructorID  INT                                 |
+  |                              |        |           |           | )                                                   |
+  |                              |        |           |           | Returns: CourseName, TrackName, StudentCount        |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  |                                                                                                                      |
+  |  CRUD PROCEDURES                                                                                                     |
+  |                                                                                                                      |
+  | InsertDepartment             | Samy   | CRUD      | YES       | InsertDepartment(DepartmentName TEXT, Location TEXT)|
+  | UpdateDepartment             | Samy   | CRUD      | YES       | UpdateDepartment(DepartmentID INT, ...)             |
+  | DeleteDepartment             | Samy   | CRUD      | YES       | DeleteDepartment(DepartmentID INT)                  |
+  | SelectDepartments            | Samy   | CRUD      | --        | SelectDepartments()                                 |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertTrack                  | Samy   | CRUD      | YES       | InsertTrack(TrackName TEXT, DepartmentID INT)       |
+  | UpdateTrack                  | Samy   | CRUD      | YES       | UpdateTrack(TrackID INT, ...)                       |
+  | DeleteTrack                  | Samy   | CRUD      | YES       | DeleteTrack(TrackID INT)                            |
+  | SelectTracksByDepartment     | Samy   | CRUD      | --        | SelectTracksByDepartment(DepartmentID INT)          |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertCourse                 | Samy   | CRUD      | YES       | InsertCourse(CourseName TEXT, Min INT, Max INT)     |
+  | UpdateCourse                 | Samy   | CRUD      | YES       | UpdateCourse(CourseID INT, ...)                     |
+  | DeleteCourse                 | Samy   | CRUD      | YES       | DeleteCourse(CourseID INT)                          |
+  | SelectCoursesByTrack         | Samy   | CRUD      | --        | SelectCoursesByTrack(TrackID INT)                   |
+  | AssignTrackToCourse          | Samy   | CRUD      | YES       | AssignTrackToCourse(TrackID INT, CourseID INT)      |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertInstructor             | Mariam | CRUD      | YES       | InsertInstructor(Name TEXT, Email TEXT, DeptNo INT) |
+  | UpdateInstructor             | Mariam | CRUD      | YES       | UpdateInstructor(InstructorID INT, ...)             |
+  | DeleteInstructor             | Mariam | CRUD      | YES       | DeleteInstructor(InstructorID INT)                  |
+  | SelectInstructors            | Mariam | CRUD      | --        | SelectInstructors()                                 |
+  | AssignInstructorToCourse     | Mariam | CRUD      | YES       | AssignInstructorToCourse(InstructorID INT,          |
+  |                              |        |           |           |                           CourseID INT)             |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertStudent                | Mariam | CRUD      | YES       | InsertStudent(Name TEXT, Email TEXT, Phone TEXT)    |
+  | UpdateStudent                | Mariam | CRUD      | YES       | UpdateStudent(StudentID INT, ...)                   |
+  | DeleteStudent                | Mariam | CRUD      | YES       | DeleteStudent(StudentID INT)                        |
+  | SelectStudents               | Mariam | CRUD      | --        | SelectStudents()                                    |
+  | AssignStudentToTrack         | Mariam | CRUD      | YES       | AssignStudentToTrack(StudentID INT, TrackID INT)    |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertQuestion               | Omar   | CRUD      | YES       | InsertQuestion(CourseID INT, QuestionText TEXT,     |
+  |                              |        |           |           |                Type TEXT, Points INT)               |
+  | UpdateQuestion               | Omar   | CRUD      | YES       | UpdateQuestion(QuestionID INT, ...)                 |
+  | DeleteQuestion               | Omar   | CRUD      | YES       | DeleteQuestion(QuestionID INT)                      |
+  | SelectQuestionsByCourse      | Omar   | CRUD      | --        | SelectQuestionsByCourse(CourseID INT)               |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertOption                 | Omar   | CRUD      | YES       | InsertOption(QuestionID INT, OptionText TEXT,       |
+  |                              |        |           |           |              OptionOrder INT)                       |
+  | UpdateOption                 | Omar   | CRUD      | YES       | UpdateOption(OptionID INT, OptionText TEXT)         |
+  | DeleteOption                 | Omar   | CRUD      | YES       | DeleteOption(OptionID INT)                          |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | SetModelAnswer               | Omar   | CRUD      | YES       | SetModelAnswer(QuestionID INT,                      |
+  |                              |        |           |           |                CorrectOptionID INT)                 |
+  |                              |        |           |           | Raises exception if CorrectOptionID does not        |
+  |                              |        |           |           | belong to the given QuestionID.                     |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  | InsertExam                   | Mahdy  | CRUD      | YES       | InsertExam(ExamName TEXT, CourseID INT)             |
+  | UpdateExam                   | Mahdy  | CRUD      | YES       | UpdateExam(ExamID INT, ExamName TEXT)               |
+  | DeleteExam                   | Mahdy  | CRUD      | YES       | DeleteExam(ExamID INT)                              |
+  | SelectExamsByCourse          | Mahdy  | CRUD      | --        | SelectExamsByCourse(CourseID INT)                   |
+  | SelectExamQuestions          | Mahdy  | CRUD      | --        | SelectExamQuestions(ExamID INT)                     |
+  | SelectStudentExamsByStudent  | Mahdy  | CRUD      | --        | SelectStudentExamsByStudent(StudentID INT)          |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+  |                                                                                                                      |
+  |  OPTIONAL REPORTS (bonus)                                                                                            |
+  |                                                                                                                      |
+  | Report_ExamQuestions         | Omar   | Optional  | --        | Report_ExamQuestions(ExamID INT)                    |
+  |                              |        |           |           | Returns: questions + all choices for an exam        |
+  | Report_StudentExamAnswers    | Omar   | Optional  | --        | Report_StudentExamAnswers(ExamID INT,               |
+  |                              |        |           |           |                            StudentID INT)           |
+  |                              |        |           |           | Returns: per-question answers for a student         |
+  +------------------------------+--------+-----------+-----------+-----------------------------------------------------+
+
+
+================================================================================
+  APPENDIX C -- DB ROLES & SECURITY
+================================================================================
+
+  ROLES
+  -----
+  admin_role       Created by: Mahdy
+                   Access: SUPERUSER / db_owner -- full access to all tables,
+                           procedures, and system functions.
+                   CREATE ROLE admin_role WITH LOGIN SUPERUSER;
+
+  instructor_role  Created by: Mariam
+                   Access: Read/write on course, question, student, and exam
+                           tables via stored procedures only.
+                   CREATE ROLE instructor_role WITH LOGIN;
+
+  student_role     Created by: Mariam
+                   Access: Read-only on own rows in StudentExam and
+                           StudentAnswer. Cannot access ModelAnswer.
+                   CREATE ROLE student_role WITH LOGIN;
+
+  GRANT SUMMARY PER TABLE
+  -----------------------
+  Table               instructor_role              student_role
+  ------------------  ---------------------------  ---------------------------
+  Departments         SELECT, INSERT, UPDATE, DEL  SELECT
+  Track               SELECT, INSERT, UPDATE, DEL  SELECT
+  TrackCourse         SELECT, INSERT, UPDATE, DEL  SELECT
+  Course              SELECT, INSERT, UPDATE, DEL  SELECT
+  Instructor          SELECT, INSERT, UPDATE, DEL  SELECT
+  InstructorCourse    SELECT, INSERT, UPDATE, DEL  REVOKE ALL
+  Student             SELECT, INSERT, UPDATE, DEL  SELECT (own row via RLS)
+  StudentTrack        SELECT, INSERT, UPDATE, DEL  SELECT
+  Questions           SELECT, INSERT, UPDATE, DEL  SELECT
+  Choice              SELECT, INSERT, UPDATE, DEL  SELECT
+  ModelAnswer         SELECT, INSERT, UPDATE, DEL  REVOKE ALL  <-- hidden
+  StudentAnswer       SELECT, INSERT, UPDATE, DEL  SELECT, INSERT (own rows)
+  Exams               SELECT, INSERT, UPDATE, DEL  SELECT
+  ExamQuestion        SELECT, INSERT, UPDATE, DEL  SELECT
+  StudentExam         SELECT, INSERT, UPDATE, DEL  SELECT (own rows via RLS)
+
+  NOTE: Row-Level Security (RLS) must be enabled on Student, StudentExam,
+        and StudentAnswer to restrict student_role to their own data only.
+
+================================================================================
+  END OF DATABASE DICTIONARY
+  ITI Student Examination Management System
+================================================================================
