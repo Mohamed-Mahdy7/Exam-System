@@ -1,32 +1,30 @@
--- Create Table Exams
-
-CREATE TABLE Exams (
-    ExamID SERIAL PRIMARY KEY,
-    ExamName TEXT,
-    CourseID INT,
-    CreatedDate TIMESTAMP DEFAULT NOW(),
-    TotalQuestions INT
+CREATE TABLE Instructor(
+	InstructorID SERIAL PRIMARY KEY ,
+	Name TEXT,
+	Email TEXT UNIQUE,
+	DepartmentNo INT REFERENCES Departments(DepartmentID) ON DELETE RESTRICT
 );
 
--- Create Table ExamQuestion
-
-CREATE TABLE ExamQuestion (
-    ExamID INT REFERENCES Exams(ExamID)
-    ON DELETE CASCADE,
-    QuestionID INT,
-    OrderNo INT CHECK (OrderNo >= 1)
+CREATE TABLE Student (
+	StudentID SERIAL PRIMARY KEY,
+	Name TEXT,
+	Email TEXT UNIQUE,
+	Phone TEXT
 );
 
--- Create Table StudentExam
-
-CREATE TABLE StudentExam (
-    StudentExamID SERIAL PRIMARY KEY,
-    StudentID INT,
-    ExamID INT,
-    StartTime TIMESTAMP,
-    EndTime TIMESTAMP,
-    TotalGrade INT
+CREATE TABLE InstructorCourse (
+	InstructorID INT REFERENCES Instructor(InstructorID) ON DELETE CASCADE,,
+	CourseID INT REFERENCES Course(CourseID) ON DELETE CASCADE,
+	PRIMARY KEY (InstructorID,CourseID)
 );
+
+
+CREATE TABLE StudentTrack(
+ 	StudentID INT REFERENCES Student(StudentID) ON DELETE CASCADE,
+	TrackID INT REFERENCES Track(TrackID) ON DELETE RESTRICT,
+	PRIMARY KEY (StudentID, TrackID)
+);
+
 
 -- Create Table Questions
 CREATE TABLE Questions (

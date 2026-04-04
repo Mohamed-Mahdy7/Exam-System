@@ -5,21 +5,6 @@
 
 ---
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Team](#team)
-- [Repository Structure](#repository-structure)
-- [Database Schema](#database-schema)
-- [Getting Started](#getting-started)
-- [Stored Procedures](#stored-procedures)
-- [Reports](#reports)
-- [Database Roles & Security](#database-roles--security)
-- [Backup & Restore](#backup--restore)
-- [Testing](#testing)
-
----
-
 ## Project Overview
 
 | Item | Detail |
@@ -50,34 +35,6 @@ The system manages the full examination lifecycle for ITI branches:
 | **Samy** | Org schema · `SubmitExamAnswers` · `CorrectExam` · Backup | `Departments` · `Track` · `TrackCourse` · `Course` |
 | **Mariam** | People schema · Roles & security · Reports · | `Instructor` · `InstructorCourse` · `Student` · `StudentTrack` |
 | **Omar** | Question schema · Question CRUD · Reports · Seed data · Delivery | `Questions` · `Choice` · `ModelAnswer` · `StudentAnswer` |
-
-### Sprint breakdown
-
-#### Sprint 1 — Days 1–3 · Design, Schema & Seed data
-| Member | Deliverables |
-|---|---|
-| Mahdy | Final ERD (draw.io + PDF) · DB Dictionary · `ar-x-icu` collation setup · `Exams`, `ExamQuestion`, `StudentExam` tables · Admin role · Seed data for his tables |
-| Samy | `Departments`, `Track`, `TrackCourse`, `Course` tables · FK rules · Indexes · Seed data for his tables |
-| Mariam | `Instructor`, `InstructorCourse`, `Student`, `StudentTrack` tables · UNIQUE constraints · `instructor_role` + `student_role` · GRANT/REVOKE for her tables · Seed data |
-| Omar | `Questions`, `Choice`, `ModelAnswer`, `StudentAnswer` tables · CHECK constraints · GRANT/REVOKE for his tables · Full question seed (30 MCQ + 20 TF) |
-
-#### Sprint 2 — Days 4–7 · All Stored Procedures
-| Member | Deliverables |
-|---|---|
-| Mahdy | `GenerateExam` · CRUD for `Exams`, `ExamQuestion`, `StudentExam` |
-| Samy | `SubmitExamAnswers` · `CorrectExam` · CRUD for `Departments`, `Track`, `Course` |
-| Mariam | CRUD for `Instructor`, `Student` · `AssignInstructorToCourse` · `AssignStudentToTrack` · all 3 mandatory reports |
-| Omar | CRUD for `Questions`, `Choice` · `SetModelAnswer` · all 3 mandatory reports · optional reports |
-
-#### Sprint 3 — Days 8–10 · Testing, Docs & Delivery
-| Member | Deliverables |
-|---|---|
-| Mahdy | Test `GenerateExam` · Test all reports · Write `README.md` |
-| Samy | Test `SubmitExamAnswers` + `CorrectExam` · `pg_dump` backup script |
-| Mariam | Test all CRUD · Verify role security · Finalise DB Dictionary |
-| Omar | Test question CRUD + `SetModelAnswer` · Optional reports · Repo cleanup · LinkedIn post |
-
----
 
 ## Repository Structure
 
