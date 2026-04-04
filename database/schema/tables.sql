@@ -1,3 +1,23 @@
+create table Departments (
+    DepartmentID serial primary key,
+    DepartmentName text not null,
+    Location text
+);
+
+create table Track (
+    TrackID serial primary key,
+    TrackName text not null,
+    DepartmentID int not null references Departments(DepartmentID) on delete restrict
+);
+
+create table Course(
+    CourseID serial primary key,
+    CourseName text not null,
+    MinDegree int not null,
+    MaxDegree int not null,
+    CHECK (MinDegree >= 0),
+    CHECK (MaxDegree > MinDegree)
+
 CREATE TABLE Instructor(
 	InstructorID SERIAL PRIMARY KEY ,
 	Name TEXT,
@@ -18,9 +38,23 @@ CREATE TABLE InstructorCourse (
 	PRIMARY KEY (InstructorID,CourseID)
 );
 
+create table TrackCourse(
+    TrackID int not null references Track(TrackID) on delete cascade,
+    CourseID int not null references Course(CourseID) on delete cascade,
+    primary key (TrackID, CourseID)
+);
+
+-- Create Table Exams
+CREATE TABLE Exams (
+    ExamID SERIAL PRIMARY KEY,
+    ExamName TEXT,
+    CourseID INT,
+    CreatedDate TIMESTAMP DEFAULT NOW(),
+    TotalQuestions INT
+
 
 CREATE TABLE StudentTrack(
- 	StudentID INT REFERENCES Student(StudentID) ON DELETE CASCADE,
+    StudentID INT REFERENCES Student(StudentID) ON DELETE CASCADE,
 	TrackID INT REFERENCES Track(TrackID) ON DELETE RESTRICT,
 	PRIMARY KEY (StudentID, TrackID)
 );
@@ -41,6 +75,11 @@ CREATE TABLE Choice (
     OptionText TEXT COLLATE "ar-x-icu" NOT NULL,
     OptionOrder INT
 );
+-- Create Table ExamQuestion
+CREATE TABLE ExamQuestion (
+    ExamID INT REFERENCES Exams(ExamID) ON DELETE CASCADE,
+    QuestionID INT,
+    OrderNo INT CHECK (OrderNo >= 1)
 
 -- Create Table ModelAnswer
 CREATE TABLE ModelAnswer (
@@ -48,6 +87,14 @@ CREATE TABLE ModelAnswer (
     QuestionID INT UNIQUE NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
     CorrectOptionID INT NOT NULL REFERENCES Choice(OptionID) ON DELETE CASCADE
 );
+-- Create Table StudentExam
+CREATE TABLE StudentExam (
+    StudentExamID SERIAL PRIMARY KEY,
+    StudentID INT,
+    ExamID INT,
+    StartTime TIMESTAMP,
+    EndTime TIMESTAMP,
+    TotalGrade INT
 
 -- Create Table StudentAnswer
 
