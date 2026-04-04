@@ -28,10 +28,3 @@ CourseID int not null references Course(CourseID) on delete cascade,
 primary key (TrackID ,CourseID )
 );
 
-
-
-create index idx_track_department on Track (DepartmentID);
-
-create index idx_trackcourse_track on TrackCourse (TrackID);
-
-create index idx_trackcourse_course on TrackCourse (CourseID);
