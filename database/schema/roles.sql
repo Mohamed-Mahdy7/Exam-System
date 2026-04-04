@@ -24,6 +24,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 ON TABLES TO admin_role;
 
 
+
 CREATE ROLE instructor_role WITH LOGIN PASSWORD 'instructor123';
 CREATE ROLE student_role WITH LOGIN PASSWORD 'student123';
 

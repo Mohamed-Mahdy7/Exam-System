@@ -14,16 +14,18 @@ CREATE TABLE Student (
 );
 
 CREATE TABLE InstructorCourse (
-	InstructorID INT REFERENCES Instructor(InstructorID),
-	CourseID INT REFERENCES Course(CourseID),
+	InstructorID INT REFERENCES Instructor(InstructorID) ON DELETE CASCADE,,
+	CourseID INT REFERENCES Course(CourseID) ON DELETE CASCADE,
 	PRIMARY KEY (InstructorID,CourseID)
 );
 
+
 CREATE TABLE StudentTrack(
  	StudentID INT REFERENCES Student(StudentID) ON DELETE CASCADE,
-	TrackID INT REFERENCES Track(TrackID) ON DELETE CASCADE,
+	TrackID INT REFERENCES Track(TrackID) ON DELETE RESTRICT,
 	PRIMARY KEY (StudentID, TrackID)
 );
+
 =======
 create table Departments (
 DepartmentID serial primary key ,
