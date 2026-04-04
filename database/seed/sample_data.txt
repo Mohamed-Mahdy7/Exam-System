@@ -103,15 +103,9 @@ INSERT INTO Questions (CourseID, QuestionText, Type, Points)
     INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FOREIGN KEY', 4) RETURNING OptionID INTO o4;
     INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
 -------------------------------------------------------------------------------
-END $$;
 --#####################################################################################################
 -- 2 -second module seed ( linux )
-DO $$
-DECLARE
-    q_id INT;
-    o1 INT; o2 INT; o3 INT; o4 INT;
-    t_id INT; f_id INT;
-BEGIN
+
 -- 1:
  INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
     VALUES (1, 'أي أمر يستخدم لعرض محتويات المجلد في Linux؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
@@ -201,17 +195,10 @@ INSERT INTO Questions (CourseID, QuestionText, Type, Points)
     INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
     INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
 
-END $$;
 --------------------------------------------------------------------------------
 -- ###################################################################################################################
 
 -- 3- third module seed ( networks )
-DO $$
-DECLARE
-    q_id INT;
-    o1 INT; o2 INT; o3 INT; o4 INT;
-    t_id INT; f_id INT;
-BEGIN
     -- 1: OSI Model Layers
     INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
     VALUES (3, 'How many layers are in the OSI model?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
@@ -333,16 +320,9 @@ BEGIN
     INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
 
 -------------------------------------------------------------------------------
-END $$;
 -- ################################################################################################################
 
 -- 4- fourth module seed ( bash script )
-DO $$
-DECLARE
-    q_id INT;
-    o1 INT; o2 INT; o3 INT; o4 INT;
-    t_id INT; f_id INT;
-BEGIN
     -- ==========================================
     -- BASH SCRIPTING MODULE
     -- ==========================================
@@ -470,16 +450,6 @@ BEGIN
     INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
 
 -------------------------------------------------------------------------------
-END $$;
--- ###########################################################################################################
--- 5- fifth module seed ( python ):
-DO $$
-DECLARE
-    q_id INT;
-    o1 INT; o2 INT; o3 INT; o4 INT;
-    t_id INT; f_id INT;
-BEGIN
-
     -- 1: File Extension
     INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
     VALUES (5, 'What is the correct file extension for Python files?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
