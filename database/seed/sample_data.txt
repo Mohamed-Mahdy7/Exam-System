@@ -1,0 +1,608 @@
+-- first module seed ( DBS )
+DO $$
+DECLARE
+    q_id INT;
+    o1 INT; o2 INT; o3 INT; o4 INT;
+    t_id INT; f_id INT;
+BEGIN
+
+    -- first module seed ( dbs )
+
+	-- 1 :
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'What does SQL stand for?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Strong Query Language', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Structured Query Language', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Simple Query Language', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'System Query Language', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+-----------------------------------------------------
+-- 2 :
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'What is the correct order of a SELECT statement?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SELECT, WHERE, FROM', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SELECT, FROM, WHERE', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FROM, WHERE, SELECT', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'WHERE, FROM, SELECT', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+--------------------------------------------------------
+-- 3 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'Which command is used to remove all records from a table without deleting the table itself?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DELETE', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DROP', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'TRUNCATE', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'REMOVE', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+------------------------------------------------------------------
+-- 4 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'A Primary Key can contain NULL values.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
+-----------------------------------------------------------------------------
+-- 5 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+-------------------------------------------------------------------------------
+-- 6 :
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'The GROUP BY statement is often used with aggregate functions.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+
+--------------------------------------------------------------------------------
+-- 7:
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'PostgreSQL is a NoSQL database management system.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO o2;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+-----------------------------------------------------------------------------
+-- 8 :
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'يمكن أن يحتوي الجدول الواحد على أكثر من Primary Key واحد.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO o2;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+-------------------------------------------------------------------------------
+-- 9 :
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'عملية تنظيم البيانات لتقليل التكرار تسمى بـ:', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Indexing', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Normalization', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Encryption', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Abstraction', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+-------------------------------------------------------------------
+-- 10 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'أي رمز يستخدم لتمثيل "أي عدد من الحروف" عند استخدام LIKE في SQL؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '_ (Underscore)', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '* (Asterisk)', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '% (Percent)', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '# (Hashtag)', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+--------------------------------------------------------------------------------
+-- 11:
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'ما هو القيد (Constraint) الذي يمنع تكرار القيم ولا يسمح بـ NULL؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'UNIQUE', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'NOT NULL', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'PRIMARY KEY', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FOREIGN KEY', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+-------------------------------------------------------------------------------
+END $$;
+--#####################################################################################################
+-- 2 -second module seed ( linux )
+DO $$
+DECLARE
+    q_id INT;
+    o1 INT; o2 INT; o3 INT; o4 INT;
+    t_id INT; f_id INT;
+BEGIN
+-- 1:
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (1, 'أي أمر يستخدم لعرض محتويات المجلد في Linux؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cd', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'mkdir', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'pwd', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+---------------------------------------------
+-- 2:
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'أي أمر يستخدم لتغيير صلاحيات الملفات في Linux؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chown', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chgrp', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cp', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+------------------------------------------------
+-- 3:
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'ما هو الأمر الذي يعرض المسار الحالي الذي تقف فيه؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'dir', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'path', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'pwd', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cd', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+--------------------------------------------------------------------
+-- 4:
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'نظام Linux هو نظام تشغيل مفتوح المصدر.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+--------------------------------------------------
+-- 5:
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'أمر "mkdir" يستخدم لمسح المجلدات الفارغة.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
+--------------------------------------------------
+-- 6 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'Which command is used to list all files, including hidden ones, in Linux?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -l', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -a', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -h', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -s', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+------------------------------------------------------------------------------
+-- 7:
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'Which command is used to search for a specific pattern within a file?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'find', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'locate', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'grep', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'search', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+------------------------------------------------------------------
+-- 8:
+ INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'What does the "sudo" command stand for?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SuperUser Do', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'System User Do', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Standard User Do', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Secure User Do', 4) RETURNING OptionID INTO o4;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
+
+---------------------------------------------------------------
+-- 9:
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'الأمر "rm" يستخدم لحذف الملفات والمجلدات في Linux.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+--------------------------------------------------------------------
+-- 10:
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (2, 'The "cd .." command is used to move one level up in the directory tree.', 'TF', 1) RETURNING QuestionID INTO q_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+END $$;
+--------------------------------------------------------------------------------
+-- ###################################################################################################################
+
+-- 3- third module seed ( networks )
+DO $$
+DECLARE
+    q_id INT;
+    o1 INT; o2 INT; o3 INT; o4 INT;
+    t_id INT; f_id INT;
+BEGIN
+    -- 1: OSI Model Layers
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'How many layers are in the OSI model?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '4 Layers', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '5 Layers', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '7 Layers', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '8 Layers', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    -----------------------------------------------------
+
+    -- 2: IP Address Length
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'What is the bit length of an IPv6 address?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '32 bits', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '64 bits', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '128 bits', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '256 bits', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    --------------------------------------------------------
+
+    -- 3: Protocols
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'Which protocol is used to securely transfer files over a network?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'HTTP', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SFTP', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SMTP', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Telnet', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    ------------------------------------------------------------------
+
+    -- 4: TCP vs UDP (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'UDP is a connection-oriented protocol that guarantees delivery.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
+
+    -----------------------------------------------------------------------------
+
+    -- 5: Network Devices (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'A Router operates at the Network Layer (Layer 3) of the OSI model.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -------------------------------------------------------------------------------
+
+    -- 6: DNS
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'Which service translates domain names (like google.com) into IP addresses?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DHCP', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FTP', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DNS', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SNMP', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    --------------------------------------------------------------------------------
+
+    -- 7: MAC Addresses (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'A MAC address is also known as a physical address.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -----------------------------------------------------------------------------
+
+    -- 8: DHCP (Arabic True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'وظيفة بروتوكول DHCP هي توزيع عناوين IP تلقائياً على الأجهزة.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO o2;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
+
+    -------------------------------------------------------------------------------
+
+    -- 9: Hub vs Switch (Arabic MCQ)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'أي من الأجهزة التالية يعتبر أذكى في توجيه البيانات داخل الشبكة المحلية؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Hub', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Switch', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Repeater', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Bridge', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    -------------------------------------------------------------------
+
+    -- 10: Port Numbers
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (3, 'ما هو رقم المنفذ (Port Number) الافتراضي لبروتوكول HTTPS؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '21', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '80', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '443', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '3306', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+-------------------------------------------------------------------------------
+END $$;
+-- ################################################################################################################
+
+-- 4- fourth module seed ( bash script )
+DO $$
+DECLARE
+    q_id INT;
+    o1 INT; o2 INT; o3 INT; o4 INT;
+    t_id INT; f_id INT;
+BEGIN
+    -- ==========================================
+    -- BASH SCRIPTING MODULE
+    -- ==========================================
+
+    -- 1: The Shebang
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'What is the correct shebang line to start a Bash script?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '#!/bin/bash', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '#/bin/bash', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '!/bin/bash', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'bin/bash', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
+
+    -----------------------------------------------------
+
+    -- 2: Variable Assignment
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'Which of the following is the correct way to assign a value to a variable in Bash?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var = "value"', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var := "value"', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var="value"', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'set var "value"', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    --------------------------------------------------------
+
+    -- 3: Permissions
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'Which command makes a script file named "script.sh" executable?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod +x script.sh', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'run +x script.sh', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod 444 script.sh', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'bash +e script.sh', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
+
+    ------------------------------------------------------------------
+
+    -- 4: Redirection (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'The ">" operator appends output to the end of an existing file.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
+
+    -----------------------------------------------------------------------------
+
+    -- 5: Accessing Variables (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'To access the value of a variable named "NAME", you must use "$NAME".', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -------------------------------------------------------------------------------
+
+    -- 6: Exit Status
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'Which special variable holds the exit status of the last executed command?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$#', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$@', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$!', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$?', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o4);
+
+    --------------------------------------------------------------------------------
+
+    -- 7: Comments (Arabic True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'يتم استخدام الرمز "#" لكتابة التعليقات (Comments) في Bash.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -----------------------------------------------------------------------------
+
+    -- 8: Numeric Comparison (Arabic MCQ)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'أي خيار يستخدم للمقارنة إذا كان رقم ما "أكبر من" (Greater Than) رقم آخر في Bash؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-eq', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-gt', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-lt', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-ne', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    -------------------------------------------------------------------------------
+
+    -- 9: User Input
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'Which command is used to accept input from the user during script execution?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'get', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'input', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'read', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'write', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    -------------------------------------------------------------------
+
+    -- 10: Logical AND
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (4, 'What is the logical AND operator used between two commands in Bash?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '&', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '&&', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '||', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '|', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+-------------------------------------------------------------------------------
+END $$;
+-- ###########################################################################################################
+-- 5- fifth module seed ( python ):
+DO $$
+DECLARE
+    q_id INT;
+    o1 INT; o2 INT; o3 INT; o4 INT;
+    t_id INT; f_id INT;
+BEGIN
+
+    -- 1: File Extension
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'What is the correct file extension for Python files?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.pt', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.py', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.pyt', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.python', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    -----------------------------------------------------
+
+    -- 2: Indentation (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'In Python, indentation is used to define a block of code.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    --------------------------------------------------------
+
+    -- 3: Function Definition
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'Which keyword is used to create a function in Python?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'function', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'def', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'define', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'func', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    ------------------------------------------------------------------
+
+    -- 4: List Mutability (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'A Python "List" is immutable, meaning its elements cannot be changed after creation.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
+
+    -----------------------------------------------------------------------------
+
+    -- 5: Comments (Arabic True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'يستخدم الرمز "#" لكتابة تعليق (Comment) من سطر واحد في بايثون.', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -------------------------------------------------------------------------------
+
+    -- 6: Logical Operators
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'Which operator is used to check if two values are equal?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '=', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '==', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'is', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '===', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+
+    --------------------------------------------------------------------------------
+
+    -- 7: Power Operator (Arabic MCQ)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'أي رمز يستخدم لحساب "الأس" (Power) في بايثون؟ (مثلاً 2 أس 3)', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '^', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '^^', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '**', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '//', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    -----------------------------------------------------------------------------
+
+    -- 8: Case Sensitivity (True/False)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'Python is a case-sensitive language (e.g., "Var" and "var" are different).', 'TF', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+
+    -------------------------------------------------------------------------------
+
+    -- 9: Data Structures (MCQ)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'Which data structure stores key-value pairs in Python?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'List', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Set', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Dictionary', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Tuple', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+    -------------------------------------------------------------------
+
+    -- 10: Input Function (Arabic MCQ)
+    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
+    VALUES (5, 'ما هي الدالة المستخدمة لاستقبال البيانات من المستخدم في بايثون؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'scanf()', 1) RETURNING OptionID INTO o1;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'get()', 2) RETURNING OptionID INTO o2;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'input()', 3) RETURNING OptionID INTO o3;
+    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'read()', 4) RETURNING OptionID INTO o4;
+
+    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
+
+-------------------------------------------------------------------------------
+END $$;
+
+
+
+

@@ -26,3 +26,9 @@ ON DELETE CASCADE,
 ADD CONSTRAINT fk_exam
 REFERENCES Exam(ExamID)
 ON DELETE RESTRICT;
+
+-- add foreign key for Question
+ALTER TABLE Questions 
+ADD CONSTRAINT FK_Questions_Course 
+FOREIGN KEY (CourseID) REFERENCES Course(CourseID) 
+ON DELETE CASCADE;

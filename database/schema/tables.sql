@@ -27,16 +27,16 @@ CREATE TABLE StudentExam (
     EndTime TIMESTAMP,
     TotalGrade INT
 );
--- CREATE TABLE QUESTIONS
+
+-- Create Table Questions
 CREATE TABLE Questions (
     QuestionID SERIAL PRIMARY KEY,
-    CourseID INT NOT NULL,
-    QuestionText TEXT NOT NULL,
+    CourseID INT NOT NULL, 
+    QuestionText TEXT COLLATE "ar-x-icu" NOT NULL,
     Type TEXT CHECK (Type IN ('MCQ', 'TF')),
     Points INT DEFAULT 1
 );
-
--- CREATE TABLE CHOICE
+-- Create Table Choice
 CREATE TABLE Choice (
     OptionID SERIAL PRIMARY KEY,
     QuestionID INT NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
@@ -44,17 +44,19 @@ CREATE TABLE Choice (
     OptionOrder INT
 );
 
--- CREATE TABLE MODEL ANSWER
+-- Create Table ModelAnswer
 CREATE TABLE ModelAnswer (
-    QuestionID INT PRIMARY KEY REFERENCES Questions(QuestionID) ON DELETE CASCADE,
+    ModelAnswerID SERIAL PRIMARY KEY,
+    QuestionID INT UNIQUE NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
     CorrectOptionID INT NOT NULL REFERENCES Choice(OptionID) ON DELETE CASCADE
 );
 
--- CREATE TABLE STUDENT ANSWER
+-- Create Table StudentAnswer
+
 CREATE TABLE StudentAnswer (
     StudentAnswerID SERIAL PRIMARY KEY,
-    StudentExamID INT NOT NULL REFERENCES StudentExam(StudentExamID) ON DELETE CASCADE,
-    QuestionID INT NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
-    ChosenOptionID INT REFERENCES Choice(OptionID) ON DELETE CASCADE,
-       UNIQUE (StudentExamID, QuestionID)
+    StudentExamID INT NOT NULL REFERENCES StudentExam(StudentExamID) ON DELETE CASCADE, 
+    QuestionID INT NOT NULL REFERENCES Questions(QuestionID) ON DELETE RESTRICT, 
+    ChosenOptionID INT REFERENCES Choice(OptionID) ON DELETE RESTRICT, 
+    UNIQUE (StudentExamID, QuestionID)
 );
