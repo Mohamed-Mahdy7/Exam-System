@@ -1,7 +1,7 @@
 create table Departments (
 DepartmentID serial primary key ,
 DepartmentName text not null,
-location text
+Location text
 );
 
 
