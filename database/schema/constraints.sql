@@ -25,7 +25,7 @@ REFERENCES Student(StudentID)
 ON DELETE CASCADE,
 ADD CONSTRAINT fk_exam
 FOREIGN KEY (ExamID)
-REFERENCES Exam(ExamID)
+REFERENCES Exams(ExamID)
 ON DELETE RESTRICT;
 
 -- add foreign key for Question

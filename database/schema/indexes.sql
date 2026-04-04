@@ -11,7 +11,7 @@ CREATE INDEX idx_studentTrack_student ON StudentTrack(StudentID);
 CREATE INDEX idx_studentTrack_track ON StudentTrack(TrackID);
 CREATE INDEX idx_instructorCourse_course ON InstructorCourse(CourseID);
 
-CREATE index idx_exam_couse ON Exam(CourseID);
+CREATE index idx_exam_couse ON Exams(CourseID);
 CREATE index idx_examquestion_exam ON ExamQuestion(ExamID);
 CREATE index idx_examquestion_question ON ExamQuestion(QuestionID);
 CREATE index idx_studentexam_student ON StudentExam(StudentID)

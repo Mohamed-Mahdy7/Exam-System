@@ -26,18 +26,20 @@ ON TABLES TO admin_role;
 
 
 CREATE ROLE instructor_role WITH LOGIN PASSWORD 'instructor123';
-CREATE ROLE student_role WITH LOGIN PASSWORD 'student123';
 
 GRANT SELECT , INSERT ,UPDATE ,DELETE ON Instructor TO instructor_role;
-GRANT SELECT ON Instructor TO student_role;
-
 GRANT SELECT , INSERT ,UPDATE ,DELETE ON Student TO instructor_role;
-GRANT SELECT ON Student TO student_role;
-
 GRANT SELECT ,INSERT ,UPDATE ,DELETE ON StudentTrack TO instructor_role;
-GRANT SELECT ON StudentTrack TO student_role;
-
 GRANT SELECT, INSERT, UPDATE, DELETE ON InstructorCourse TO instructor_role;
+
+
+
+CREATE ROLE student_role WITH LOGIN PASSWORD 'student123';
+
+GRANT SELECT ON Instructor TO student_role;
+GRANT SELECT ON StudentTrack TO student_role;
+GRANT SELECT ON Student TO student_role;
+REVOKE INSERT , UPDATE, DELETE ON Student FROM student_role;
 REVOKE ALL ON InstructorCourse FROM student_role;
 
-REVOKE INSERT , UPDATE, DELETE ON Student FROM student_role;
+
