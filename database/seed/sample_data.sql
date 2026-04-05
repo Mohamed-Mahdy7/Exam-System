@@ -1,3 +1,196 @@
+-- Departments (5+)
+INSERT INTO Departments (DepartmentName, Location) VALUES
+('Software Engineering', 'Building A'),
+('Networking', 'Building B'),
+('Data Science', 'Building C'),
+('Cyber Security', 'Building D'),
+('Artificial Intelligence', 'Building E');
+
+-- Tracks (4 per department = 20 total)
+INSERT INTO Track (TrackName, DepartmentID) VALUES
+-- Software Engineering (1)
+('Web Development', 1),
+('Mobile Development', 1),
+('Desktop Applications', 1),
+('DevOps Engineering', 1),
+
+-- Networking (2)
+('Network Administration', 2),
+('Cloud Networking', 2),
+('Wireless Networks', 2),
+('Network Security', 2),
+
+-- Data Science (3)
+('Data Analysis', 3),
+('Big Data Engineering', 3),
+('Business Intelligence', 3),
+('Data Visualization', 3),
+
+-- Cyber Security (4)
+('Ethical Hacking', 4),
+('Digital Forensics', 4),
+('Security Operations', 4),
+('Cryptography', 4),
+
+-- Artificial Intelligence (5)
+('Machine Learning', 5),
+('Deep Learning', 5),
+('Natural Language Processing', 5),
+('Computer Vision', 5);
+
+-- Courses (10+ with valid Min/Max)
+INSERT INTO Course (CourseName, MinDegree, MaxDegree) VALUES
+('Programming Fundamentals', 0, 100),
+('Data Structures', 20, 100),
+('Databases', 30, 100),
+('Operating Systems', 25, 100),
+('Computer Networks', 20, 100),
+('Cloud Computing', 30, 100),
+('Machine Learning Basics', 40, 100),
+('Deep Learning Advanced', 50, 100),
+('Cyber Security Fundamentals', 20, 100),
+('Ethical Hacking Advanced', 50, 100),
+('Data Visualization Tools', 30, 100),
+('Big Data Processing', 40, 100);
+
+-- TrackCourse (junction links)
+INSERT INTO TrackCourse (TrackID, CourseID) VALUES
+-- Web Development
+(1,1),(1,2),(1,3),
+
+-- Mobile Development
+(2,1),(2,2),(2,4),
+
+-- Desktop Applications
+(3,1),(3,2),(3,4),
+
+-- DevOps
+(4,4),(4,5),(4,6),
+
+-- Network Administration
+(5,5),(5,4),
+
+-- Cloud Networking
+(6,5),(6,6),
+
+-- Wireless Networks
+(7,5),
+
+-- Network Security
+(8,5),(8,9),
+
+-- Data Analysis
+(9,1),(9,2),(9,11),
+
+-- Big Data Engineering
+(10,2),(10,12),
+
+-- Business Intelligence
+(11,3),(11,11),
+
+-- Data Visualization
+(12,11),
+
+-- Ethical Hacking
+(13,9),(13,10),
+
+-- Digital Forensics
+(14,9),
+
+-- Security Operations
+(15,9),(15,5),
+
+-- Cryptography
+(16,9),
+
+-- Machine Learning
+(17,7),
+
+-- Deep Learning
+(18,7),(18,8),
+
+-- NLP
+(19,7),
+
+-- Computer Vision
+(20,7),(20,8);
+
+
+INSERT INTO Instructor (Name, Email, DepartmentNo) VALUES 
+('Dr. Magdy Youssef', 'magdy.youssef@university.edu', 1), -- Software Engineering
+('Dr. Rasha Ali', 'rasha.ali@university.edu', 2),       -- Networking
+('Dr. Tarek Emad', 'tarek.emad@university.edu', 3),      -- Data Science
+('Dr. Heba Nabil', 'heba.nabil@university.edu', 4),      -- Cyber Security
+('Dr. Khaled Wael', 'khaled.wael@university.edu', 5);    -- AI
+
+
+INSERT INTO InstructorCourse (InstructorID, CourseID) VALUES 
+(1, 1),  -- Dr. Magdy teaches Programming Fundamentals
+(1, 2),  -- Dr. Magdy teaches Data Structures
+(2, 5),  -- Dr. Rasha teaches Computer Networks
+(2, 6),  -- Dr. Rasha teaches Cloud Computing
+(3, 11), -- Dr. Tarek teaches Data Visualization Tools
+(3, 12), -- Dr. Tarek teaches Big Data Processing
+(4, 9),  -- Dr. Heba teaches Cyber Security Fundamentals
+(4, 10), -- Dr. Heba teaches Ethical Hacking Advanced
+(5, 7),  -- Dr. Khaled teaches Machine Learning Basics
+(5, 8);  -- Dr. Khaled teaches Deep Learning Advanced
+
+INSERT INTO Student (Name, Email, Phone) VALUES 
+('Ahmed Ali', 'ahmed.ali@example.com', '01012345601'),
+('Sara Hassan', 'sara.hassan@example.com', '01112345602'),
+('Mohamed Mahmoud', 'mohamed.m@example.com', '01212345603'),
+('Mona Adel', 'mona.adel@example.com', '01512345604'),
+('Youssef Ibrahim', 'youssef.i@example.com', '01012345605'),
+('Nada Khaled', 'nada.khaled@example.com', '01112345606'),
+('Omar Mostafa', 'omar.m@example.com', '01212345607'),
+('Aya Tarek', 'aya.tarek@example.com', '01512345608'),
+('Karim Magdy', 'karim.magdy@example.com', '01012345609'),
+('Salma Samir', 'salma.samir@example.com', '01112345610'),
+('Amr Wael', 'amr.wael@example.com', '01212345611'),
+('Hoda Yasser', 'hoda.yasser@example.com', '01512345612'),
+('Tarek Nabil', 'tarek.nabil@example.com', '01012345613'),
+('Rania Kamal', 'rania.kamal@example.com', '01112345614'),
+('Ziad Fathy', 'ziad.fathy@example.com', '01212345615'),
+('Dina Sherif', 'dina.sherif@example.com', '01512345616'),
+('Moustafa Adel', 'moustafa.adel@example.com', '01012345617'),
+('Nour Ehab', 'nour.ehab@example.com', '01112345618'),
+('Yassin Omar', 'yassin.omar@example.com', '01212345619'),
+('Mariam Sayed', 'mariam.sayed@example.com', '01512345620');
+
+INSERT INTO StudentTrack (StudentID, TrackID) VALUES 
+(1, 1),   -- Ahmed is in Web Development
+(2, 2),   -- Sara is in Mobile Development
+(3, 3),   -- Mohamed is in Desktop Applications
+(4, 4),   -- Mona is in DevOps Engineering
+(5, 5),   -- Youssef is in Network Administration
+(6, 6),   -- Nada is in Cloud Networking
+(7, 7),   -- Omar is in Wireless Networks
+(8, 8),   -- Aya is in Network Security
+(9, 9),   -- Karim is in Data Analysis
+(10, 10), -- Salma is in Big Data Engineering
+(11, 11), -- Amr is in Business Intelligence
+(12, 12), -- Hoda is in Data Visualization
+(13, 13), -- Tarek is in Ethical Hacking
+(14, 14), -- Rania is in Digital Forensics
+(15, 15), -- Ziad is in Security Operations
+(16, 16), -- Dina is in Cryptography
+(17, 17), -- Moustafa is in Machine Learning
+(18, 18), -- Nour is in Deep Learning
+(19, 19), -- Yassin is in Natural Language Processing
+(20, 20); -- Mariam is in Computer Vision
+
+
+INSERT INTO Exams (ExamName, CourseID, TotalQuestions)
+VALUES 
+    ('Fundamentals Exam', 1, 15),
+    ('Data Structure Exam', 2, 15),
+    ('DB Exam', 3, 10),
+    ('OS Exam', 4, 10),
+    ('Network Exam', 5, 10);
+
+
+
 -- PROGRAMMING FUNDAMENTALS QUESTIONS
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What is a variable?', 'MCQ', 1);
 INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
@@ -10,34 +203,15 @@ INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
     (SELECT OptionID FROM Choice WHERE OptionText = 'A storage location' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
 );
 
-INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
-1,
-(SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'),
-(SELECT OptionID FROM Choice 
- WHERE OptionText = 'A storage location' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
-);
-
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'Which of the following is a loop structure?', 'MCQ', 1);
-
 INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
 ((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'If', 1),
 ((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'For', 2),
 ((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'Switch', 3),
 ((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'Return', 4);
-
 INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
     (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'),
     (SELECT OptionID FROM Choice WHERE OptionText = 'For' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
-);
-
-
-INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
-1,
-(SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'),
-(SELECT OptionID FROM Choice 
- WHERE OptionText = 'A storage location' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
 );
 
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What does IDE stand for?', 'MCQ', 1);
@@ -702,3 +876,86 @@ INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
     (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'),
     (SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'))
 );
+
+
+INSERT INTO ExamQuestion (ExamID, QuestionID, OrderNo)
+VALUES 
+    (1, 1, 1),
+    (1, 2, 2),
+    (1, 3, 3),
+    (1, 4, 4),
+    (1, 5, 5),
+    (1, 6, 6),
+    (1, 7, 7),
+    (1, 8, 8),
+    (1, 9, 9),
+    (1, 10, 10),
+    (1, 11, 11),
+    (1, 12, 12),
+    (1, 13, 13),
+    (1, 14, 14),
+    (1, 15, 15),
+
+    (2, 16, 1),
+    (2, 17, 2),
+    (2, 18, 3),
+    (2, 19, 4),
+    (2, 20, 5),
+    (2, 21, 6),
+    (2, 22, 7),
+    (2, 23, 8),
+    (2, 24, 9),
+    (2, 25, 10),
+    (2, 26, 11),
+    (2, 27, 12),
+    (2, 28, 13),
+    (2, 29, 14),
+    (2, 30, 15),
+
+    (3, 31, 1),
+    (3, 32, 2),
+    (3, 33, 3),
+    (3, 34, 4),
+    (3, 35, 5),
+    (3, 36, 6),
+    (3, 37, 7),
+    (3, 38, 8),
+    (3, 39, 9),
+    (3, 40, 10),
+
+    (4, 41, 1),
+    (4, 42, 2),
+    (4, 43, 3),
+    (4, 44, 4),
+    (4, 45, 5),
+    (4, 46, 6),
+    (4, 47, 7),
+    (4, 48, 8),
+    (4, 49, 9),
+    (4, 50, 10),
+
+    (5, 51, 1),
+    (5, 52, 2),
+    (5, 53, 3),
+    (5, 54, 4),
+    (5, 55, 5),
+    (5, 56, 6),
+    (5, 57, 7),
+    (5, 58, 8),
+    (5, 59, 9),
+    (5, 60, 10);
+
+
+INSERT INTO StudentExam(StudentID, ExamID, StartTime, EndTime, TotalGrade)
+VALUES 
+    (1, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 0),
+    (2, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 0),
+    (3, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 0),
+    (4, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 0),
+    (5, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 0),
+    (6, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 0),
+    (7, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 0),
+    (8, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 0),
+    (9, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 0),
+    (10, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 0);
+
