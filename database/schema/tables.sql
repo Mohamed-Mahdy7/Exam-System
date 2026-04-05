@@ -21,14 +21,14 @@ create table IF NOT EXISTS Course(
 
 CREATE TABLE IF NOT EXISTS Instructor(
 	InstructorID SERIAL PRIMARY KEY ,
-	Name TEXT,
+	Name TEXT COLLATE "ar-x-icu" NOT NULL,
 	Email TEXT UNIQUE,
 	DepartmentNo INT REFERENCES Departments(DepartmentID) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS Student (
 	StudentID SERIAL PRIMARY KEY,
-	Name TEXT,
+	Name TEXT COLLATE "ar-x-icu" NOT NULL,
 	Email TEXT UNIQUE,
 	Phone TEXT
 );
