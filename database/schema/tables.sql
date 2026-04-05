@@ -48,7 +48,7 @@ create table IF NOT EXISTS TrackCourse(
 -- Create Table IF NOT EXISTS Exams
 CREATE TABLE IF NOT EXISTS Exams (
     ExamID SERIAL PRIMARY KEY,
-    ExamName TEXT TEXT COLLATE "ar-x-icu" NOT NULL,
+    ExamName TEXT COLLATE "ar-x-icu" NOT NULL,
     CourseID INT,
     CreatedDate TIMESTAMP DEFAULT NOW(),
     TotalQuestions INT
