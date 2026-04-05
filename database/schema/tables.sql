@@ -1,18 +1,18 @@
 create table IF NOT EXISTS Departments (
     DepartmentID serial primary key,
-    DepartmentName text not null,
-    Location text
+    DepartmentName text collate "ar-x-icu" not null,
+    Location text collate "ar-x-icu"  
 );
 
 create table IF NOT EXISTS Track (
     TrackID serial primary key,
-    TrackName text not null,
+    TrackName text  collate "ar-x-icu" not null,
     DepartmentID int not null references Departments(DepartmentID) on delete restrict
 );
 
 create table IF NOT EXISTS Course(
     CourseID serial primary key,
-    CourseName text not null,
+    CourseName text collate "ar-x-icu" not null,
     MinDegree int not null,
     MaxDegree int not null,
     CHECK (MinDegree >= 0),
@@ -21,14 +21,14 @@ create table IF NOT EXISTS Course(
 
 CREATE TABLE IF NOT EXISTS Instructor(
 	InstructorID SERIAL PRIMARY KEY ,
-	Name TEXT,
+	Name TEXT COLLATE "ar-x-icu" NOT NULL,
 	Email TEXT UNIQUE,
 	DepartmentNo INT REFERENCES Departments(DepartmentID) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS Student (
 	StudentID SERIAL PRIMARY KEY,
-	Name TEXT,
+	Name TEXT COLLATE "ar-x-icu" NOT NULL,
 	Email TEXT UNIQUE,
 	Phone TEXT
 );
@@ -48,7 +48,7 @@ create table IF NOT EXISTS TrackCourse(
 -- Create Table IF NOT EXISTS Exams
 CREATE TABLE IF NOT EXISTS Exams (
     ExamID SERIAL PRIMARY KEY,
-    ExamName TEXT,
+    ExamName TEXT COLLATE "ar-x-icu" NOT NULL,
     CourseID INT,
     CreatedDate TIMESTAMP DEFAULT NOW(),
     TotalQuestions INT

@@ -43,3 +43,19 @@ REVOKE INSERT , UPDATE, DELETE ON Student FROM student_role;
 REVOKE ALL ON InstructorCourse FROM student_role;
 
 
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON Departments TO instructor_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Track TO instructor_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TrackCourse TO instructor_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Course TO instructor_role;
+
+GRANT SELECT ON Track TO student_role;
+GRANT SELECT ON Departments TO student_role;
+GRANT SELECT ON TrackCourse TO student_role;
+GRANT SELECT ON Course TO student_role;
+
+REVOKE INSERT, UPDATE, DELETE ON Departments FROM student_role;
+REVOKE INSERT, UPDATE, DELETE ON Track FROM student_role;
+REVOKE INSERT, UPDATE, DELETE ON TrackCourse FROM student_role;
+REVOKE INSERT, UPDATE, DELETE ON Course FROM student_role;
+
