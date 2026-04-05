@@ -1,578 +1,685 @@
--- first module seed ( DBS )
-DO $$
-DECLARE
-    q_id INT;
-    o1 INT; o2 INT; o3 INT; o4 INT;
-    t_id INT; f_id INT;
-BEGIN
+-- PROGRAMMING FUNDAMENTALS QUESTIONS
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What is a variable?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'), 'A storage location', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'), 'A loop', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'), 'A function', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'), 'A data type', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A storage location' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
+);
 
-    -- first module seed ( dbs )
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'Which of the following is a loop structure?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'If', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'For', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'Switch', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'), 'Return', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'For' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
+);
 
-	-- 1 :
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'What does SQL stand for?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What does IDE stand for?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'), 'Internal Design Engine', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'), 'Integrated Development Environment', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'), 'Interactive Data Execution', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'), 'Internet Development Engine', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Integrated Development Environment' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'))
+);
 
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Strong Query Language', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Structured Query Language', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Simple Query Language', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'System Query Language', 4) RETURNING OptionID INTO o4;
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'Which data type is used for text?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'), 'Integer', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'), 'Float', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'), 'String', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'), 'Boolean', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'String' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'))
+);
 
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
------------------------------------------------------
--- 2 :
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'What is the correct order of a SELECT statement?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SELECT, WHERE, FROM', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SELECT, FROM, WHERE', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FROM, WHERE, SELECT', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'WHERE, FROM, SELECT', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What is the output of 5 modulo 2?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'), '1', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'), '2', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'), '2.5', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'), '0', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = '1' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'))
+);
 
---------------------------------------------------------
--- 3 :
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What is a function?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'), 'A reusable block of code', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'), 'A hardware component', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'), 'A database table', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'), 'An operating system', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A reusable block of code' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'Which symbol is typically used for assignment?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'), '==', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'), '=', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'), '=>', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'), '<-', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = '=' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which symbol is typically used for assignment?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What is an array?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'), 'A single variable', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'), 'A collection of elements', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'), 'A mathematical operator', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'), 'A styling method', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A collection of elements' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is an array?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'What does boolean mean?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'), 'Text only', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'), 'Numbers only', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'), 'True or False', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'), 'Empty value', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'True or False' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does boolean mean?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (1, 'Which is a conditional statement?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'), 'If', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'), 'Loop', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'), 'Print', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'), 'Declare', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'If' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which is a conditional statement?'))
+);
+-- Q1 (EN / TF)
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'Which command is used to remove all records from a table without deleting the table itself?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DELETE', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DROP', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'TRUNCATE', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'REMOVE', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-------------------------------------------------------------------
--- 4 :
+VALUES (1, 'A variable can store different values during program execution.', 'TF', 10);
+
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A variable can store different values during program execution.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A variable can store different values during program execution.'), 'False', 2);
+
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'A variable can store different values during program execution.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'True' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A variable can store different values during program execution.'))
+);
+
+-- Q2 (AR / TF)
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'A Primary Key can contain NULL values.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
------------------------------------------------------------------------------
--- 5 :
+VALUES (1, 'المتغير لا يمكن تغيير قيمته أثناء تنفيذ البرنامج.', 'TF', 10);
+
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'المتغير لا يمكن تغيير قيمته أثناء تنفيذ البرنامج.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'المتغير لا يمكن تغيير قيمته أثناء تنفيذ البرنامج.'), 'خطأ', 2);
+
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'المتغير لا يمكن تغيير قيمته أثناء تنفيذ البرنامج.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'المتغير لا يمكن تغيير قيمته أثناء تنفيذ البرنامج.'))
+);
+
+-- Q3 (EN / TF)
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+VALUES (1, 'An if statement is used for decision making.', 'TF', 10);
 
--------------------------------------------------------------------------------
--- 6 :
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'The GROUP BY statement is often used with aggregate functions.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'An if statement is used for decision making.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'An if statement is used for decision making.'), 'False', 2);
 
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'An if statement is used for decision making.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'True' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'An if statement is used for decision making.'))
+);
 
---------------------------------------------------------------------------------
--- 7:
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'PostgreSQL is a NoSQL database management system.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO o2;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
------------------------------------------------------------------------------
--- 8 :
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'يمكن أن يحتوي الجدول الواحد على أكثر من Primary Key واحد.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO o2;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
--------------------------------------------------------------------------------
--- 9 :
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'عملية تنظيم البيانات لتقليل التكرار تسمى بـ:', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Indexing', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Normalization', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Encryption', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Abstraction', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
--------------------------------------------------------------------
--- 10 :
+-- Q4 (AR / TF)
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'أي رمز يستخدم لتمثيل "أي عدد من الحروف" عند استخدام LIKE في SQL؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '_ (Underscore)', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '* (Asterisk)', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '% (Percent)', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '# (Hashtag)', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
---------------------------------------------------------------------------------
--- 11:
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'ما هو القيد (Constraint) الذي يمنع تكرار القيم ولا يسمح بـ NULL؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'UNIQUE', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'NOT NULL', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'PRIMARY KEY', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FOREIGN KEY', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
--------------------------------------------------------------------------------
---#####################################################################################################
--- 2 -second module seed ( linux )
+VALUES (1, 'الحلقة for تُستخدم لتكرار تنفيذ مجموعة من الأوامر.', 'TF', 10);
 
--- 1:
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (1, 'أي أمر يستخدم لعرض محتويات المجلد في Linux؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الحلقة for تُستخدم لتكرار تنفيذ مجموعة من الأوامر.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الحلقة for تُستخدم لتكرار تنفيذ مجموعة من الأوامر.'), 'خطأ', 2);
 
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cd', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'mkdir', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'pwd', 4) RETURNING OptionID INTO o4;
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'الحلقة for تُستخدم لتكرار تنفيذ مجموعة من الأوامر.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'صح' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الحلقة for تُستخدم لتكرار تنفيذ مجموعة من الأوامر.'))
+);
 
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
----------------------------------------------
--- 2:
+-- Q5 (EN / TF)
 INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'أي أمر يستخدم لتغيير صلاحيات الملفات في Linux؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chown', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chgrp', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cp', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-------------------------------------------------
--- 3:
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'ما هو الأمر الذي يعرض المسار الحالي الذي تقف فيه؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'dir', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'path', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'pwd', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'cd', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
---------------------------------------------------------------------
--- 4:
-INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'نظام Linux هو نظام تشغيل مفتوح المصدر.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
---------------------------------------------------
--- 5:
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'أمر "mkdir" يستخدم لمسح المجلدات الفارغة.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
---------------------------------------------------
--- 6 :
-INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'Which command is used to list all files, including hidden ones, in Linux?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -l', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -a', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -h', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'ls -s', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-------------------------------------------------------------------------------
--- 7:
-INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'Which command is used to search for a specific pattern within a file?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'find', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'locate', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'grep', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'search', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-------------------------------------------------------------------
--- 8:
- INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'What does the "sudo" command stand for?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SuperUser Do', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'System User Do', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Standard User Do', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Secure User Do', 4) RETURNING OptionID INTO o4;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
-
----------------------------------------------------------------
--- 9:
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'الأمر "rm" يستخدم لحذف الملفات والمجلدات في Linux.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
---------------------------------------------------------------------
--- 10:
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (2, 'The "cd .." command is used to move one level up in the directory tree.', 'TF', 1) RETURNING QuestionID INTO q_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
---------------------------------------------------------------------------------
--- ###################################################################################################################
-
--- 3- third module seed ( networks )
-    -- 1: OSI Model Layers
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'How many layers are in the OSI model?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '4 Layers', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '5 Layers', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '7 Layers', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '8 Layers', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    -----------------------------------------------------
-
-    -- 2: IP Address Length
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'What is the bit length of an IPv6 address?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '32 bits', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '64 bits', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '128 bits', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '256 bits', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    --------------------------------------------------------
-
-    -- 3: Protocols
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'Which protocol is used to securely transfer files over a network?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'HTTP', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SFTP', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SMTP', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Telnet', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    ------------------------------------------------------------------
-
-    -- 4: TCP vs UDP (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'UDP is a connection-oriented protocol that guarantees delivery.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
-
-    -----------------------------------------------------------------------------
-
-    -- 5: Network Devices (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'A Router operates at the Network Layer (Layer 3) of the OSI model.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -------------------------------------------------------------------------------
-
-    -- 6: DNS
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'Which service translates domain names (like google.com) into IP addresses?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DHCP', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'FTP', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'DNS', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'SNMP', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    --------------------------------------------------------------------------------
-
-    -- 7: MAC Addresses (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'A MAC address is also known as a physical address.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -----------------------------------------------------------------------------
-
-    -- 8: DHCP (Arabic True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'وظيفة بروتوكول DHCP هي توزيع عناوين IP تلقائياً على الأجهزة.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO o2;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
-
-    -------------------------------------------------------------------------------
-
-    -- 9: Hub vs Switch (Arabic MCQ)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'أي من الأجهزة التالية يعتبر أذكى في توجيه البيانات داخل الشبكة المحلية؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Hub', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Switch', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Repeater', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Bridge', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    -------------------------------------------------------------------
-
-    -- 10: Port Numbers
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (3, 'ما هو رقم المنفذ (Port Number) الافتراضي لبروتوكول HTTPS؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '21', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '80', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '443', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '3306', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
--------------------------------------------------------------------------------
--- ################################################################################################################
-
--- 4- fourth module seed ( bash script )
-    -- ==========================================
-    -- BASH SCRIPTING MODULE
-    -- ==========================================
-
-    -- 1: The Shebang
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'What is the correct shebang line to start a Bash script?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '#!/bin/bash', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '#/bin/bash', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '!/bin/bash', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'bin/bash', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
-
-    -----------------------------------------------------
-
-    -- 2: Variable Assignment
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'Which of the following is the correct way to assign a value to a variable in Bash?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var = "value"', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var := "value"', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'var="value"', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'set var "value"', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    --------------------------------------------------------
-
-    -- 3: Permissions
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'Which command makes a script file named "script.sh" executable?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod +x script.sh', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'run +x script.sh', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'chmod 444 script.sh', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'bash +e script.sh', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o1);
-
-    ------------------------------------------------------------------
-
-    -- 4: Redirection (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'The ">" operator appends output to the end of an existing file.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
-
-    -----------------------------------------------------------------------------
-
-    -- 5: Accessing Variables (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'To access the value of a variable named "NAME", you must use "$NAME".', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -------------------------------------------------------------------------------
-
-    -- 6: Exit Status
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'Which special variable holds the exit status of the last executed command?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$#', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$@', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$!', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '$?', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o4);
-
-    --------------------------------------------------------------------------------
-
-    -- 7: Comments (Arabic True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'يتم استخدام الرمز "#" لكتابة التعليقات (Comments) في Bash.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -----------------------------------------------------------------------------
-
-    -- 8: Numeric Comparison (Arabic MCQ)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'أي خيار يستخدم للمقارنة إذا كان رقم ما "أكبر من" (Greater Than) رقم آخر في Bash؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-eq', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-gt', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-lt', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '-ne', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    -------------------------------------------------------------------------------
-
-    -- 9: User Input
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'Which command is used to accept input from the user during script execution?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'get', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'input', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'read', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'write', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    -------------------------------------------------------------------
-
-    -- 10: Logical AND
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (4, 'What is the logical AND operator used between two commands in Bash?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '&', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '&&', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '||', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '|', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
--------------------------------------------------------------------------------
-    -- 1: File Extension
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'What is the correct file extension for Python files?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.pt', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.py', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.pyt', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '.python', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    -----------------------------------------------------
-
-    -- 2: Indentation (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'In Python, indentation is used to define a block of code.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    --------------------------------------------------------
-
-    -- 3: Function Definition
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'Which keyword is used to create a function in Python?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'function', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'def', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'define', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'func', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    ------------------------------------------------------------------
-
-    -- 4: List Mutability (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'A Python "List" is immutable, meaning its elements cannot be changed after creation.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, f_id);
-
-    -----------------------------------------------------------------------------
-
-    -- 5: Comments (Arabic True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'يستخدم الرمز "#" لكتابة تعليق (Comment) من سطر واحد في بايثون.', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'صح', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'خطأ', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -------------------------------------------------------------------------------
-
-    -- 6: Logical Operators
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'Which operator is used to check if two values are equal?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '=', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '==', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'is', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '===', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o2);
-
-    --------------------------------------------------------------------------------
-
-    -- 7: Power Operator (Arabic MCQ)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'أي رمز يستخدم لحساب "الأس" (Power) في بايثون؟ (مثلاً 2 أس 3)', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '^', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '^^', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '**', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, '//', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    -----------------------------------------------------------------------------
-
-    -- 8: Case Sensitivity (True/False)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'Python is a case-sensitive language (e.g., "Var" and "var" are different).', 'TF', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'True', 1) RETURNING OptionID INTO t_id;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'False', 2) RETURNING OptionID INTO f_id;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, t_id);
-
-    -------------------------------------------------------------------------------
-
-    -- 9: Data Structures (MCQ)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'Which data structure stores key-value pairs in Python?', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'List', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Set', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Dictionary', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'Tuple', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
-    -------------------------------------------------------------------
-
-    -- 10: Input Function (Arabic MCQ)
-    INSERT INTO Questions (CourseID, QuestionText, Type, Points) 
-    VALUES (5, 'ما هي الدالة المستخدمة لاستقبال البيانات من المستخدم في بايثون؟', 'MCQ', 1) RETURNING QuestionID INTO q_id;
-
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'scanf()', 1) RETURNING OptionID INTO o1;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'get()', 2) RETURNING OptionID INTO o2;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'input()', 3) RETURNING OptionID INTO o3;
-    INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES (q_id, 'read()', 4) RETURNING OptionID INTO o4;
-
-    INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (q_id, o3);
-
--------------------------------------------------------------------------------
-END $$;
-
-
-
-
+VALUES (1, 'A function can return more than one value directly.', 'TF', 10);
+
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A function can return more than one value directly.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A function can return more than one value directly.'), 'False', 2);
+
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'A function can return more than one value directly.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'False' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A function can return more than one value directly.'))
+);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+-- DATA STRUCTURES QUESTIONS
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is a Stack?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'), 'A FIFO data structure', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'), 'A LIFO data structure', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'), 'A hierarchical database', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'), 'A sorting algorithm', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A LIFO data structure' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Stack?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'Which data structure uses FIFO?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'), 'Stack', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'), 'Tree', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'), 'Queue', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'), 'Graph', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Queue' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure uses FIFO?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is a linked list?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'), 'Nodes with data and pointers', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'), 'A static array', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'), 'A binary search tree', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'), 'A hash function', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Nodes with data and pointers' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a linked list?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is the time complexity of binary search?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'), 'O(n)', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'), 'O(n log n)', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'), 'O(1)', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'), 'O(log n)', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'O(log n)' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the time complexity of binary search?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is a binary tree?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'), 'A tree with infinite children', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'), 'A tree with at most two children', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'), 'A linear data structure', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'), 'A complete graph', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A tree with at most two children' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a binary tree?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'Which data structure is best for hierarchical data?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'), 'Array', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'), 'Queue', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'), 'Tree', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'), 'Stack', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Tree' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data structure is best for hierarchical data?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What does a graph consist of?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'), 'Only edges', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'), 'Verticies and Edges', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'), 'Rows and Columns', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'), 'Tables and Keys', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Verticies and Edges' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does a graph consist of?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is the main advantage of an array?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'), 'Dynamic sizing', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'), 'Random access', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'), 'Fast insertion', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'), 'No memory usage', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Random access' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the main advantage of an array?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'What is a hash table used for?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'), 'Sorting items', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'), 'Fast key-value lookups', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'), 'Designing interfaces', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'), 'Compiling code', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Fast key-value lookups' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a hash table used for?'))
+);
+
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'Which sorting algorithm is typically fastest on average?', 'MCQ', 1);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'), 'Bubble Sort', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'), 'Selection Sort', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'), 'Quick Sort', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'), 'Insertion Sort', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Quick Sort' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which sorting algorithm is typically fastest on average?'))
+);
+
+-- Q1 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'A stack follows the LIFO principle.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A stack follows the LIFO principle.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A stack follows the LIFO principle.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'A stack follows the LIFO principle.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A stack follows the LIFO principle.'))
+);
+
+-- Q2 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'الـ Queue تعمل بنظام FIFO.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Queue تعمل بنظام FIFO.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Queue تعمل بنظام FIFO.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Queue تعمل بنظام FIFO.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Queue تعمل بنظام FIFO.'))
+);
+
+-- Q3 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'An array has a fixed size.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'An array has a fixed size.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'An array has a fixed size.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'An array has a fixed size.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'An array has a fixed size.'))
+);
+
+-- Q4 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'Linked List تسمح بتغيير الحجم ديناميكياً.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Linked List تسمح بتغيير الحجم ديناميكياً.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Linked List تسمح بتغيير الحجم ديناميكياً.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'Linked List تسمح بتغيير الحجم ديناميكياً.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Linked List تسمح بتغيير الحجم ديناميكياً.'))
+);
+
+-- Q5 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (2, 'A tree data structure has a root node.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A tree data structure has a root node.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A tree data structure has a root node.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+(SELECT QuestionID FROM Questions WHERE QuestionText = 'A tree data structure has a root node.'),
+(SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A tree data structure has a root node.'))
+);
+
+
+-------------------------------------------------------
+-- COURSE 3: DATABASE (10 Questions: Mix EN/AR, MCQ/TF)
+---------------------------------------------------------
+
+-- 1 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'What is a Primary Key in a database?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'), 'A unique identifier for a record', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'), 'A duplicate value', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'), 'A network protocol', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'), 'A storage device', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'A unique identifier for a record' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a Primary Key in a database?'))
+);
+
+-- 2 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'ماذا تعني اختصار RDBMS؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'), 'Random Database Management System', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'), 'Relational Database Management System', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'), 'Real Data Backup Management System', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'), 'Row Data Base Management System', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Relational Database Management System' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'ماذا تعني اختصار RDBMS؟'))
+);
+
+-- 3 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'SQL stands for Structured Query Language.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'SQL stands for Structured Query Language.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'SQL stands for Structured Query Language.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'SQL stands for Structured Query Language.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'SQL stands for Structured Query Language.'))
+);
+
+-- 4 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'المفتاح الأجنبي (Foreign Key) لا يمكن أن يحتوي على قيم فارغة (NULL) نهائيا.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'المفتاح الأجنبي (Foreign Key) لا يمكن أن يحتوي على قيم فارغة (NULL) نهائيا.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'المفتاح الأجنبي (Foreign Key) لا يمكن أن يحتوي على قيم فارغة (NULL) نهائيا.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'المفتاح الأجنبي (Foreign Key) لا يمكن أن يحتوي على قيم فارغة (NULL) نهائيا.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'المفتاح الأجنبي (Foreign Key) لا يمكن أن يحتوي على قيم فارغة (NULL) نهائيا.'))
+);
+
+-- 5 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'Which SQL command is used to remove a table entirely from the database?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'), 'DELETE', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'), 'TRUNCATE', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'), 'DROP', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'), 'REMOVE', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'DROP' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which SQL command is used to remove a table entirely from the database?'))
+);
+
+-- 6 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'), 'INSERT', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'), 'UPDATE', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'), 'ALTER', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'), 'MODIFY', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'UPDATE' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من الأوامر التالية يستخدم لتحديث البيانات الموجودة في جدول؟'))
+);
+
+-- 7 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'A View in SQL contains its own physical data.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A View in SQL contains its own physical data.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A View in SQL contains its own physical data.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'A View in SQL contains its own physical data.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'False' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A View in SQL contains its own physical data.'))
+);
+
+-- 8 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'أمر COMMIT يحفظ التغييرات بشكل نهائي في قاعدة البيانات.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أمر COMMIT يحفظ التغييرات بشكل نهائي في قاعدة البيانات.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أمر COMMIT يحفظ التغييرات بشكل نهائي في قاعدة البيانات.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'أمر COMMIT يحفظ التغييرات بشكل نهائي في قاعدة البيانات.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'أمر COMMIT يحفظ التغييرات بشكل نهائي في قاعدة البيانات.'))
+);
+
+-- 9 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'What does the INNER JOIN do?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'), 'Returns all records from both tables', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'), 'Returns only matched records from both tables', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'), 'Returns records from the left table only', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'), 'Deletes matching records', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Returns only matched records from both tables' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does the INNER JOIN do?'))
+);
+
+-- 10 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (3, 'لغة DDL تستخدم للتحكم في صلاحيات المستخدمين.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'لغة DDL تستخدم للتحكم في صلاحيات المستخدمين.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'لغة DDL تستخدم للتحكم في صلاحيات المستخدمين.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'لغة DDL تستخدم للتحكم في صلاحيات المستخدمين.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'لغة DDL تستخدم للتحكم في صلاحيات المستخدمين.'))
+);
+
+---------------------------------------------------------
+-- COURSE 4: OPERATING SYSTEM (10 Questions: Mix EN/AR, MCQ/TF)
+---------------------------------------------------------
+
+-- 11 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'What is the core component of a Linux Operating System called?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'), 'Shell', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'), 'Kernel', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'), 'Terminal', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'), 'GUI', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Kernel' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the core component of a Linux Operating System called?'))
+);
+
+-- 12 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'), 'تخزين البيانات بشكل دائم', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'), 'معالجة الرسوميات', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'), 'تخزين البيانات والبرامج قيد التشغيل مؤقتاً', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'), 'تبريد المعالج', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'تخزين البيانات والبرامج قيد التشغيل مؤقتاً' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هي وظيفة الـ RAM الأساسية في نظام التشغيل؟'))
+);
+
+-- 13 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'Ubuntu is an open-source operating system based on Debian.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Ubuntu is an open-source operating system based on Debian.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Ubuntu is an open-source operating system based on Debian.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Ubuntu is an open-source operating system based on Debian.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Ubuntu is an open-source operating system based on Debian.'))
+);
+
+-- 14 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'نظام التشغيل هو البرنامج الوسيط بين المستخدم وعتاد الحاسوب (Hardware).', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'نظام التشغيل هو البرنامج الوسيط بين المستخدم وعتاد الحاسوب (Hardware).'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'نظام التشغيل هو البرنامج الوسيط بين المستخدم وعتاد الحاسوب (Hardware).'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'نظام التشغيل هو البرنامج الوسيط بين المستخدم وعتاد الحاسوب (Hardware).'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'نظام التشغيل هو البرنامج الوسيط بين المستخدم وعتاد الحاسوب (Hardware).'))
+);
+
+-- 15 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'Which command is used in Bash to print the current working directory?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'), 'ls', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'), 'pwd', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'), 'cd', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'), 'mkdir', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'pwd' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which command is used in Bash to print the current working directory?'))
+);
+
+-- 16 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'), 'First-Come, First-Served', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'), 'Round Robin', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'), 'Shortest Job Next', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'), 'Priority Scheduling', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Round Robin' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'أي من خوارزميات الجدولة (Scheduling) تعتمد على إعطاء وقت محدد لكل عملية؟'))
+);
+
+-- 17 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'A process in an operating system is defined as a program in execution.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A process in an operating system is defined as a program in execution.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'A process in an operating system is defined as a program in execution.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'A process in an operating system is defined as a program in execution.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'A process in an operating system is defined as a program in execution.'))
+);
+
+-- 18 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'الـ Deadlock يحدث عندما تنتظر عمليتان أو أكثر بعضهما البعض إلى ما لا نهاية.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Deadlock يحدث عندما تنتظر عمليتان أو أكثر بعضهما البعض إلى ما لا نهاية.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Deadlock يحدث عندما تنتظر عمليتان أو أكثر بعضهما البعض إلى ما لا نهاية.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Deadlock يحدث عندما تنتظر عمليتان أو أكثر بعضهما البعض إلى ما لا نهاية.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Deadlock يحدث عندما تنتظر عمليتان أو أكثر بعضهما البعض إلى ما لا نهاية.'))
+);
+
+-- 19 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'What does GUI stand for in Operating Systems?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'), 'General User Integration', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'), 'Graphical User Interface', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'), 'Generic Universal Interface', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'), 'Graphic Utility Index', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Graphical User Interface' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does GUI stand for in Operating Systems?'))
+);
+
+-- 20 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (4, 'الـ Virtual Memory تستخدم جزء من القرص الصلب كأنها ذاكرة عشوائية (RAM) إضافية.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Virtual Memory تستخدم جزء من القرص الصلب كأنها ذاكرة عشوائية (RAM) إضافية.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Virtual Memory تستخدم جزء من القرص الصلب كأنها ذاكرة عشوائية (RAM) إضافية.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Virtual Memory تستخدم جزء من القرص الصلب كأنها ذاكرة عشوائية (RAM) إضافية.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ Virtual Memory تستخدم جزء من القرص الصلب كأنها ذاكرة عشوائية (RAM) إضافية.'))
+);
+
+---------------------------------------------------------
+-- COURSE 5: NETWORK (10 Questions: Mix EN/AR, MCQ/TF)
+---------------------------------------------------------
+
+-- 21 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'What does IP stand for in networking?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'), 'Internal Protocol', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'), 'Internet Protocol', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'), 'Intranet Provider', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'), 'Internet Provider', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Internet Protocol' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IP stand for in networking?'))
+);
+
+-- 22 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'), 'Data Link Layer', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'), 'Network Layer', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'), 'Transport Layer', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'), 'Physical Layer', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'Network Layer' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'في أي طبقة (Layer) من نموذج OSI يعمل جهاز الـ Router؟'))
+);
+
+-- 23 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'TCP is considered a connection-oriented protocol.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'TCP is considered a connection-oriented protocol.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'TCP is considered a connection-oriented protocol.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'TCP is considered a connection-oriented protocol.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'True' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'TCP is considered a connection-oriented protocol.'))
+);
+
+-- 24 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'بروتوكول HTTP يستخدم منفذ (Port) رقم 80 افتراضياً.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'بروتوكول HTTP يستخدم منفذ (Port) رقم 80 افتراضياً.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'بروتوكول HTTP يستخدم منفذ (Port) رقم 80 افتراضياً.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'بروتوكول HTTP يستخدم منفذ (Port) رقم 80 افتراضياً.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'صح' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'بروتوكول HTTP يستخدم منفذ (Port) رقم 80 افتراضياً.'))
+);
+
+-- 25 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'Which protocol is responsible for translating domain names into IP addresses?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'), 'DHCP', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'), 'DNS', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'), 'FTP', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'), 'SMTP', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'DNS' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which protocol is responsible for translating domain names into IP addresses?'))
+);
+
+-- 26 (AR / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'ما هو عنوان الـ MAC Address؟', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'), 'عنوان منطقي يتغير حسب الشبكة', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'), 'عنوان فيزيائي ثابت لكرت الشبكة', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'), 'بروتوكول لنقل الملفات', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'), 'كلمة مرور للراوتر', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'عنوان فيزيائي ثابت لكرت الشبكة' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'ما هو عنوان الـ MAC Address؟'))
+);
+
+-- 27 (EN / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'The UDP protocol guarantees the delivery of all packets.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'The UDP protocol guarantees the delivery of all packets.'), 'True', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'The UDP protocol guarantees the delivery of all packets.'), 'False', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'The UDP protocol guarantees the delivery of all packets.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'False' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'The UDP protocol guarantees the delivery of all packets.'))
+);
+
+-- 28 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'طبقة الـ Data Link تستخدم الـ IP Addresses لتوجيه البيانات بين الأجهزة.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'طبقة الـ Data Link تستخدم الـ IP Addresses لتوجيه البيانات بين الأجهزة.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'طبقة الـ Data Link تستخدم الـ IP Addresses لتوجيه البيانات بين الأجهزة.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'طبقة الـ Data Link تستخدم الـ IP Addresses لتوجيه البيانات بين الأجهزة.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'طبقة الـ Data Link تستخدم الـ IP Addresses لتوجيه البيانات بين الأجهزة.'))
+);
+
+-- 29 (EN / MCQ)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'What is the primary function of a Firewall?', 'MCQ', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'), 'To speed up internet connection', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'), 'To monitor and control incoming and outgoing network traffic', 2),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'), 'To store database backups', 3),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'), 'To generate IP addresses', 4);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'To monitor and control incoming and outgoing network traffic' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the primary function of a Firewall?'))
+);
+
+-- 30 (AR / TF)
+INSERT INTO Questions (CourseID, QuestionText, Type, Points) VALUES (5, 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.', 'TF', 10);
+INSERT INTO Choice (QuestionID, OptionText, OptionOrder) VALUES
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'), 'صح', 1),
+((SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'), 'خطأ', 2);
+INSERT INTO ModelAnswer (QuestionID, CorrectOptionID) VALUES (
+    (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'),
+    (SELECT OptionID FROM Choice WHERE OptionText = 'خطأ' AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'الـ LAN (Local Area Network) تغطي مساحة جغرافية واسعة جداً مثل دولة كاملة.'))
+);
