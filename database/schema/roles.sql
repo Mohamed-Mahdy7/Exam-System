@@ -59,3 +59,32 @@ REVOKE INSERT, UPDATE, DELETE ON Track FROM student_role;
 REVOKE INSERT, UPDATE, DELETE ON TrackCourse FROM student_role;
 REVOKE INSERT, UPDATE, DELETE ON Course FROM student_role;
 
+-----------------------------------------------------------------------------------
+
+CREATE ROLE instructor_role;
+CREATE ROLE student_role;
+-------------------------------------------------------------
+--                      Questions
+----------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON Questions TO instructor_role;
+GRANT SELECT ON Questions TO student_role;
+
+---------------------------------------------------------
+--                   Choice
+-------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON Choice TO instructor_role;
+GRANT SELECT ON Choice TO student_role;
+
+-------------------------------------------------------------
+--                  ModelAnswer
+--------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON ModelAnswer TO instructor_role;
+REVOKE ALL ON ModelAnswer FROM student_role;
+
+-------------------------------------------------------------
+--                       StudentAnswer
+--------------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON StudentAnswer TO instructor_role;
+GRANT SELECT, INSERT ON StudentAnswer TO student_role;
+REVOKE UPDATE, DELETE ON StudentAnswer FROM student_role;
+--------------------------------------------------------------------------------
