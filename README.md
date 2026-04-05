@@ -135,11 +135,11 @@ CREATE DATABASE exam_db;
 \c exam_db
 
 -- 3. Create tables
-\i database/schema/tables.sql
+\i <your path to this repo>/database/schema/tables.sql
 
 -- 4. Apply constraints and indexes
-\i database/schema/constraints.sql
-\i database/schema/indexes.sql
+\i <your path to this repo>/database/schema/constraints.sql
+\i <your path to this repo>/database/schema/indexes.sql
 
 -- 5. Create roles
 CREATE ROLE admin_role      WITH LOGIN SUPERUSER;
@@ -147,14 +147,14 @@ CREATE ROLE instructor_role WITH LOGIN;
 CREATE ROLE student_role    WITH LOGIN;
 
 -- 6. Load seed data
-\i database/seed/sample_data.txt
+\i <your path to this repo>/database/seed/sample_data.sql
 
 -- 7. Load all stored procedures
-\i database/procedures/exam_crud.sql
-\i database/procedures/exam_generation.sql
-\i database/procedures/exam_question.sql
-\i database/procedures/...                  # The same for the rest of the tables
-\i database/reports/reports.sql
+\i <your path to this repo>/database/procedures/exam_crud.sql
+\i <your path to this repo>/database/procedures/exam_generation.sql
+\i <your path to this repo>/database/procedures/exam_question.sql
+\i <your path to this repo>/database/procedures/...                  # The same for the rest of the tables
+\i <your path to this repo>/database/reports/reports.sql
 ```
 
 ---
