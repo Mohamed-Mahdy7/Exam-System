@@ -1,18 +1,18 @@
 create table IF NOT EXISTS Departments (
     DepartmentID serial primary key,
-    DepartmentName text not null,
-    Location text
+    DepartmentName text collate "ar-x-icu" not null,
+    Location text collate "ar-x-icu"  
 );
 
 create table IF NOT EXISTS Track (
     TrackID serial primary key,
-    TrackName text not null,
+    TrackName text  collate "ar-x-icu" not null,
     DepartmentID int not null references Departments(DepartmentID) on delete restrict
 );
 
 create table IF NOT EXISTS Course(
     CourseID serial primary key,
-    CourseName text not null,
+    CourseName text collate "ar-x-icu" not null,
     MinDegree int not null,
     MaxDegree int not null,
     CHECK (MinDegree >= 0),
