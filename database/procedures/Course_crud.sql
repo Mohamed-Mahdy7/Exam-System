@@ -15,22 +15,26 @@ call InsertCourses ('python' , 40, 100 )
 
 
 ----------------------- update ----------------------------
+
+
+
+
 create or replace procedure UpdateCourses(
     p_CourseID int,
-    p_CourseName text,
-	p_MinDegree int , 
-  	p_MaxDegree int 
+    p_CourseName text DEFAULT NULL,
+    p_MinDegree int DEFAULT NULL, 
+      p_MaxDegree int DEFAULT NULL
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
       UPDATE Course
-    SET CourseName = p_CourseName,
-		MinDegree = p_MinDegree,
-        MaxDegree = p_MaxDegree
+    SET CourseName = COALESCE(p_CourseName, CourseName),
+        MinDegree = COALESCE(p_MinDegree, MinDegree),
+        MaxDegree = COALESCE(p_MaxDegree, MaxDegree)
     WHERE CourseID = p_CourseID;
- END   
+ END
 $$
-call UpdateCourses ( 5 , 'Java', 60, 100)
+-- call UpdateCourses ( 5 , 'Java', 60, 100)
 ----------------------- delete  ----------------------------
 CREATE OR REPLACE PROCEDURE DeleteCourse(
      p_CourseID int
@@ -43,9 +47,9 @@ BEGIN
 END;
 $$;
 
-call DeleteCourse(4 )
+-- call DeleteCourse(4 )
 
-select * from Course ;
+-- select * from Course ;
 
 CREATE OR REPLACE PROCEDURE SelectCoursebyTrackID(INOUT ref refcursor , p_TrackID int   )
 LANGUAGE plpgsql
@@ -57,5 +61,5 @@ WHERE CourseID IN ( SELECT CourseID  FROM TrackCourse  WHERE TrackID = p_TrackID
 	 
 END;
 $$;
-CALL SelectCoursebyTrackID('mycursor',1);
-FETCH ALL FROM mycursor;
+-- CALL SelectCoursebyTrackID('mycursor',1);
+-- FETCH ALL FROM mycursor;
