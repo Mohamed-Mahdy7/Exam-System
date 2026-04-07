@@ -37,26 +37,26 @@ $$;
 -- 		p_phone: student phone number
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE UpdateStudent(
-	p_StudentID INT,
-	p_Name TEXT,
-    p_Email TEXT,
-    p_Phone TEXT 
+CREATE OR REPLACE PROCEDURE UpdateStudent(
+    p_StudentID INT,
+    p_Name TEXT DEFAULT NULL,
+    p_Email TEXT DEFAULT NULL,
+    p_Phone TEXT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	UPDATE Student 
-	SET NAME = p_Name, 
-		Email = p_Email,
-		Phone = p_phone 
-	WHERE StudentID = p_StudentID;
+    UPDATE Student 
+    SET Name = COALESCE(p_Name, Name), 
+        Email = COALESCE(p_Email, Email),
+        Phone = COALESCE(p_Phone, Phone)
+    WHERE StudentID = p_StudentID;
 
-	RAISE NOTICE 'Student % upated successfully', p_Name;
+    RAISE NOTICE 'Student ID % updated successfully', p_StudentID;
 
 EXCEPTION 
-	WHEN OTHERS THEN
-		RAISE NOTICE 'Transaction failed';
-
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Transaction failed: %', SQLERRM;
 END;
 $$;
 

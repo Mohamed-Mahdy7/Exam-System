@@ -38,27 +38,26 @@ $$;
 -- 		p_DepartmentNo: instructor department
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE UpdateInstructor(
-	p_InstructorID INT,
-	p_Name TEXT,
-    p_Email TEXT,
-    p_DepartmentNo INT 
+    p_InstructorID INT,
+    p_Name TEXT DEFAULT NULL,
+    p_Email TEXT DEFAULT NULL,
+    p_DepartmentNo INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	UPDATE Instructor 
-	SET NAME = p_Name, 
-		Email = p_Email,
-		DepartmentNo = p_DepartmentNo 
-	WHERE InstructorID = p_InstructorID;
+    UPDATE Instructor 
+    SET Name = COALESCE(p_Name, Name), 
+        Email = COALESCE(p_Email, Email),
+        DepartmentNo = COALESCE(p_DepartmentNo, DepartmentNo)
+    WHERE InstructorID = p_InstructorID;
 
-	RAISE NOTICE 'Instructor % upated successfully', p_Name;
+    RAISE NOTICE 'Instructor ID % updated successfully', p_InstructorID;
 
 EXCEPTION 
-	WHEN OTHERS THEN
-		RAISE NOTICE 'Transaction failed';
-
-END; 
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Transaction failed: %', SQLERRM;
+END;
 $$;
 
 
