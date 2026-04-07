@@ -128,53 +128,47 @@ IS 'Purpose: Delete a question by QuestionID. Parameters: QuestionID. Returns: n
 -- ---------------------------------------------------------------------------
 -- 4. SelectQuestion
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION SelectQuestion(p_question_id INT)
-RETURNS TABLE (
-    QuestionID INT,
-    CourseID INT,
-    QuestionText TEXT,
-    Type TEXT,
-    Points INT
+CREATE OR REPLACE PROCEDURE SelectQuestion(
+    IN p_question_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
     FROM Questions q
     WHERE q.QuestionID = p_question_id;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
 
-COMMENT ON FUNCTION SelectQuestion(INT)
-IS 'Purpose: Return one question by QuestionID. Parameters: QuestionID. Returns: QuestionID, CourseID, QuestionText, Type, Points. Exceptions: none.';
-
+COMMENT ON PROCEDURE SelectQuestion(INT, REFCURSOR)
+IS 'Purpose: Select one question by QuestionID. Parameters: QuestionID, cursor. Returns: cursor with question row. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 5. SelectQuestionsByCourse
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION SelectQuestionsByCourse(p_course_id INT)
-RETURNS TABLE (
-    QuestionID INT,
-    CourseID INT,
-    QuestionText TEXT,
-    Type TEXT,
-    Points INT
+CREATE OR REPLACE PROCEDURE SelectQuestionsByCourse(
+    IN p_course_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
     FROM Questions q
     WHERE q.CourseID = p_course_id
     ORDER BY q.QuestionID;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
 
-COMMENT ON FUNCTION SelectQuestionsByCourse(INT)
-IS 'Purpose: Return all questions for a specific course. Parameters: CourseID. Returns: question rows. Exceptions: none.';
-
+COMMENT ON PROCEDURE SelectQuestionsByCourse(INT, REFCURSOR)
+IS 'Purpose: Return all questions for a specific course. Parameters: CourseID, cursor. Returns: cursor with question rows. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 6. InsertOption
@@ -401,55 +395,44 @@ IS 'Purpose: Insert or update the model answer for a question. Parameters: Quest
 -- ---------------------------------------------------------------------------
 -- 10. SelectStudentAnswers
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION SelectStudentAnswers(p_student_exam_id INT)
-RETURNS TABLE (
-    StudentAnswerID INT,
-    StudentExamID INT,
-    QuestionID INT,
-    QuestionText TEXT,
-    ChosenOptionID INT,
-    ChosenOptionText TEXT
+CREATE OR REPLACE PROCEDURE SelectStudentAnswers(
+    IN p_student_exam_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT sa.StudentAnswerID,
            sa.StudentExamID,
            sa.QuestionID,
            q.QuestionText,
            sa.ChosenOptionID,
-           c.OptionText
+           c.OptionText AS ChosenOptionText
     FROM StudentAnswer sa
-    JOIN Questions q
-      ON q.QuestionID = sa.QuestionID
-    LEFT JOIN Choice c
-      ON c.OptionID = sa.ChosenOptionID
+    JOIN Questions q ON q.QuestionID = sa.QuestionID
+    LEFT JOIN Choice c ON c.OptionID = sa.ChosenOptionID
     WHERE sa.StudentExamID = p_student_exam_id
     ORDER BY sa.StudentAnswerID;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
 
-COMMENT ON FUNCTION SelectStudentAnswers(INT)
-IS 'Purpose: Return all submitted answers for a given StudentExam. Parameters: StudentExamID. Returns: StudentAnswerID, StudentExamID, QuestionID, QuestionText, ChosenOptionID, ChosenOptionText. Exceptions: none.';
-
+COMMENT ON PROCEDURE SelectStudentAnswers(INT, REFCURSOR)
+IS 'Purpose: Return all submitted answers for a StudentExam. Parameters: StudentExamID, cursor. Returns: cursor with answers. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 11. Report_StudentsByDepartment
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION Report_StudentsByDepartment(p_department_no INT)
-RETURNS TABLE (
-    StudentID INT,
-    Name TEXT,
-    Email TEXT,
-    Phone TEXT,
-    TrackName TEXT,
-    BranchName TEXT
+CREATE OR REPLACE PROCEDURE Report_StudentsByDepartment(
+    IN p_department_no INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT s.StudentID,
            s.Name,
            s.Email,
@@ -457,36 +440,29 @@ BEGIN
            t.TrackName,
            d.DepartmentName AS BranchName
     FROM Student s
-    JOIN StudentTrack st
-      ON st.StudentID = s.StudentID
-    JOIN Track t
-      ON t.TrackID = st.TrackID
-    JOIN Departments d
-      ON d.DepartmentID = t.DepartmentID
+    JOIN StudentTrack st ON st.StudentID = s.StudentID
+    JOIN Track t ON t.TrackID = st.TrackID
+    JOIN Departments d ON d.DepartmentID = t.DepartmentID
     WHERE d.DepartmentID = p_department_no
     ORDER BY s.Name;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
-
-COMMENT ON FUNCTION Report_StudentsByDepartment(INT)
-IS 'Purpose: Mandatory report - return students by department. Parameters: DepartmentNo. Returns: StudentID, Name, Email, Phone, TrackName, BranchName. Exceptions: none.';
-
+COMMENT ON PROCEDURE Report_StudentsByDepartment(INT, REFCURSOR)
+IS 'Purpose: Mandatory report - return students by department. Parameters: DepartmentNo, cursor. Returns: cursor with StudentID, Name, Email, Phone, TrackName, BranchName. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 12. Report_StudentGrades
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION Report_StudentGrades(p_student_id INT)
-RETURNS TABLE (
-    CourseName TEXT,
-    ExamName TEXT,
-    TotalGrade INT,
-    MaxDegree INT,
-    Percentage DOUBLE PRECISION
+CREATE OR REPLACE PROCEDURE Report_StudentGrades(
+    IN p_student_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT c.CourseName,
            e.ExamName,
            COALESCE(se.TotalGrade, 0) AS TotalGrade,
@@ -496,72 +472,56 @@ BEGIN
                ELSE (COALESCE(se.TotalGrade, 0)::FLOAT / c.MaxDegree::FLOAT) * 100
            END AS Percentage
     FROM StudentExam se
-    JOIN Exams e
-      ON e.ExamID = se.ExamID
-    JOIN Course c
-      ON c.CourseID = e.CourseID
+    JOIN Exams e ON e.ExamID = se.ExamID
+    JOIN Course c ON c.CourseID = e.CourseID
     WHERE se.StudentID = p_student_id
     ORDER BY e.ExamID DESC;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
-
-COMMENT ON FUNCTION Report_StudentGrades(INT)
-IS 'Purpose: Mandatory report - return student grades. Parameters: StudentID. Returns: CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.';
-
+COMMENT ON PROCEDURE Report_StudentGrades(INT, REFCURSOR)
+IS 'Purpose: Mandatory report - return student grades. Parameters: StudentID, cursor. Returns: cursor with CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 13. Report_InstructorCourses
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION Report_InstructorCourses(p_instructor_id INT)
-RETURNS TABLE (
-    CourseName TEXT,
-    TrackName TEXT,
-    StudentCount BIGINT
+CREATE OR REPLACE PROCEDURE Report_InstructorCourses(
+    IN p_instructor_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT c.CourseName,
            t.TrackName,
            COUNT(DISTINCT st.StudentID) AS StudentCount
     FROM InstructorCourse ic
-    JOIN Course c
-      ON c.CourseID = ic.CourseID
-    JOIN TrackCourse tc
-      ON tc.CourseID = c.CourseID
-    JOIN Track t
-      ON t.TrackID = tc.TrackID
-    LEFT JOIN StudentTrack st
-      ON st.TrackID = t.TrackID
+    JOIN Course c ON c.CourseID = ic.CourseID
+    JOIN TrackCourse tc ON tc.CourseID = c.CourseID
+    JOIN Track t ON t.TrackID = tc.TrackID
+    LEFT JOIN StudentTrack st ON st.TrackID = t.TrackID
     WHERE ic.InstructorID = p_instructor_id
     GROUP BY c.CourseName, t.TrackName
     ORDER BY c.CourseName, t.TrackName;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
-
-COMMENT ON FUNCTION Report_InstructorCourses(INT)
-IS 'Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID. Returns: CourseName, TrackName, StudentCount. Exceptions: none.';
-
-
+COMMENT ON PROCEDURE Report_InstructorCourses(INT, REFCURSOR)
+IS 'Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID, cursor. Returns: cursor with CourseName, TrackName, StudentCount. Exceptions: none.';
 -- ---------------------------------------------------------------------------
 -- 14. Report_ExamQuestions
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION Report_ExamQuestions(p_exam_id INT)
-RETURNS TABLE (
-    OrderNo INT,
-    QuestionID INT,
-    QuestionText TEXT,
-    Type TEXT,
-    Points INT,
-    OptionID INT,
-    OptionText TEXT,
-    OptionOrder INT
+CREATE OR REPLACE PROCEDURE Report_ExamQuestions(
+    IN p_exam_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT eq.OrderNo,
            q.QuestionID,
            q.QuestionText,
@@ -571,60 +531,47 @@ BEGIN
            c.OptionText,
            c.OptionOrder
     FROM ExamQuestion eq
-    JOIN Questions q
-      ON q.QuestionID = eq.QuestionID
-    LEFT JOIN Choice c
-      ON c.QuestionID = q.QuestionID
+    JOIN Questions q ON q.QuestionID = eq.QuestionID
+    LEFT JOIN Choice c ON c.QuestionID = q.QuestionID
     WHERE eq.ExamID = p_exam_id
     ORDER BY eq.OrderNo, c.OptionOrder;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
-
-COMMENT ON FUNCTION Report_ExamQuestions(INT)
-IS 'Purpose: Optional report - return all questions in an exam with their choices. Parameters: ExamID. Returns: OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.';
-
+COMMENT ON PROCEDURE Report_ExamQuestions(INT, REFCURSOR)
+IS 'Purpose: Optional report - return all exam questions with choices. Parameters: ExamID, cursor. Returns: cursor with OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 15. Report_StudentExamAnswers
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION Report_StudentExamAnswers(
-    p_exam_id INT,
-    p_student_id INT
-)
-RETURNS TABLE (
-    OrderNo INT,
-    QuestionText TEXT,
-    ChosenOptionText TEXT,
-    Correct BOOLEAN
+CREATE OR REPLACE PROCEDURE Report_StudentExamAnswers(
+    IN p_exam_id INT,
+    IN p_student_id INT,
+    INOUT p_cur REFCURSOR
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY
+    OPEN p_cur FOR
     SELECT eq.OrderNo,
            q.QuestionText,
            c.OptionText AS ChosenOptionText,
-           CASE
-               WHEN sa.ChosenOptionID = ma.CorrectOptionID THEN TRUE
-               ELSE FALSE
-           END AS Correct
+           CASE WHEN sa.ChosenOptionID = ma.CorrectOptionID THEN TRUE ELSE FALSE END AS Correct
     FROM StudentExam se
-    JOIN ExamQuestion eq
-      ON eq.ExamID = se.ExamID
-    JOIN Questions q
-      ON q.QuestionID = eq.QuestionID
+    JOIN ExamQuestion eq ON eq.ExamID = se.ExamID
+    JOIN Questions q ON q.QuestionID = eq.QuestionID
     LEFT JOIN StudentAnswer sa
-      ON sa.StudentExamID = se.StudentExamID
-     AND sa.QuestionID = eq.QuestionID
-    LEFT JOIN Choice c
-      ON c.OptionID = sa.ChosenOptionID
-    LEFT JOIN ModelAnswer ma
-      ON ma.QuestionID = q.QuestionID
+        ON sa.StudentExamID = se.StudentExamID
+       AND sa.QuestionID = eq.QuestionID
+    LEFT JOIN Choice c ON c.OptionID = sa.ChosenOptionID
+    LEFT JOIN ModelAnswer ma ON ma.QuestionID = q.QuestionID
     WHERE se.ExamID = p_exam_id
       AND se.StudentID = p_student_id
     ORDER BY eq.OrderNo;
+EXCEPTION WHEN OTHERS THEN
+    RAISE;
 END;
 $$;
-
-COMMENT ON FUNCTION Report_StudentExamAnswers(INT, INT)
-IS 'Purpose: Optional report - return student answers in an exam with correctness. Parameters: ExamID, StudentID. Returns: OrderNo, QuestionText, ChosenOptionText, Correct. Exceptions: none.';
+COMMENT ON PROCEDURE Report_StudentExamAnswers(INT, INT, REFCURSOR)
+IS 'Purpose: Optional report - return student exam answers with correctness. Parameters: ExamID, StudentID, cursor. Returns: cursor with OrderNo, QuestionText, ChosenOptionText, Correct. Exceptions: none.';
