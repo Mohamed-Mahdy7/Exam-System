@@ -56,7 +56,7 @@ BEGIN
 
 EXCEPTION 
     WHEN OTHERS THEN
-        RAISE NOTICE 'Transaction failed: %', SQLERRM;
+        RAISE NOTICE 'Transaction failed';
 END;
 $$;
 
