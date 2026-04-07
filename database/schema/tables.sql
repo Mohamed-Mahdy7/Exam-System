@@ -18,6 +18,11 @@ create table IF NOT EXISTS Course(
     CHECK (MinDegree >= 0),
     CHECK (MaxDegree > MinDegree)
 );
+create table IF NOT EXISTS TrackCourse(
+    TrackID int not null references Track(TrackID) on delete cascade,
+    CourseID int not null references Course(CourseID) on delete cascade,
+    primary key (TrackID, CourseID)
+);
 
 CREATE TABLE IF NOT EXISTS Instructor(
 	InstructorID SERIAL PRIMARY KEY ,
@@ -39,11 +44,7 @@ CREATE TABLE IF NOT EXISTS InstructorCourse (
 	PRIMARY KEY (InstructorID,CourseID)
 );
 
-create table IF NOT EXISTS TrackCourse(
-    TrackID int not null references Track(TrackID) on delete cascade,
-    CourseID int not null references Course(CourseID) on delete cascade,
-    primary key (TrackID, CourseID)
-);
+
 
 -- Create Table IF NOT EXISTS Exams
 CREATE TABLE IF NOT EXISTS Exams (
