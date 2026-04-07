@@ -71,80 +71,91 @@ IS 'Purpose: Insert a new option for a question. Parameters: QuestionID, OptionT
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_option_id INT,
-    IN p_question_id INT,
-    IN p_option_text TEXT,
-    IN p_option_order INT
+    IN p_question_id INT DEFAULT NULL,
+    IN p_option_text TEXT DEFAULT NULL,
+    IN p_option_order INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
+    v_old_question_id INT;
+    v_old_option_text TEXT;
+    v_old_option_order INT;
+
+    v_final_question_id INT;
+    v_final_option_text TEXT;
+    v_final_option_order INT;
+
     v_question_type TEXT;
     v_final_option_count INT;
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM Choice WHERE OptionID = p_option_id
-    ) THEN
+    SELECT QuestionID, OptionText, OptionOrder
+    INTO v_old_question_id, v_old_option_text, v_old_option_order
+    FROM Choice
+    WHERE OptionID = p_option_id;
+
+    IF NOT FOUND THEN
         RAISE EXCEPTION 'Option % does not exist', p_option_id;
     END IF;
 
+    v_final_question_id := COALESCE(p_question_id, v_old_question_id);
+    v_final_option_text := COALESCE(p_option_text, v_old_option_text);
+    v_final_option_order := COALESCE(p_option_order, v_old_option_order);
+
     IF NOT EXISTS (
-        SELECT 1 FROM Questions WHERE QuestionID = p_question_id
+        SELECT 1 FROM Questions WHERE QuestionID = v_final_question_id
     ) THEN
-        RAISE EXCEPTION 'Question % does not exist', p_question_id;
+        RAISE EXCEPTION 'Question % does not exist', v_final_question_id;
     END IF;
 
-    IF p_option_text IS NULL OR BTRIM(p_option_text) = '' THEN
+    IF v_final_option_text IS NULL OR BTRIM(v_final_option_text) = '' THEN
         RAISE EXCEPTION 'Option text cannot be empty';
     END IF;
 
-    IF p_option_order IS NULL OR p_option_order <= 0 THEN
+    IF v_final_option_order IS NULL OR v_final_option_order <= 0 THEN
         RAISE EXCEPTION 'Option order must be greater than 0';
     END IF;
 
     IF EXISTS (
         SELECT 1
         FROM Choice
-        WHERE QuestionID = p_question_id
-          AND OptionOrder = p_option_order
+        WHERE QuestionID = v_final_question_id
+          AND OptionOrder = v_final_option_order
           AND OptionID <> p_option_id
     ) THEN
-        RAISE EXCEPTION 'Option order % already exists for question %', p_option_order, p_question_id;
+        RAISE EXCEPTION 'Option order % already exists for question %',
+            v_final_option_order, v_final_question_id;
     END IF;
 
     SELECT Type
     INTO v_question_type
     FROM Questions
-    WHERE QuestionID = p_question_id;
+    WHERE QuestionID = v_final_question_id;
 
     SELECT COUNT(*)
     INTO v_final_option_count
     FROM Choice
-    WHERE QuestionID = p_question_id
+    WHERE QuestionID = v_final_question_id
       AND OptionID <> p_option_id;
 
     v_final_option_count := v_final_option_count + 1;
 
     IF v_question_type = 'MCQ' AND v_final_option_count > 4 THEN
-        RAISE EXCEPTION 'MCQ question % cannot have more than 4 options', p_question_id;
+        RAISE EXCEPTION 'MCQ question % cannot have more than 4 options', v_final_question_id;
     ELSIF v_question_type = 'TF' AND v_final_option_count > 2 THEN
-        RAISE EXCEPTION 'TF question % cannot have more than 2 options', p_question_id;
+        RAISE EXCEPTION 'TF question % cannot have more than 2 options', v_final_question_id;
     END IF;
 
     UPDATE Choice
-    SET QuestionID = p_question_id,
-        OptionText = p_option_text,
-        OptionOrder = p_option_order
+    SET QuestionID = v_final_question_id,
+        OptionText = v_final_option_text,
+        OptionOrder = v_final_option_order
     WHERE OptionID = p_option_id;
-
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE;
 END;
 $$;
 
 COMMENT ON PROCEDURE UpdateOption(INT, INT, TEXT, INT)
-IS 'Purpose: Update an existing option. Parameters: OptionID, QuestionID, OptionText, OptionOrder. Returns: none. Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.';
-
+IS 'Purpose: Update an existing option partially or fully. Parameters: OptionID, QuestionID, OptionText, OptionOrder. Null parameters keep old values. Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.';
 
 -- ---------------------------------------------------------------------------
 -- 3. DeleteOption
