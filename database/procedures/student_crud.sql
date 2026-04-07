@@ -18,16 +18,14 @@ BEGIN
 	INSERT INTO Student (Name, Email,Phone)
 	VALUES (p_Name, p_Email,p_phone );
 
-	COMMIT;
 	RAISE NOTICE 'Student % added successfully', p_Name;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 -- ==========================================================
@@ -53,16 +51,14 @@ BEGIN
 		Phone = p_phone 
 	WHERE StudentID = p_StudentID;
 
-	COMMIT;
 	RAISE NOTICE 'Student % upated successfully', p_Name;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 
@@ -81,16 +77,14 @@ BEGIN
 	DELETE FROM Student
 	WHERE StudentID = p_StudentID;
 
-	COMMIT;
 	RAISE NOTICE 'Student % deleted successfully',p_StudentID;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 
@@ -108,17 +102,11 @@ BEGIN
     SELECT StudentID, Name, Email, Phone 
     FROM Student;
 
-	COMMIT;
 
-END 
-$$
+END; 
+$$;
 
 
-BEGIN;
-CALL SelectStudents('data'); 
-FETCH ALL FROM data; 
-
-COMMIT;
 
 
 -- ==========================================================
