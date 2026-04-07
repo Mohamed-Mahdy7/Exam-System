@@ -135,12 +135,9 @@ CREATE OR REPLACE PROCEDURE SelectStudentsByTrack(
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    -- Attach the query to the cursor, filtering by the track ID
     OPEN ref FOR 
     SELECT StudentID, Name, Email, Phone 
     FROM Student
     WHERE TrackID = p_TrackID; 
-
-    -- Remember: No COMMIT here so the cursor stays open!
 END; 
 $$;
