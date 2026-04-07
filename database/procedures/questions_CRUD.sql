@@ -47,11 +47,11 @@ IS 'Purpose: Insert a new question. Parameters: CourseID, QuestionText, Type, Po
 -- 2. UpdateQuestion
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateQuestion(
-    IN p_question_id INT,
-    IN p_course_id INT,
-    IN p_question_text TEXT,
-    IN p_type TEXT,
-    IN p_points INT
+    IN p_question_id INT DEFAULT NULL,
+    IN p_course_id INT DEFAULT NULL,
+    IN p_question_text TEXT DEFAULT NULL,
+    IN p_type TEXT DEFAULT NULL,
+    IN p_points INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
@@ -81,10 +81,10 @@ BEGIN
     END IF;
 
     UPDATE Questions
-    SET CourseID = p_course_id,
-        QuestionText = p_question_text,
-        Type = p_type,
-        Points = p_points
+    SET CourseID = COALESCE(p_course_id, CourseID),
+        QuestionText = COALESCE(p_question_text, QuestionText),
+        Type = COALESCE(p_type, Type),
+        Points = COALESCE(p_points, Points)
     WHERE QuestionID = p_question_id;
 
 EXCEPTION
