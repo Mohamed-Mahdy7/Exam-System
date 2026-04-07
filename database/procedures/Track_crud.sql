@@ -51,3 +51,15 @@ select * from Track;
 ------------- select  ----------------------    
 
 
+CREATE OR REPLACE PROCEDURE SelectTrack(INOUT ref refcursor , p_DepartmentID int )
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN ref FOR
+    SELECT * FROM Track where DepartmentID = p_DepartmentID ;
+END;
+$$;
+
+
+CALL SelectTrack('mycursor',2);
+FETCH ALL FROM mycursor;

@@ -46,3 +46,5 @@ $$;
 call DeleteCourse(4 )
 
 select * from Course ;
+
+
