@@ -37,7 +37,6 @@ $$;
 -- 		p_phone: student phone number
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE UpdateStudent(
-CREATE OR REPLACE PROCEDURE UpdateStudent(
     p_StudentID INT,
     p_Name TEXT DEFAULT NULL,
     p_Email TEXT DEFAULT NULL,
