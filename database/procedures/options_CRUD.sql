@@ -74,6 +74,9 @@ CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_question_id INT DEFAULT NULL,
     IN p_option_text TEXT DEFAULT NULL,
     IN p_option_order INT DEFAULT NULL
+    IN p_question_id INT DEFAULT NULL,
+    IN p_option_text TEXT DEFAULT NULL,
+    IN p_option_order INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
@@ -104,14 +107,18 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM Questions WHERE QuestionID = v_final_question_id
+        SELECT 1 FROM Questions WHERE QuestionID = v_final_question_id
     ) THEN
+        RAISE EXCEPTION 'Question % does not exist', v_final_question_id;
         RAISE EXCEPTION 'Question % does not exist', v_final_question_id;
     END IF;
 
     IF v_final_option_text IS NULL OR BTRIM(v_final_option_text) = '' THEN
+    IF v_final_option_text IS NULL OR BTRIM(v_final_option_text) = '' THEN
         RAISE EXCEPTION 'Option text cannot be empty';
     END IF;
 
+    IF v_final_option_order IS NULL OR v_final_option_order <= 0 THEN
     IF v_final_option_order IS NULL OR v_final_option_order <= 0 THEN
         RAISE EXCEPTION 'Option order must be greater than 0';
     END IF;
@@ -121,8 +128,12 @@ BEGIN
         FROM Choice
         WHERE QuestionID = v_final_question_id
           AND OptionOrder = v_final_option_order
+        WHERE QuestionID = v_final_question_id
+          AND OptionOrder = v_final_option_order
           AND OptionID <> p_option_id
     ) THEN
+        RAISE EXCEPTION 'Option order % already exists for question %',
+            v_final_option_order, v_final_question_id;
         RAISE EXCEPTION 'Option order % already exists for question %',
             v_final_option_order, v_final_question_id;
     END IF;
@@ -131,10 +142,12 @@ BEGIN
     INTO v_question_type
     FROM Questions
     WHERE QuestionID = v_final_question_id;
+    WHERE QuestionID = v_final_question_id;
 
     SELECT COUNT(*)
     INTO v_final_option_count
     FROM Choice
+    WHERE QuestionID = v_final_question_id
     WHERE QuestionID = v_final_question_id
       AND OptionID <> p_option_id;
 
@@ -142,7 +155,9 @@ BEGIN
 
     IF v_question_type = 'MCQ' AND v_final_option_count > 4 THEN
         RAISE EXCEPTION 'MCQ question % cannot have more than 4 options', v_final_question_id;
+        RAISE EXCEPTION 'MCQ question % cannot have more than 4 options', v_final_question_id;
     ELSIF v_question_type = 'TF' AND v_final_option_count > 2 THEN
+        RAISE EXCEPTION 'TF question % cannot have more than 2 options', v_final_question_id;
         RAISE EXCEPTION 'TF question % cannot have more than 2 options', v_final_question_id;
     END IF;
 
@@ -150,11 +165,10 @@ BEGIN
     SET QuestionID = v_final_question_id,
         OptionText = v_final_option_text,
         OptionOrder = v_final_option_order
+    SET QuestionID = v_final_question_id,
+        OptionText = v_final_option_text,
+        OptionOrder = v_final_option_order
     WHERE OptionID = p_option_id;
-
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE;
 END;
 $$;
 
