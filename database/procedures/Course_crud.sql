@@ -52,11 +52,10 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     OPEN ref FOR
-   SELECT * FROM Course where 
-  (select * from TrackCourse where TrackID = p_TrackID ) 
-	 ;
+ SELECT * FROM Course 
+WHERE CourseID IN ( SELECT CourseID  FROM TrackCourse  WHERE TrackID = p_TrackID);
+	 
 END;
 $$;
- 
 CALL SelectCoursebyTrackID('mycursor',1);
 FETCH ALL FROM mycursor;
