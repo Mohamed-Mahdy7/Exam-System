@@ -9,7 +9,7 @@
 CREATE OR REPLACE PROCEDURE InsertInstructor(
 	p_Name TEXT,
     p_Email TEXT,
-    p_departmentNo INT 
+    p_DepartmentNo INT 
 )
 LANGUAGE plpgsql
 AS $$
@@ -22,11 +22,10 @@ BEGIN
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 -- ==========================================================
@@ -39,30 +38,27 @@ $$
 -- 		p_DepartmentNo: instructor department
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE UpdateInstructor(
-	p_InstructorID INT,
-	p_Name TEXT,
-    p_Email TEXT,
-    p_DepartmentNo INT 
+    p_InstructorID INT,
+    p_Name TEXT DEFAULT NULL,
+    p_Email TEXT DEFAULT NULL,
+    p_DepartmentNo INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	UPDATE Instructor 
-	SET NAME = p_Name, 
-		Email = p_Email,
-		DepartmentNo = p_DepartmentNo 
-	WHERE InstructorID = p_InstructorID;
+    UPDATE Instructor 
+    SET Name = COALESCE(p_Name, Name), 
+        Email = COALESCE(p_Email, Email),
+        DepartmentNo = COALESCE(p_DepartmentNo, DepartmentNo)
+    WHERE InstructorID = p_InstructorID;
 
-	COMMIT;
-	RAISE NOTICE 'Instructor % upated successfully', p_Name;
+    RAISE NOTICE 'Instructor ID % updated successfully', p_InstructorID;
 
 EXCEPTION 
-	WHEN OTHERS THEN
-		ROLLBACK;
-		RAISE NOTICE 'Transaction failed';
-
-END 
-$$
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Transaction failed ';
+END;
+$$;
 
 
 
@@ -80,15 +76,14 @@ BEGIN
 	WHERE InstructorID = p_InstructorID;
 
 	COMMIT;
-	RAISE NOTICE 'Instructor % deleted successfully', p_Name;
+	RAISE NOTICE 'Instructor % deleted successfully', p_InstructorID;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 
@@ -111,15 +106,8 @@ BEGIN
 
 	COMMIT;
 
-END 
-$$
-
-
-BEGIN;
-CALL SelectInstructors('data'); 
-FETCH ALL FROM data; 
-
-COMMIT;
+END;
+$$;
 
 -- ==========================================================
 -- Procedure Name: SelectInstructorsByDept
