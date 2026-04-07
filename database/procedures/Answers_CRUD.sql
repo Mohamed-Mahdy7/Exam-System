@@ -1,12 +1,15 @@
 -- ---------------------------------------------------------------------------
--- 9. SetModelAnswer
+-- 1. SetModelAnswer
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SetModelAnswer(
     IN p_question_id INT,
-    IN p_correct_option_id INT
+    IN p_correct_option_id INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    v_old_correct_option_id INT;
+    v_final_correct_option_id INT;
 BEGIN
     IF NOT EXISTS (
         SELECT 1 FROM Questions WHERE QuestionID = p_question_id
@@ -14,23 +17,34 @@ BEGIN
         RAISE EXCEPTION 'Question % does not exist', p_question_id;
     END IF;
 
+    SELECT CorrectOptionID
+    INTO v_old_correct_option_id
+    FROM ModelAnswer
+    WHERE QuestionID = p_question_id;
+
+    v_final_correct_option_id := COALESCE(p_correct_option_id, v_old_correct_option_id);
+
+    IF v_final_correct_option_id IS NULL THEN
+        RAISE EXCEPTION 'Correct option cannot be null for question %', p_question_id;
+    END IF;
+
     IF NOT EXISTS (
-        SELECT 1 FROM Choice WHERE OptionID = p_correct_option_id
+        SELECT 1 FROM Choice WHERE OptionID = v_final_correct_option_id
     ) THEN
-        RAISE EXCEPTION 'Option % does not exist', p_correct_option_id;
+        RAISE EXCEPTION 'Option % does not exist', v_final_correct_option_id;
     END IF;
 
     IF NOT EXISTS (
         SELECT 1
         FROM Choice
-        WHERE OptionID = p_correct_option_id
+        WHERE OptionID = v_final_correct_option_id
           AND QuestionID = p_question_id
     ) THEN
-        RAISE EXCEPTION 'Option % does not belong to question %', p_correct_option_id, p_question_id;
+        RAISE EXCEPTION 'Option % does not belong to question %', v_final_correct_option_id, p_question_id;
     END IF;
 
     INSERT INTO ModelAnswer (QuestionID, CorrectOptionID)
-    VALUES (p_question_id, p_correct_option_id)
+    VALUES (p_question_id, v_final_correct_option_id)
     ON CONFLICT (QuestionID)
     DO UPDATE SET CorrectOptionID = EXCLUDED.CorrectOptionID;
 
@@ -41,11 +55,10 @@ END;
 $$;
 
 COMMENT ON PROCEDURE SetModelAnswer(INT, INT)
-IS 'Purpose: Insert or update the model answer for a question. Parameters: QuestionID, CorrectOptionID. Returns: none. Exceptions: missing question, missing option, or option not belonging to the question.';
-
+IS 'Purpose: Insert or update the model answer for a question. Parameters: QuestionID, CorrectOptionID. Null CorrectOptionID keeps old value if model answer already exists. Returns: none. Exceptions: missing question, null option when no current model answer exists, missing option, or option not belonging to the question.';
 
 -- ---------------------------------------------------------------------------
--- 10. SelectStudentAnswers
+-- 2. SelectStudentAnswers
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectStudentAnswers(
     IN p_student_exam_id INT,
