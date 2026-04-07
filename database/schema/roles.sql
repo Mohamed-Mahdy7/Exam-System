@@ -2,7 +2,7 @@
 
 CREATE ROLE admin_role
 WITH LOGIN
-PASSWORD "admin123"
+PASSWORD 'admin123'
 SUPERUSER
 CREATEDB
 CREATEROLE;
@@ -11,9 +11,7 @@ CREATEROLE;
 --  Grant privilege for admin_role
 
 GRANT CONNECT ON DATABASE exam_db TO admin_role;
-
 GRANT USAGE ON SCHEMA public TO admin_role;
-
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON ALL TABLES IN SCHEMA public
 TO admin_role;
