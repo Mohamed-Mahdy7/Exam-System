@@ -9,7 +9,7 @@
 CREATE OR REPLACE PROCEDURE InsertInstructor(
 	p_Name TEXT,
     p_Email TEXT,
-    p_departmentNo INT 
+    p_DepartmentNo INT 
 )
 LANGUAGE plpgsql
 AS $$
@@ -22,11 +22,10 @@ BEGIN
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 -- ==========================================================
@@ -53,16 +52,14 @@ BEGIN
 		DepartmentNo = p_DepartmentNo 
 	WHERE InstructorID = p_InstructorID;
 
-	COMMIT;
 	RAISE NOTICE 'Instructor % upated successfully', p_Name;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END; 
+$$;
 
 
 
@@ -80,15 +77,14 @@ BEGIN
 	WHERE InstructorID = p_InstructorID;
 
 	COMMIT;
-	RAISE NOTICE 'Instructor % deleted successfully', p_Name;
+	RAISE NOTICE 'Instructor % deleted successfully', p_InstructorID;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		ROLLBACK;
 		RAISE NOTICE 'Transaction failed';
 
-END 
-$$
+END;
+$$;
 
 
 
@@ -111,15 +107,8 @@ BEGIN
 
 	COMMIT;
 
-END 
-$$
-
-
-BEGIN;
-CALL SelectInstructors('data'); 
-FETCH ALL FROM data; 
-
-COMMIT;
+END;
+$$;
 
 -- ==========================================================
 -- Procedure Name: SelectInstructorsByDept
