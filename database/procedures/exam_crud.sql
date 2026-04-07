@@ -8,10 +8,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL ex_sa('mycursor');
 -- 	FETCH ALL FROM mycursor;
--- COMMIT;
 
 
 -- SELECT EXAM BY ExamID
@@ -33,11 +31,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL ex_s(5, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;
 
 
 -- SELECT EXAM BY CourseID
@@ -59,11 +54,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL ex_s(3, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;
 
 
 -- INSERT INTO Exams

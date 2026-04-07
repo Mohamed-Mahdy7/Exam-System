@@ -8,10 +8,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL se_s('mycursor');
 -- 	FETCH ALL FROM mycursor;
--- COMMIT;
 
 
 -- SELECT SrudentExam BY ExamID
@@ -33,11 +31,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL se_s_eid(5, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;
 
 
 -- SELECT SrudentExam BY StudentID
@@ -59,11 +54,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL se_s_sid(5, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;
 
 
 -- SELECT SrudentExam BY StudentExamID
@@ -85,8 +77,5 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL se_s_seid(8, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;

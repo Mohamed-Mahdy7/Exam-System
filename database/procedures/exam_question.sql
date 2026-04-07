@@ -8,10 +8,8 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL exq_sa('mycursor');
 -- 	FETCH ALL FROM mycursor;
--- COMMIT;
 
 
 -- SELECT ExamQuestion BY ExamID
@@ -33,11 +31,9 @@ BEGIN
 END;
 $$;
 
--- BEGIN;
 -- 	CALL exq_s_eid(5, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
--- 	CLOSE mycursor;
--- COMMIT;
+
 
 
 -- INSERT INTO ExamQuestion
