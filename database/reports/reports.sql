@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- 11. Report_StudentsByDepartment
+-- 1. Report_StudentsByDepartment
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentsByDepartment(
     IN p_department_no INT,
@@ -29,7 +29,7 @@ COMMENT ON PROCEDURE Report_StudentsByDepartment(INT, REFCURSOR)
 IS 'Purpose: Mandatory report - return students by department. Parameters: DepartmentNo, cursor. Returns: cursor with StudentID, Name, Email, Phone, TrackName, BranchName. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
--- 12. Report_StudentGrades
+-- 2. Report_StudentGrades
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentGrades(
     IN p_student_id INT,
@@ -60,7 +60,7 @@ COMMENT ON PROCEDURE Report_StudentGrades(INT, REFCURSOR)
 IS 'Purpose: Mandatory report - return student grades. Parameters: StudentID, cursor. Returns: cursor with CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
--- 13. Report_InstructorCourses
+-- 3. Report_InstructorCourses
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_InstructorCourses(
     IN p_instructor_id INT,
@@ -88,7 +88,7 @@ $$;
 COMMENT ON PROCEDURE Report_InstructorCourses(INT, REFCURSOR)
 IS 'Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID, cursor. Returns: cursor with CourseName, TrackName, StudentCount. Exceptions: none.';
 -- ---------------------------------------------------------------------------
--- 14. Report_ExamQuestions
+-- 4. Report_ExamQuestions
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_ExamQuestions(
     IN p_exam_id INT,
@@ -119,7 +119,7 @@ COMMENT ON PROCEDURE Report_ExamQuestions(INT, REFCURSOR)
 IS 'Purpose: Optional report - return all exam questions with choices. Parameters: ExamID, cursor. Returns: cursor with OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
--- 15. Report_StudentExamAnswers
+-- 5. Report_StudentExamAnswers
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentExamAnswers(
     IN p_exam_id INT,

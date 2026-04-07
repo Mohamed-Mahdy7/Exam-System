@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- 9. SetModelAnswer
+-- 1. SetModelAnswer
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SetModelAnswer(
     IN p_question_id INT,
@@ -45,7 +45,7 @@ IS 'Purpose: Insert or update the model answer for a question. Parameters: Quest
 
 
 -- ---------------------------------------------------------------------------
--- 10. SelectStudentAnswers
+-- 2. SelectStudentAnswers
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectStudentAnswers(
     IN p_student_exam_id INT,

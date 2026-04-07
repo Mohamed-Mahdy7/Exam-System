@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- 6. InsertOption
+-- 1. InsertOption
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE InsertOption(
     IN p_question_id INT,
@@ -67,7 +67,7 @@ IS 'Purpose: Insert a new option for a question. Parameters: QuestionID, OptionT
 
 
 -- ---------------------------------------------------------------------------
--- 7. UpdateOption
+-- 2. UpdateOption
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_option_id INT,
@@ -147,7 +147,7 @@ IS 'Purpose: Update an existing option. Parameters: OptionID, QuestionID, Option
 
 
 -- ---------------------------------------------------------------------------
--- 8. DeleteOption
+-- 3. DeleteOption
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE DeleteOption(
     IN p_option_id INT
