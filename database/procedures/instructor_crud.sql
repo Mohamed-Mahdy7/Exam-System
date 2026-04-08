@@ -228,7 +228,7 @@ BEGIN
     CALL AssignInstructorToCourse(2, 12);  
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Test failed. Error: %', SQLERRM;
+        RAISE NOTICE 'Assignment failed. Error: %', SQLERRM;
 END;
 $$;
 

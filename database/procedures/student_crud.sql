@@ -128,6 +128,34 @@ BEGIN
 END; 
 $$;
 
+
+-- ==========================================================
+-- Procedure Name: AssignStudentToTrack
+-- purpose: Assigns a student to a specific track
+-- parameters:
+--      p_StudentID : The ID of the student being assigned
+--      p_TrackID : The ID of the track they are assigned to
+-- ==========================================================
+CREATE OR REPLACE PROCEDURE AssignStudentToTrack(
+    p_StudentID INT,
+    p_TrackID INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	INSERT INTO studenttrack (studentid, trackid)
+    VALUES (p_StudentID, p_TrackID);
+	
+    RAISE NOTICE 'Student ID % was successfully assigned to Track ID %', p_StudentID, p_TrackID;
+
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Assignment failed. Error: %', SQLERRM;
+END; 
+$$;
+
+
+
 -- ==========================================================
 -- Testing : Call Procedures
 -- ==========================================================
@@ -189,6 +217,17 @@ FETCH ALL FROM track_data;
 COMMIT;
 
 
+--=================================================================================------
+
+DO $$
+BEGIN
+    CALL AssignStudentToTrack(1, 7);
+    
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'assigning failed. Error: %', SQLERRM;
+END;
+$$;
 
 
 *\
