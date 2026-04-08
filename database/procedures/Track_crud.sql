@@ -8,7 +8,7 @@ AS $$
 BEGIN 
     INSERT INTO Track (TrackName,DepartmentID ) VALUES(p_TracktName,p_DepartmentID );
  END   
-$$
+$$;
 
 -- call InsertTrack('work', 2);
 -- call InsertTrack('park', 2);
@@ -30,7 +30,7 @@ BEGIN
         DepartmentID = COALESCE(p_DepartmentID, DepartmentID)
     WHERE TrackID = p_trackID;
  END   
-$$
+$$;
 -- call UpdateTrack (2, 'java',1 )
 ------------- delete ----------------------
 

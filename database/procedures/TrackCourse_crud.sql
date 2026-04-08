@@ -14,7 +14,7 @@ BEGIN
 END;
 $$;
 
-call AssignTrackToCourse(2,4)
-select * from TrackCourse ;
+-- call AssignTrackToCourse(2,4)
+-- select * from TrackCourse ;
 
 

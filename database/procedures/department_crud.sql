@@ -8,8 +8,8 @@ AS $$
 BEGIN 
     INSERT INTO Departments (DepartmentName,Location ) VALUES(p_DepartmentName,p_Location );
  END   
-$$
-call InsertDepartment('testing', 'Building b');
+$$;
+-- call InsertDepartment('testing', 'Building b');
 
 ------------- update ----------------------
 

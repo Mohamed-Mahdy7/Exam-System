@@ -9,9 +9,9 @@ AS $$
 BEGIN 
     INSERT INTO Course (CourseName,MinDegree,MaxDegree ) VALUES(p_CourseName,p_MinDegree,p_MaxDegree );
  END   
-$$
+$$;
 
-call InsertCourses ('python' , 40, 100 )
+-- call InsertCourses ('python' , 40, 100 )
 
 
 ----------------------- update ----------------------------
@@ -19,11 +19,11 @@ call InsertCourses ('python' , 40, 100 )
 
 
 
-create or replace procedure UpdateCourses(
+CREATE OR REPLACE PROCEDURE UpdateCourses(
     p_CourseID int,
     p_CourseName text DEFAULT NULL,
     p_MinDegree int DEFAULT NULL, 
-      p_MaxDegree int DEFAULT NULL
+    p_MaxDegree int DEFAULT NULL
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
@@ -33,7 +33,8 @@ BEGIN
         MaxDegree = COALESCE(p_MaxDegree, MaxDegree)
     WHERE CourseID = p_CourseID;
  END
-$$
+$$;
+
 -- call UpdateCourses ( 5 , 'Java', 60, 100)
 ----------------------- delete  ----------------------------
 CREATE OR REPLACE PROCEDURE DeleteCourse(
