@@ -127,3 +127,68 @@ BEGIN
     WHERE TrackID = p_TrackID; 
 END; 
 $$;
+
+-- ==========================================================
+-- Testing : Call Procedures
+-- ==========================================================
+
+/*
+
+SELECT * FROM student;
+SELECT * FROM track;
+
+DO $$
+BEGIN
+    CALL InsertStudent('Dalia Ahmed', 'Dalia.ahmed@example.com', '01012345678');
+    RAISE NOTICE 'committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Insert failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+DO $$
+BEGIN
+    CALL UpdateStudent(31,'Mona Ahmed', 'mona.ahmed@example.com', '01012345677');
+    RAISE NOTICE 'Update committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Update failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+DO $$
+BEGIN
+    CALL DeleteStudent(31);
+    RAISE NOTICE 'Delete committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Delete failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+BEGIN;
+CALL SelectStudents('all_students'); 
+FETCH ALL FROM all_instructors; 
+COMMIT;
+
+--=================================================================================------
+
+BEGIN;
+CALL SelectStudentsByTrack('track_data', 2); 
+FETCH ALL FROM track_data; 
+COMMIT;
+
+
+
+
+*\
