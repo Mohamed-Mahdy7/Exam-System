@@ -1,4 +1,11 @@
------------------------ insert ----------------------------
+-- ==========================================================
+-- Procedure Name: InsertCourses
+-- Description: Adds new course
+-- parameters:
+-- 		p_CourseName : Course Name
+-- 		p_MinDegree: MinDegree of course
+--      p_MaxDegree: MaxDegree of course
+-- ==========================================================
 
 create or replace procedure InsertCourses(
     p_CourseName text,
@@ -14,10 +21,15 @@ $$;
 -- call InsertCourses ('python' , 40, 100 )
 
 
------------------------ update ----------------------------
-
-
-
+-- ==========================================================
+-- Procedure Name: UpdateCourses
+-- Description: update existing Course
+-- parameters:
+-- 		p_CourseID : CourseID
+-- 		p_CourseName: Course Name if want dont change insert null
+--     p_MinDegree :MinDegree  if want dont change insert null
+--      p_MaxDegree: MaxDegree if want dont change insert null
+-- ==========================================================
 
 CREATE OR REPLACE PROCEDURE UpdateCourses(
     p_CourseID int,
@@ -36,7 +48,12 @@ BEGIN
 $$;
 
 -- call UpdateCourses ( 5 , 'Java', 60, 100)
------------------------ delete  ----------------------------
+-- ==========================================================
+-- Procedure Name: DeleteCourse
+-- Description: deletes existing course
+-- parameters:
+-- 		p_CourseID : Course ID of Course to delete 
+-- ==========================================================
 CREATE OR REPLACE PROCEDURE DeleteCourse(
      p_CourseID int
 )
@@ -50,7 +67,12 @@ $$;
 
 -- call DeleteCourse(4 )
 
--- select * from Course ;
+-- ==========================================================
+-- Procedure Name: SelectCoursebyTrackID
+-- Description: selcet Course by Track id 
+-- parameters:
+--		p_TrackID: ID of Track to select by Track id 
+-- ==========================================================
 
 CREATE OR REPLACE PROCEDURE SelectCoursebyTrackID(INOUT ref refcursor , p_TrackID int   )
 LANGUAGE plpgsql

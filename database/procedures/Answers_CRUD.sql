@@ -1,5 +1,6 @@
 -- ---------------------------------------------------------------------------
 -- 1. SetModelAnswer
+-- Purpose: Insert or update the model answer for a question. Parameters: QuestionID, CorrectOptionID. Null CorrectOptionID keeps old value if model answer already exists. Returns: none. Exceptions: missing question, null option when no current model answer exists, missing option, or option not belonging to the question.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SetModelAnswer(
     IN p_question_id INT,
@@ -54,11 +55,9 @@ EXCEPTION
 END;
 $$;
 
-COMMENT ON PROCEDURE SetModelAnswer(INT, INT)
-IS 'Purpose: Insert or update the model answer for a question. Parameters: QuestionID, CorrectOptionID. Null CorrectOptionID keeps old value if model answer already exists. Returns: none. Exceptions: missing question, null option when no current model answer exists, missing option, or option not belonging to the question.';
-
 -- ---------------------------------------------------------------------------
 -- 2. SelectStudentAnswers
+-- Purpose: Return all submitted answers for a StudentExam. Parameters: StudentExamID, cursor. Returns: cursor with answers. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectStudentAnswers(
     IN p_student_exam_id INT,
@@ -83,6 +82,3 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-
-COMMENT ON PROCEDURE SelectStudentAnswers(INT, REFCURSOR)
-IS 'Purpose: Return all submitted answers for a StudentExam. Parameters: StudentExamID, cursor. Returns: cursor with answers. Exceptions: none.';
