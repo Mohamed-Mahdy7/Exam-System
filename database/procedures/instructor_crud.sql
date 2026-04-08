@@ -129,6 +129,32 @@ END;
 $$;
 
 
+-- ==========================================================
+-- Procedure Name: AssignInstructorToCourse
+-- purpose: Links an existing instructor to a specific course
+-- parameters:
+--      p_InstructorID : The ID of the instructor to assign
+--      p_CourseID : The ID of the course they will teach
+-- ==========================================================
+CREATE OR REPLACE PROCEDURE AssignInstructorToCourse(
+    p_InstructorID INT,
+    p_CourseID INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO InstructorCourse (InstructorID, CourseID) 
+    VALUES (p_InstructorID, p_CourseID);
+    RAISE NOTICE 'Instructor ID % was successfully assigned to Course ID %', p_InstructorID, p_CourseID;
+
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Assignment failed. Error: %', SQLERRM;
+END; 
+$$;
+
+
+
 
 -- ==========================================================
 -- Testing : Call Procedures
@@ -189,5 +215,22 @@ BEGIN;
 CALL SelectInstructorsByDept('dept_data', 1); 
 FETCH ALL FROM dept_data; 
 COMMIT;
+
+
+--=================================================================================------
+
+SELECT * FROM Course;
+SELECT * FROM InstructorCourse;
+
+
+DO $$
+BEGIN
+    CALL AssignInstructorToCourse(2, 12);  
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Test failed. Error: %', SQLERRM;
+END;
+$$;
+
 
 *\
