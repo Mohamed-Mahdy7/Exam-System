@@ -1,5 +1,6 @@
 -- ---------------------------------------------------------------------------
 -- 1. InsertOption
+-- Purpose: Insert a new option for a question. Parameters: QuestionID, OptionText, OptionOrder. Returns: OptionID through OUT parameter. Exceptions: missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE InsertOption(
     IN p_question_id INT,
@@ -62,12 +63,10 @@ EXCEPTION
 END;
 $$;
 
-COMMENT ON PROCEDURE InsertOption(INT, TEXT, INT)
-IS 'Purpose: Insert a new option for a question. Parameters: QuestionID, OptionText, OptionOrder. Returns: OptionID through OUT parameter. Exceptions: missing question, empty text, invalid order, duplicate order, exceeded allowed option count.';
-
 
 -- ---------------------------------------------------------------------------
 -- 2. UpdateOption
+-- Purpose: Update an existing option. Any NULL input keeps the current value (partial update). Parameters: OptionID, QuestionID, OptionText, OptionOrder. Returns: none. Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_option_id INT,
@@ -170,10 +169,10 @@ EXCEPTION
 END;
 $$;
 
-COMMENT ON PROCEDURE UpdateOption(INT, INT, TEXT, INT)
-IS 'Purpose: Update an existing option. Any NULL input keeps the current value (partial update). Parameters: OptionID, QuestionID, OptionText, OptionOrder. Returns: none. Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.';
+
 -- ---------------------------------------------------------------------------
 -- 3. DeleteOption
+-- Purpose: Delete an option by OptionID. Parameters: OptionID. Returns: none. Exceptions: option not found.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE DeleteOption(
     IN p_option_id INT
@@ -195,6 +194,3 @@ EXCEPTION
         RAISE;
 END;
 $$;
-
-COMMENT ON PROCEDURE DeleteOption(INT)
-IS 'Purpose: Delete an option by OptionID. Parameters: OptionID. Returns: none. Exceptions: option not found.';

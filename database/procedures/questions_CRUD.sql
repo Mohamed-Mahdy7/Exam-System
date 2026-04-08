@@ -1,5 +1,6 @@
 -- ---------------------------------------------------------------------------
 -- 1. InsertQuestion
+-- Purpose: Insert a new question. Parameters: CourseID, QuestionText, Type, Points. Returns: QuestionID through OUT parameter. Exceptions: empty text, invalid type, invalid points, missing course.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE InsertQuestion(
     IN p_course_id INT,
@@ -39,12 +40,11 @@ EXCEPTION
 END;
 $$;
 
-COMMENT ON PROCEDURE InsertQuestion(INT, TEXT, TEXT, INT)
-IS 'Purpose: Insert a new question. Parameters: CourseID, QuestionText, Type, Points. Returns: QuestionID through OUT parameter. Exceptions: empty text, invalid type, invalid points, missing course.';
 
 
 -- ---------------------------------------------------------------------------
 -- 2. UpdateQuestion
+-- Purpose: Update an existing question partially or fully. Parameters: QuestionID, CourseID, QuestionText, Type, Points. Null parameters keep old values. Returns: none. Exceptions: missing question, missing course, empty text, invalid type, invalid points.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateQuestion(
     IN p_question_id INT DEFAULT NULL,
@@ -107,11 +107,9 @@ BEGIN
 END;
 $$;
 
-COMMENT ON PROCEDURE UpdateQuestion(INT, INT, TEXT, TEXT, INT)
-IS 'Purpose: Update an existing question partially or fully. Parameters: QuestionID, CourseID, QuestionText, Type, Points. Null parameters keep old values. Returns: none. Exceptions: missing question, missing course, empty text, invalid type, invalid points.';
-
 -- ---------------------------------------------------------------------------
 -- 3. DeleteQuestion
+-- Purpose: Delete a question by QuestionID. Parameters: QuestionID. Returns: none. Exceptions: question not found. Cascading behavior depends on foreign keys.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE DeleteQuestion(
     IN p_question_id INT
@@ -134,12 +132,10 @@ EXCEPTION
 END;
 $$;
 
-COMMENT ON PROCEDURE DeleteQuestion(INT)
-IS 'Purpose: Delete a question by QuestionID. Parameters: QuestionID. Returns: none. Exceptions: question not found. Cascading behavior depends on foreign keys.';
-
 
 -- ---------------------------------------------------------------------------
 -- 4. SelectQuestion
+-- Purpose: Select one question by QuestionID. Parameters: QuestionID, cursor. Returns: cursor with question row. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectQuestion(
     IN p_question_id INT,
@@ -157,11 +153,9 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $$;
 
-COMMENT ON PROCEDURE SelectQuestion(INT, REFCURSOR)
-IS 'Purpose: Select one question by QuestionID. Parameters: QuestionID, cursor. Returns: cursor with question row. Exceptions: none.';
-
 -- ---------------------------------------------------------------------------
 -- 5. SelectQuestionsByCourse
+-- Purpose: Return all questions for a specific course. Parameters: CourseID, cursor. Returns: cursor with question rows. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectQuestionsByCourse(
     IN p_course_id INT,
@@ -179,7 +173,3 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-
-COMMENT ON PROCEDURE SelectQuestionsByCourse(INT, REFCURSOR)
-IS 'Purpose: Return all questions for a specific course. Parameters: CourseID, cursor. Returns: cursor with question rows. Exceptions: none.';
-
