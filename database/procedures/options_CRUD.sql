@@ -74,6 +74,9 @@ CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_question_id INT DEFAULT NULL,
     IN p_option_text TEXT DEFAULT NULL,
     IN p_option_order INT DEFAULT NULL
+    IN p_question_id INT,
+    IN p_option_text TEXT DEFAULT NULL,
+    IN p_option_order INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
@@ -99,8 +102,7 @@ BEGIN
         RAISE EXCEPTION 'Option % does not exist', p_option_id;
     END IF;
 
-    -- Determine final values (use input if provided, otherwise keep current)
-    v_final_question_id := COALESCE(p_question_id, v_current_question_id);
+    v_final_question_id := p_question_id;
     v_final_option_text := COALESCE(p_option_text, v_current_option_text);
     v_final_option_order := COALESCE(p_option_order, v_current_option_order);
 

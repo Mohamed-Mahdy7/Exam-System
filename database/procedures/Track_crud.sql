@@ -8,30 +8,30 @@ AS $$
 BEGIN 
     INSERT INTO Track (TrackName,DepartmentID ) VALUES(p_TracktName,p_DepartmentID );
  END   
-$$
+$$;
 
-call InsertTrack('work', 2);
-call InsertTrack('park', 2);
-call InsertTrack('shark', 2);
+-- call InsertTrack('work', 2);
+-- call InsertTrack('park', 2);
+-- call InsertTrack('shark', 2);
 
 ------------- update ----------------------
 
 
 CREATE OR REPLACE PROCEDURE UpdateTrack(
-p_trackID int,
-    p_TracktName TEXT,
-    p_DepartmentID int
+p_trackID int DEFAULT NULL,
+    p_TracktName TEXT DEFAULT NULL,
+    p_DepartmentID int DEFAULT NULL
   
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
       UPDATE Track
-    SET TrackName = p_TracktName,
-        DepartmentID = p_DepartmentID
+    SET TrackName = COALESCE(p_TracktName, TrackName),
+        DepartmentID = COALESCE(p_DepartmentID, DepartmentID)
     WHERE TrackID = p_trackID;
  END   
-$$
-call UpdateTrack (2, 'java',1 )
+$$;
+-- call UpdateTrack (2, 'java',1 )
 ------------- delete ----------------------
 
 CREATE OR REPLACE PROCEDURE DeleteTrack(
@@ -45,9 +45,9 @@ BEGIN
 END;
 $$;
 
-call DeleteTrack(6)
+-- call DeleteTrack(6)
 
-select * from Track;
+-- select * from Track;
 ------------- select  ----------------------    
 
 
@@ -61,5 +61,5 @@ END;
 $$;
 
 
-CALL SelectTrack('mycursor',2);
-FETCH ALL FROM mycursor;
+-- CALL SelectTrack('mycursor',2);
+-- FETCH ALL FROM mycursor;
