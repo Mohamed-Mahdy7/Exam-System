@@ -1,6 +1,6 @@
 -- ==========================================================
 -- Procedure Name: InsertInstructor
--- Description: Adds new instructor
+-- purpose: Adds new instructor
 -- parameters:
 -- 		p_name : instructor name
 -- 		p_email: instructor email
@@ -17,12 +17,11 @@ BEGIN
 	INSERT INTO Instructor (Name, Email,DepartmentNo)
 	VALUES (p_Name, p_Email,p_DepartmentNo );
 
-	COMMIT;
 	RAISE NOTICE 'Instructor % added successfully', p_Name;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		RAISE NOTICE 'Transaction failed';
+		RAISE EXCEPTION 'Transaction failed';
 
 END;
 $$;
@@ -30,7 +29,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: UpdateInstructor
--- Description: updates existing instructor
+-- purpose: updates existing instructor
 -- parameters:
 --		p_InstructorID: ID of instructor to update
 -- 		p_name : instructor name
@@ -56,7 +55,7 @@ BEGIN
 
 EXCEPTION 
     WHEN OTHERS THEN
-        RAISE NOTICE 'Transaction failed ';
+        RAISE EXCEPTION 'Transaction failed ';
 END;
 $$;
 
@@ -64,7 +63,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: DeleteInstructor
--- Description: deletes existing instructor
+-- purpose: deletes existing instructor
 -- parameters:
 -- 		p_InstructorID : ID of instructor to delete 
 -- ==========================================================
@@ -75,12 +74,11 @@ BEGIN
 	DELETE FROM Instructor
 	WHERE InstructorID = p_InstructorID;
 
-	COMMIT;
 	RAISE NOTICE 'Instructor % deleted successfully', p_InstructorID;
 
 EXCEPTION 
 	WHEN OTHERS THEN
-		RAISE NOTICE 'Transaction failed';
+		RAISE EXCEPTION 'Transaction failed';
 
 END;
 $$;
@@ -89,7 +87,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: SelectInstructors
--- Description: updates existing instructor
+-- purpose: updates existing instructor
 -- parameters:
 --		p_InstructorID: ID of instructor to update
 -- 		p_name : instructor name
@@ -104,14 +102,13 @@ BEGIN
     SELECT InstructorID, Name, Email, DepartmentNo 
     FROM Instructor; 
 
-	COMMIT;
 
 END;
 $$;
 
 -- ==========================================================
 -- Procedure Name: SelectInstructorsByDept
--- Description: Returns instructors filtered by their department
+-- purpose: Returns instructors filtered by their department
 -- parameters:
 --      ref : The cursor used to point to the data
 --      p_DepartmentNo : The ID of the department to filter by
@@ -130,3 +127,67 @@ BEGIN
 
 END; 
 $$;
+
+
+
+-- ==========================================================
+-- Testing : Call Procedures
+-- ==========================================================
+
+/*
+SELECT * FROM instructor;
+SELECT * FROM Departments;
+
+
+DO $$
+BEGIN
+    CALL InsertInstructor('DR. Mahmoud Ahmed', 'mahmoud.ahmed@university.com', 1);
+    RAISE NOTICE 'Insert committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Insert failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+DO $$
+BEGIN
+    CALL UpdateInstructor(17,'DR Mona Ahmed', 'mona.ahmed@university.com',1);
+    RAISE NOTICE 'Update committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Update failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+DO $$
+BEGIN
+    CALL DeleteInstructor(17);
+    RAISE NOTICE 'Delete committed successfully.';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Delete failed. Error: %', SQLERRM;
+END;
+$$;
+
+--=================================================================================------
+
+BEGIN;
+CALL SelectInstructors('all_instructors'); 
+FETCH ALL FROM all_instructors; 
+COMMIT;
+
+--=================================================================================------
+
+BEGIN;
+CALL SelectInstructorsByDept('dept_data', 1); 
+FETCH ALL FROM dept_data; 
+COMMIT;
+
+*\

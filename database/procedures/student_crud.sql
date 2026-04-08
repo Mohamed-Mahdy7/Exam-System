@@ -1,7 +1,7 @@
 
 -- ==========================================================
 -- Procedure Name: InsertStudent
--- Description: Adds new student
+-- purpose: Adds new student
 -- parameters:
 -- 		p_name : instructor name
 -- 		p_email: instructor email
@@ -30,7 +30,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: UpdateStudent
--- Description: updates existing stue
+-- purpose: updates existing stue
 -- parameters:
 -- 		p_name : instructor name
 -- 		p_email: instructor email
@@ -63,7 +63,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: DeleteStudent
--- Description: deletes existing student
+-- purpose: deletes existing student
 -- parameters:
 -- 		p_name : instructor name
 -- 		p_email: instructor email
@@ -89,7 +89,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: SelectStudents
--- Description: updates existing student
+-- purpose: updates existing student
 -- parameters:
 --		ref : The cursor used to point to the data
 -- ==========================================================
@@ -101,7 +101,6 @@ BEGIN
     SELECT StudentID, Name, Email, Phone 
     FROM Student;
 
-
 END; 
 $$;
 
@@ -110,7 +109,7 @@ $$;
 
 -- ==========================================================
 -- Procedure Name: SelectStudentsByTrack
--- Description: Returns a list of students filtered by their track
+-- purpose: Returns a list of students filtered by their track
 -- parameters:
 --      ref : The cursor used to point to the data
 --      p_TrackID : The ID of the track to filter by
