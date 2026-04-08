@@ -1,4 +1,13 @@
 
+-- ==========================================================
+-- Procedure Name: AssignTrackToCourse
+-- Description: Adds new Track To Course
+-- parameters:
+-- 		p_TrackID : Track ID
+-- 		p_CourseID: Course ID 
+-- ==========================================================
+
+
 CREATE OR REPLACE PROCEDURE AssignTrackToCourse(
     IN p_TrackID INT,
     IN p_CourseID INT
