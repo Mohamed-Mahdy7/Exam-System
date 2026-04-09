@@ -24,9 +24,7 @@ BEGIN
         RAISE EXCEPTION 'Points must be greater than 0';
     END IF;
 
-    IF NOT EXISTS (
-        SELECT 1 FROM Course WHERE CourseID = p_course_id
-    ) THEN
+    IF NOT EXISTS (SELECT 1 FROM Course WHERE CourseID = p_course_id) THEN
         RAISE EXCEPTION 'Course % does not exist', p_course_id;
     END IF;
 
@@ -40,14 +38,12 @@ EXCEPTION
 END;
 $$;
 
-
-
 -- ---------------------------------------------------------------------------
 -- 2. UpdateQuestion
 -- Purpose: Update an existing question partially or fully. Parameters: QuestionID, CourseID, QuestionText, Type, Points. Null parameters keep old values. Returns: none. Exceptions: missing question, missing course, empty text, invalid type, invalid points.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateQuestion(
-    IN p_question_id INT DEFAULT NULL,
+    IN p_question_id INT,
     IN p_course_id INT DEFAULT NULL,
     IN p_question_text TEXT DEFAULT NULL,
     IN p_type TEXT DEFAULT NULL,
@@ -80,9 +76,7 @@ BEGIN
     v_final_type := COALESCE(p_type, v_old_type);
     v_final_points := COALESCE(p_points, v_old_points);
 
-    IF NOT EXISTS (
-        SELECT 1 FROM Course WHERE CourseID = v_final_course_id
-    ) THEN
+    IF NOT EXISTS (SELECT 1 FROM Course WHERE CourseID = v_final_course_id) THEN
         RAISE EXCEPTION 'Course % does not exist', v_final_course_id;
     END IF;
 
@@ -99,10 +93,10 @@ BEGIN
     END IF;
 
     UPDATE Questions
-    SET CourseID = COALESCE(p_course_id, CourseID),
-        QuestionText = COALESCE(p_question_text, QuestionText),
-        Type = COALESCE(p_type, Type),
-        Points = COALESCE(p_points, Points)
+    SET CourseID = v_final_course_id,
+        QuestionText = v_final_question_text,
+        Type = v_final_type,
+        Points = v_final_points
     WHERE QuestionID = p_question_id;
 END;
 $$;
@@ -111,15 +105,11 @@ $$;
 -- 3. DeleteQuestion
 -- Purpose: Delete a question by QuestionID. Parameters: QuestionID. Returns: none. Exceptions: question not found. Cascading behavior depends on foreign keys.
 -- ---------------------------------------------------------------------------
-CREATE OR REPLACE PROCEDURE DeleteQuestion(
-    IN p_question_id INT
-)
+CREATE OR REPLACE PROCEDURE DeleteQuestion(IN p_question_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM Questions WHERE QuestionID = p_question_id
-    ) THEN
+    IF NOT EXISTS (SELECT 1 FROM Questions WHERE QuestionID = p_question_id) THEN
         RAISE EXCEPTION 'Question % does not exist', p_question_id;
     END IF;
 
@@ -131,7 +121,6 @@ EXCEPTION
         RAISE;
 END;
 $$;
-
 
 -- ---------------------------------------------------------------------------
 -- 4. SelectQuestion
@@ -145,14 +134,11 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     OPEN p_cur FOR
-    SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
-    FROM Questions q
-    WHERE q.QuestionID = p_question_id;
-EXCEPTION WHEN OTHERS THEN
-    RAISE;
+        SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
+        FROM Questions q
+        WHERE q.QuestionID = p_question_id;
 END;
 $$;
-
 -- ---------------------------------------------------------------------------
 -- 5. SelectQuestionsByCourse
 -- Purpose: Return all questions for a specific course. Parameters: CourseID, cursor. Returns: cursor with question rows. Exceptions: none.
@@ -165,11 +151,12 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     OPEN p_cur FOR
-    SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
-    FROM Questions q
-    WHERE q.CourseID = p_course_id
-    ORDER BY q.QuestionID;
-EXCEPTION WHEN OTHERS THEN
-    RAISE;
+        SELECT q.QuestionID, q.CourseID, q.QuestionText, q.Type, q.Points
+        FROM Questions q
+        WHERE q.CourseID = p_course_id
+        ORDER BY q.QuestionID;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE;
 END;
 $$;

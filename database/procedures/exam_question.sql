@@ -1,15 +1,27 @@
--- SELECT ALL FROM ExamQuestion
+/*
+Purpose: SELECT ALL ExamQuestion
+parameters: ref refcursor
+returns: All data from Table ExamQuestion
+exception raised : 'Error in select from Exams: %'
+*/
 CREATE OR REPLACE PROCEDURE exq_sa(INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
 BEGIN
 	OPEN ref FOR
 	SELECT * FROM ExamQuestion;
+
+	EXCEPTION WHEN OTHERS
+	THEN
+		RAISE NOTICE 'Error in select from Exams: %', SQLERRM;
+		RAISE;
 END;
 $$;
 
+-- BEGIN;
 -- 	CALL exq_sa('mycursor');
 -- 	FETCH ALL FROM mycursor;
+-- COMMIT;
 
 
 -- SELECT ExamQuestion BY ExamID
