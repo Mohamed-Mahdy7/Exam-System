@@ -44,4 +44,4 @@ $$;
 
 
 
-CALL CorrectExam(3);
+-- CALL CorrectExam(3);

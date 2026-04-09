@@ -46,25 +46,25 @@ $$;
 
 
 
-CALL SubmitExamAnswers(
-    2,
-    1,
-    '2026-04-08 10:00:00',
-    '2026-04-08 11:00:00',
-    '[
-	{"question_id":1,"chosen_option_id":1},
-      {"question_id":2,"chosen_option_id":4},
-	  {"question_id":3,"chosen_option_id":8},
-	  {"question_id":4,"chosen_option_id":3},
-	  {"question_id":5,"chosen_option_id":3},
-	  {"question_id":6,"chosen_option_id":3},
-	  {"question_id":7,"chosen_option_id":3},
-	  {"question_id":8,"chosen_option_id":3},
-	  {"question_id":9,"chosen_option_id":7},
-	  {"question_id":1,"chosen_option_id":7},
-	  {"question_id":9,"chosen_option_id":7},
-	  {"question_id":9,"chosen_option_id":7},
-	  {"question_id":9,"chosen_option_id":7},
-	  {"question_id":9,"chosen_option_id":7}
-	  ]'
-);
+-- CALL SubmitExamAnswers(
+--     2,
+--     1,
+--     '2026-04-08 10:00:00',
+--     '2026-04-08 11:00:00',
+--     '[
+--     {"question_id":1,"chosen_option_id":1},
+--     {"question_id":2,"chosen_option_id":4},
+--     {"question_id":3,"chosen_option_id":8},
+--     {"question_id":4,"chosen_option_id":3},
+--     {"question_id":5,"chosen_option_id":3},
+--     {"question_id":6,"chosen_option_id":3},
+--     {"question_id":7,"chosen_option_id":3},
+--     {"question_id":8,"chosen_option_id":3},
+--     {"question_id":9,"chosen_option_id":7},
+--     {"question_id":1,"chosen_option_id":7},
+--     {"question_id":9,"chosen_option_id":7},
+--     {"question_id":9,"chosen_option_id":7},
+--     {"question_id":9,"chosen_option_id":7},
+--     {"question_id":9,"chosen_option_id":7}
+--     ]'
+-- );
