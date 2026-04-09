@@ -120,7 +120,6 @@ BEGIN
         RAISE EXCEPTION 'Option order must be greater than 0';
     END IF;
 
-    -- Check for duplicate order in target question
     IF EXISTS (
         SELECT 1
         FROM Choice
@@ -132,13 +131,11 @@ BEGIN
             v_final_option_order, v_final_question_id;
     END IF;
 
-    -- Get question type for validation
     SELECT Type
     INTO v_question_type
     FROM Questions
     WHERE QuestionID = v_final_question_id;
 
-    -- Count options in target question (excluding current option)
     SELECT COUNT(*)
     INTO v_final_option_count
     FROM Choice
@@ -147,14 +144,12 @@ BEGIN
 
     v_final_option_count := v_final_option_count + 1; -- Add current option back
 
-    -- Validate option count limits
     IF v_question_type = 'MCQ' AND v_final_option_count > 4 THEN
         RAISE EXCEPTION 'MCQ question % cannot have more than 4 options', v_final_question_id;
     ELSIF v_question_type = 'TF' AND v_final_option_count > 2 THEN
         RAISE EXCEPTION 'TF question % cannot have more than 2 options', v_final_question_id;
     END IF;
 
-    -- Perform update
     UPDATE Choice
     SET QuestionID = v_final_question_id,
         OptionText = v_final_option_text,
