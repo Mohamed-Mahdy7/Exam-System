@@ -1,5 +1,6 @@
 -- ---------------------------------------------------------------------------
 -- 1. Report_StudentsByDepartment
+-- Purpose: Mandatory report - return students by department. Parameters: DepartmentNo, cursor. Returns: cursor with StudentID, Name, Email, Phone, TrackName, BranchName. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentsByDepartment(
     IN p_department_no INT,
@@ -25,11 +26,9 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-COMMENT ON PROCEDURE Report_StudentsByDepartment(INT, REFCURSOR)
-IS 'Purpose: Mandatory report - return students by department. Parameters: DepartmentNo, cursor. Returns: cursor with StudentID, Name, Email, Phone, TrackName, BranchName. Exceptions: none.';
-
 -- ---------------------------------------------------------------------------
 -- 2. Report_StudentGrades
+-- Purpose: Mandatory report - return student grades. Parameters: StudentID, cursor. Returns: cursor with CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentGrades(
     IN p_student_id INT,
@@ -56,11 +55,9 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-COMMENT ON PROCEDURE Report_StudentGrades(INT, REFCURSOR)
-IS 'Purpose: Mandatory report - return student grades. Parameters: StudentID, cursor. Returns: cursor with CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.';
-
 -- ---------------------------------------------------------------------------
 -- 3. Report_InstructorCourses
+-- Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID, cursor. Returns: cursor with CourseName, TrackName, StudentCount. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_InstructorCourses(
     IN p_instructor_id INT,
@@ -85,10 +82,9 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-COMMENT ON PROCEDURE Report_InstructorCourses(INT, REFCURSOR)
-IS 'Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID, cursor. Returns: cursor with CourseName, TrackName, StudentCount. Exceptions: none.';
 -- ---------------------------------------------------------------------------
 -- 4. Report_ExamQuestions
+-- Purpose: Optional report - return all exam questions with choices. Parameters: ExamID, cursor. Returns: cursor with OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_ExamQuestions(
     IN p_exam_id INT,
@@ -115,11 +111,10 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-COMMENT ON PROCEDURE Report_ExamQuestions(INT, REFCURSOR)
-IS 'Purpose: Optional report - return all exam questions with choices. Parameters: ExamID, cursor. Returns: cursor with OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.';
 
 -- ---------------------------------------------------------------------------
 -- 5. Report_StudentExamAnswers
+-- Purpose: Optional report - return student exam answers with correctness. Parameters: ExamID, StudentID, cursor. Returns: cursor with OrderNo, QuestionText, ChosenOptionText, Correct. Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE Report_StudentExamAnswers(
     IN p_exam_id INT,
@@ -149,5 +144,3 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
-COMMENT ON PROCEDURE Report_StudentExamAnswers(INT, INT, REFCURSOR)
-IS 'Purpose: Optional report - return student exam answers with correctness. Parameters: ExamID, StudentID, cursor. Returns: cursor with OrderNo, QuestionText, ChosenOptionText, Correct. Exceptions: none.';
