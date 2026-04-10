@@ -354,7 +354,7 @@ GRANT student_role TO your_db_user;
 ### Create a backup
 
 ```bash
-pg_dump -U postgres -d exam_db -F c -f database/backup/backup.dump
+pg_dump -U postgres -d exam_db -F c -f <path to the backup dir>/backup.dump
 ```
 
 Or using the provided script:
@@ -366,7 +366,7 @@ psql -U postgres -d exam_db -f database/backup/backup.sql
 ### Restore from backup
 
 ```bash
-pg_restore -U postgres -d exam_db database/backup/backup.dump
+pg_restore -U postgres -d test_db <path to database backup file>/backup.dump
 ```
 
 Or using the provided script:

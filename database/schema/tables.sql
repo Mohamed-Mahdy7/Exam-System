@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS Choice (
 -- Create Table IF NOT EXISTS ExamQuestion
 CREATE TABLE IF NOT EXISTS ExamQuestion (
     ExamID INT REFERENCES Exams(ExamID) ON DELETE CASCADE,
-    QuestionID INT,
-    OrderNo INT CHECK (OrderNo >= 1)
+    QuestionID INT REFERENCES Questions(QuestionID) ON DELETE RESTRICT,
+    OrderNo INT CHECK (OrderNo >= 1) NOT NULL
 );
 
 -- Create Table IF NOT EXISTS ModelAnswer
