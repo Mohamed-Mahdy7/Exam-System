@@ -67,15 +67,15 @@ CREATE TABLE IF NOT EXISTS Questions (
     QuestionID SERIAL PRIMARY KEY,
     CourseID INT NOT NULL, 
     QuestionText TEXT COLLATE "ar-x-icu" NOT NULL,
-    Type TEXT CHECK (Type IN ('MCQ', 'TF')),
-    Points INT DEFAULT 1
+    Type TEXT NOT NULL CHECK (Type IN ('MCQ','TF')),
+    Points INT NOT NULL CHECK (Points > 0)
 );
 -- Create Table IF NOT EXISTS Choice
 CREATE TABLE IF NOT EXISTS Choice (
     OptionID SERIAL PRIMARY KEY,
     QuestionID INT NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
     OptionText TEXT COLLATE "ar-x-icu" NOT NULL,
-    OptionOrder INT
+    OptionOrder INT NOT NULL CHECK (OptionOrder BETWEEN 1 AND 4)
 );
 -- Create Table IF NOT EXISTS ExamQuestion
 CREATE TABLE IF NOT EXISTS ExamQuestion (
@@ -86,9 +86,8 @@ CREATE TABLE IF NOT EXISTS ExamQuestion (
 
 -- Create Table IF NOT EXISTS ModelAnswer
 CREATE TABLE IF NOT EXISTS ModelAnswer (
-    ModelAnswerID SERIAL PRIMARY KEY,
     QuestionID INT UNIQUE NOT NULL REFERENCES Questions(QuestionID) ON DELETE CASCADE,
-    CorrectOptionID INT NOT NULL REFERENCES Choice(OptionID) ON DELETE CASCADE
+    CorrectOptionID INT NOT NULL REFERENCES Choice(OptionID) ON DELETE RESTRICT
 );
 -- Create Table IF NOT EXISTS StudentExam
 CREATE TABLE IF NOT EXISTS StudentExam (
