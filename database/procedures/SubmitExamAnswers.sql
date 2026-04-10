@@ -1,3 +1,31 @@
+/*
+===============================================================================
+Procedure Name : SubmitExamAnswers
+===============================================================================
+Parameters:
+--------------
+p_StudentID   INT, p_ExamID      INT, p_StartTime   TIMESTAMP, p_EndTime     TIMESTAMP, p_Answers     JSONB
+    - A JSONB array containing the student's answers.
+    - Format:[ {"question_id": <INT>, "chosen_option_id": <INT>},  ... ]
+ Purpose:
+This procedure handles the full submission process of a student's exam attempt.
+-------------------------------------------------------------------------------
+Returns: Creates a new exam attempt in StudentExam, Parses the JSONB answers array.
+-------------------------------------------------------------------------------
+ Exceptions:
+--------------
+- ANY UNEXPECTED ERROR (WHEN OTHERS)
+     Logs the error message using RAISE NOTICE.
+Example usage:
+    BEGIN;
+    CALL SubmitExamAnswers(...);
+    COMMIT;
+If an error occurs:
+    ROLLBACK;
+===============================================================================
+*/
+
+
 CREATE OR REPLACE PROCEDURE SubmitExamAnswers(
     IN p_StudentID INT,
     IN p_ExamID INT,

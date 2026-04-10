@@ -1,3 +1,24 @@
+/*
+===============================================================================
+Procedure Name : CorrectExam
+===============================================================================
+ Purpose: This procedure evaluates a student's submitted exam by comparing their answers
+against the correct answers (ModelAnswer).
+-------------------------------------------------------------------------------
+Parameters: p_StudentExamID   INT
+Returns: Updates StudentExam.TotalGrade with the computed score.
+Exceptions:
+- ANY UNEXPECTED ERROR (WHEN OTHERS)
+  Logs error message using RAISE NOTICE
+-------------------------------------------------------------------------------
+Transaction
+- Caller must control COMMIT / ROLLBACK
+Example:
+    BEGIN;
+    CALL CorrectExam(1);
+    COMMIT;
+===============================================================================
+*/
 CREATE OR REPLACE PROCEDURE CorrectExam(
     IN p_StudentExamID INT
 )
