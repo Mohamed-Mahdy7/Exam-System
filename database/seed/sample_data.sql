@@ -158,10 +158,10 @@ INSERT INTO Student (Name, Email, Phone) VALUES
 ('Yassin Omar', 'yassin.omar@example.com', '01212345619'),
 ('Mariam Sayed', 'mariam.sayed@example.com', '01512345620');
 
-INSERT INTO StudentTrack (StudentID, TrackID) VALUES 
+INSERT INTO StudentTrack (StudentID, TrackID) VALUES
 (1, 1),   -- Ahmed is in Web Development
-(2, 2),   -- Sara is in Mobile Development
-(3, 3),   -- Mohamed is in Desktop Applications
+(2, 1),   -- Sara is ALSO in Web Development 
+(3, 1),   -- Mohamed is ALSO in Web Development 
 (4, 4),   -- Mona is in DevOps Engineering
 (5, 5),   -- Youssef is in Network Administration
 (6, 6),   -- Nada is in Cloud Networking
@@ -178,7 +178,7 @@ INSERT INTO StudentTrack (StudentID, TrackID) VALUES
 (17, 17), -- Moustafa is in Machine Learning
 (18, 18), -- Nour is in Deep Learning
 (19, 19), -- Yassin is in Natural Language Processing
-(20, 20); -- Mariam is in Computer Vision
+(20, 20); -- Farah is in Computer Vision
 
 -- Exams (5 Exams)
 INSERT INTO Exams (ExamName, CourseID, TotalQuestions)
