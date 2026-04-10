@@ -1,3 +1,81 @@
+/*
+===============================================================================
+Procedure Name : SubmitExamAnswers
+===============================================================================
+ Purpose:
+-----------
+This procedure handles the full submission process of a student's exam attempt.
+It records the exam session and stores each submitted answer individually.
+The procedure ensures data integrity by executing all operations within a
+transactional block.
+-------------------------------------------------------------------------------
+Parameters:
+--------------
+p_StudentID   INT
+    - The unique identifier of the student submitting the exam.
+
+p_ExamID      INT
+    - The unique identifier of the exam being submitted.
+
+p_StartTime   TIMESTAMP
+    - The timestamp indicating when the student started the exam.
+
+p_EndTime     TIMESTAMP
+    - The timestamp indicating when the student finished the exam.
+
+p_Answers     JSONB
+    - A JSONB array containing the student's answers.
+    - Format:
+        [
+          {"question_id": <INT>, "chosen_option_id": <INT>},
+          ...
+        ]
+-------------------------------------------------------------------------------
+Returns:
+-----------
+VOID (no direct return value)
+
+However:
+- Inserts a new record into StudentExam table.
+- Inserts multiple records into StudentAnswer table (one per answered question).
+-------------------------------------------------------------------------------
+ Behavior:
+-------------
+1. Creates a new exam attempt in StudentExam.
+2. Parses the JSONB answers array.
+3. Inserts each answer into StudentAnswer.
+4. Skips unanswered questions (no row inserted → implicitly scored as 0).
+5. Ensures atomicity using a transactional block.
+
+-------------------------------------------------------------------------------
+ Exceptions:
+--------------
+The procedure raises exceptions in the following cases:
+
+- ANY UNEXPECTED ERROR (WHEN OTHERS)
+     Logs the error message using RAISE NOTICE.
+     he exception to allow outer transaction rollback.
+Recommended additional validations (if implemented):
+- Invalid ExamID
+- Invalid StudentID
+- Duplicate exam submission
+- Malformed JSON structure
+-------------------------------------------------------------------------------
+Transaction Notes:
+---------------------
+- This procedure uses a BEGIN...EXCEPTION block (subtransaction behavior).
+- A full COMMIT / ROLLBACK must be controlled by the caller.
+
+Example usage:
+    BEGIN;
+    CALL SubmitExamAnswers(...);
+    COMMIT;
+If an error occurs:
+    ROLLBACK;
+===============================================================================
+*/
+
+
 CREATE OR REPLACE PROCEDURE SubmitExamAnswers(
     IN p_StudentID INT,
     IN p_ExamID INT,

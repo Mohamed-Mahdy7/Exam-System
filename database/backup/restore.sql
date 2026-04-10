@@ -1,0 +1,1 @@
+pg_restore -U postgres -d exam_db backup_exam_db.dump
