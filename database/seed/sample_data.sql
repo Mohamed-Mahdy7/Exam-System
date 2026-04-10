@@ -117,24 +117,24 @@ INSERT INTO TrackCourse (TrackID, CourseID) VALUES
 
 
 INSERT INTO Instructor (Name, Email, DepartmentNo) VALUES 
-('Dr. Magdy Youssef', 'magdy.youssef@university.edu', 1), -- Software Engineering
-('Dr. Rasha Ali', 'rasha.ali@university.edu', 2),       -- Networking
-('Dr. Tarek Emad', 'tarek.emad@university.edu', 3),      -- Data Science
-('Dr. Heba Nabil', 'heba.nabil@university.edu', 4),      -- Cyber Security
-('Dr. Khaled Wael', 'khaled.wael@university.edu', 5);    -- AI
+('Dr. Magdy Youssef', 'magdy.youssef@university.edu', 1), 
+('Dr. Rasha Ali', 'rasha.ali@university.edu', 2),       
+('Dr. Tarek Emad', 'tarek.emad@university.edu', 3),      
+('Dr. Heba Nabil', 'heba.nabil@university.edu', 4),     
+('Dr. Khaled Wael', 'khaled.wael@university.edu', 5);    
 
 
 INSERT INTO InstructorCourse (InstructorID, CourseID) VALUES 
-(1, 1),  -- Dr. Magdy teaches Programming Fundamentals
-(1, 2),  -- Dr. Magdy teaches Data Structures
-(2, 5),  -- Dr. Rasha teaches Computer Networks
-(2, 6),  -- Dr. Rasha teaches Cloud Computing
-(3, 11), -- Dr. Tarek teaches Data Visualization Tools
-(3, 12), -- Dr. Tarek teaches Big Data Processing
-(4, 9),  -- Dr. Heba teaches Cyber Security Fundamentals
-(4, 10), -- Dr. Heba teaches Ethical Hacking Advanced
-(5, 7),  -- Dr. Khaled teaches Machine Learning Basics
-(5, 8);  -- Dr. Khaled teaches Deep Learning Advanced
+(1, 1),  
+(1, 2),  
+(2, 5),  
+(2, 6),  
+(3, 11), 
+(3, 12), 
+(4, 9),  
+(4, 10), 
+(5, 7), 
+(5, 8);
 
 INSERT INTO Student (Name, Email, Phone) VALUES 
 ('Ahmed Ali', 'ahmed.ali@example.com', '01012345601'),
@@ -159,26 +159,26 @@ INSERT INTO Student (Name, Email, Phone) VALUES
 ('Mariam Sayed', 'mariam.sayed@example.com', '01512345620');
 
 INSERT INTO StudentTrack (StudentID, TrackID) VALUES
-(1, 1),   -- Ahmed is in Web Development
-(2, 1),   -- Sara is ALSO in Web Development 
-(3, 1),   -- Mohamed is ALSO in Web Development 
-(4, 4),   -- Mona is in DevOps Engineering
-(5, 5),   -- Youssef is in Network Administration
-(6, 6),   -- Nada is in Cloud Networking
-(7, 7),   -- Omar is in Wireless Networks
-(8, 8),   -- Aya is in Network Security
-(9, 9),   -- Karim is in Data Analysis
-(10, 10), -- Salma is in Big Data Engineering
-(11, 11), -- Amr is in Business Intelligence
-(12, 12), -- Hoda is in Data Visualization
-(13, 13), -- Tarek is in Ethical Hacking
-(14, 14), -- Rania is in Digital Forensics
-(15, 15), -- Ziad is in Security Operations
-(16, 16), -- Dina is in Cryptography
-(17, 17), -- Moustafa is in Machine Learning
-(18, 18), -- Nour is in Deep Learning
-(19, 19), -- Yassin is in Natural Language Processing
-(20, 20); -- Farah is in Computer Vision
+(1, 1),  
+(2, 1),   
+(3, 1),   
+(4, 4),  
+(5, 5),  
+(6, 6),  
+(7, 7),  
+(8, 8),   
+(9, 9),   
+(10, 10), 
+(11, 11),
+(12, 12), 
+(13, 13),
+(14, 14), 
+(15, 15), 
+(16, 16), 
+(17, 17), 
+(18, 18),
+(19, 19), 
+(20, 20); 
 
 -- Exams (5 Exams)
 INSERT INTO Exams (ExamName, CourseID, TotalQuestions)
