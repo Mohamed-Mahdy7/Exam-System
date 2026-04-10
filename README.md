@@ -45,7 +45,7 @@ database/
 │   └── restore.sql         # pg_restore instructions and script
 ├── procedures/
 │   ├── exam_crud.sql       # CRUD procedures for Exams, ExamQuestion, StudentExam
-│   ├── exam_generation.sql # GenerateExam, SubmitExamAnswers, CorrectExam
+│   ├── GenerateExam.sql    # GenerateExam, SubmitExamAnswers, CorrectExam
 │   ├── exam_question.sql   # Question, Choice, ModelAnswer CRUD + SetModelAnswer
 │   └── ...                 # Rest fo the procedures as the same structure for each table
 ├── reports/
@@ -56,7 +56,16 @@ database/
 │   ├──  indexes.sql        # Indexes on all FK columns
 │   └── roles.sql           # Roles and Securety
 └── seed/
-    └── sample_data.txt     # Minimum required seed data (departments → students → questions)
+│   └── sample_data.txt     # Minimum required seed data (departments → students → questions)
+│
+└── test/
+    └── GenerateExam.sql
+    └── SubmitExamAnswers.sql
+    └── CorrectExam.sql
+    └── Report_InstructorCourses.sql
+    └── Report_StudentByDepartment.sql
+    └── Report_StudentGrades.sql
+    └── ...
 
 docs/
 ├── DB project.pdf                      # Original SRS / project brief
@@ -372,7 +381,7 @@ psql -U postgres -f database/backup/restore.sql
 
 | File | Description |
 |---|---|
-| `docs/data_dictionary.md` | Full DB Dictionary — all 15 tables, every column with type, constraints and description |
+| `docs/db_dictionary.txt` | Full DB Dictionary — all 15 tables, every column with type, constraints and description |
 | `docs/PostgresSQL Project.drawio` | Editable ERD source file |
 | `docs/PostgresSQL Project.drawio.pdf` | ERD export for review |
 | `docs/DB project.pdf` | Original SRS / project requirements |
