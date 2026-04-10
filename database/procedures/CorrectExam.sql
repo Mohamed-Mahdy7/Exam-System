@@ -2,53 +2,21 @@
 ===============================================================================
 Procedure Name : CorrectExam
 ===============================================================================
- Purpose:
------------
-This procedure evaluates a student's submitted exam by comparing their answers
-against the correct answers (ModelAnswer). It calculates the total grade based
-on question points and updates the StudentExam record.
+ Purpose: This procedure evaluates a student's submitted exam by comparing their answers
+against the correct answers (ModelAnswer).
 -------------------------------------------------------------------------------
-Parameters:
---------------
-p_StudentExamID   INT
-    - The unique identifier of the student's exam attempt.
--------------------------------------------------------------------------------
-Returns:
------------
-VOID (no direct return value)
-However:
-- Updates StudentExam.TotalGrade with the computed score.
--------------------------------------------------------------------------------
- Behavior:
--------------
-1. Retrieves all questions related to the exam.
-2. LEFT JOIN with StudentAnswer to include unanswered questions.
-3. Compares each answer with ModelAnswer.
-4. Awards:
-      Question.Points → if correct
-      0 → if wrong or unanswered
-5. Aggregates total score.
-6. Updates StudentExam.TotalGrade.
--------------------------------------------------------------------------------
+Parameters: p_StudentExamID   INT
+Returns: Updates StudentExam.TotalGrade with the computed score.
 Exceptions:
---------------
 - ANY UNEXPECTED ERROR (WHEN OTHERS)
   Logs error message using RAISE NOTICE
-   Re-throws error to allow transaction rollback
-Recommended validations:
-- Invalid StudentExamID
-- Missing ModelAnswer entries
-- Data inconsistency
 -------------------------------------------------------------------------------
-Transaction Notes:
----------------------
-- Uses BEGIN...EXCEPTION block (subtransaction behavior)
+Transaction
 - Caller must control COMMIT / ROLLBACK
 Example:
     BEGIN;
     CALL CorrectExam(1);
     COMMIT;
-
 ===============================================================================
 */
 CREATE OR REPLACE PROCEDURE CorrectExam(
