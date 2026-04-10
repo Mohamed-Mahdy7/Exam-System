@@ -26,6 +26,8 @@ EXCEPTION
 END;
 $$;
 
+-- CALL InsertInstructor('DR. Mahmoud Ahmed', 'mahmoud.ahmed@university.com', 1);
+
 
 -- ==========================================================
 -- Procedure Name: UpdateInstructor
@@ -59,6 +61,7 @@ EXCEPTION
 END;
 $$;
 
+--  CALL UpdateInstructor(17,'DR Mona Ahmed', 'mona.ahmed@university.com',1);
 
 
 -- ==========================================================
@@ -83,6 +86,7 @@ EXCEPTION
 END;
 $$;
 
+-- CALL DeleteInstructor(17);
 
 
 -- ==========================================================
@@ -106,6 +110,12 @@ BEGIN
 END;
 $$;
 
+-- BEGIN;
+-- CALL SelectInstructors('all_instructors'); 
+-- FETCH ALL FROM all_instructors; 
+-- COMMIT;
+
+
 -- ==========================================================
 -- Procedure Name: SelectInstructorsByDept
 -- purpose: Returns instructors filtered by their department
@@ -128,6 +138,11 @@ BEGIN
 END; 
 $$;
 
+--BEGIN;
+--CALL SelectInstructorsByDept('dept_data', 1); 
+--FETCH ALL FROM dept_data; 
+--COMMIT;
+
 
 -- ==========================================================
 -- Procedure Name: AssignInstructorToCourse
@@ -136,6 +151,7 @@ $$;
 --      p_InstructorID : The ID of the instructor to assign
 --      p_CourseID : The ID of the course they will teach
 -- ==========================================================
+
 CREATE OR REPLACE PROCEDURE AssignInstructorToCourse(
     p_InstructorID INT,
     p_CourseID INT
@@ -153,84 +169,4 @@ EXCEPTION
 END; 
 $$;
 
-
-
-
--- ==========================================================
--- Testing : Call Procedures
--- ==========================================================
-
-/*
-SELECT * FROM instructor;
-SELECT * FROM Departments;
-
-
-DO $$
-BEGIN
-    CALL InsertInstructor('DR. Mahmoud Ahmed', 'mahmoud.ahmed@university.com', 1);
-    RAISE NOTICE 'Insert committed successfully.';
-
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Insert failed. Error: %', SQLERRM;
-END;
-$$;
-
---=================================================================================------
-
-DO $$
-BEGIN
-    CALL UpdateInstructor(17,'DR Mona Ahmed', 'mona.ahmed@university.com',1);
-    RAISE NOTICE 'Update committed successfully.';
-
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Update failed. Error: %', SQLERRM;
-END;
-$$;
-
---=================================================================================------
-
-DO $$
-BEGIN
-    CALL DeleteInstructor(17);
-    RAISE NOTICE 'Delete committed successfully.';
-
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Delete failed. Error: %', SQLERRM;
-END;
-$$;
-
---=================================================================================------
-
-BEGIN;
-CALL SelectInstructors('all_instructors'); 
-FETCH ALL FROM all_instructors; 
-COMMIT;
-
---=================================================================================------
-
-BEGIN;
-CALL SelectInstructorsByDept('dept_data', 1); 
-FETCH ALL FROM dept_data; 
-COMMIT;
-
-
---=================================================================================------
-
-SELECT * FROM Course;
-SELECT * FROM InstructorCourse;
-
-
-DO $$
-BEGIN
-    CALL AssignInstructorToCourse(2, 12);  
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Assignment failed. Error: %', SQLERRM;
-END;
-$$;
-
-
-*\
+-- CALL AssignInstructorToCourse(2, 12);  

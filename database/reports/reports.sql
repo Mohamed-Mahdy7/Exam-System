@@ -26,6 +26,15 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
+
+
+--BEGIN;
+--CALL Report_StudentsByDepartment(1, 'dept_report');
+--FETCH ALL FROM dept_report;
+--COMMIT;
+
+
+
 -- ---------------------------------------------------------------------------
 -- 2. Report_StudentGrades
 -- Purpose: Mandatory report - return student grades. Parameters: StudentID, cursor. Returns: cursor with CourseName, ExamName, TotalGrade, MaxDegree, Percentage. Exceptions: none.
@@ -55,6 +64,15 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
+
+
+
+--BEGIN;
+--CALL Report_StudentGrades(1, 'grades_report');
+--FETCH ALL FROM grades_report;
+--COMMIT;
+
+
 -- ---------------------------------------------------------------------------
 -- 3. Report_InstructorCourses
 -- Purpose: Mandatory report - return instructor courses with track and student count. Parameters: InstructorID, cursor. Returns: cursor with CourseName, TrackName, StudentCount. Exceptions: none.
@@ -82,6 +100,15 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
+
+
+--BEGIN;
+--CALL Report_InstructorCourses(1, 'instructor_report');
+--FETCH ALL FROM instructor_report;
+--COMMIT;
+
+
+
 -- ---------------------------------------------------------------------------
 -- 4. Report_ExamQuestions
 -- Purpose: Optional report - return all exam questions with choices. Parameters: ExamID, cursor. Returns: cursor with OrderNo, QuestionID, QuestionText, Type, Points, OptionID, OptionText, OptionOrder. Exceptions: none.
