@@ -11,11 +11,11 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT s.StudentID,
-           s.Name,
-           s.Email,
-           s.Phone,
-           t.TrackName,
-           d.DepartmentName AS BranchName
+        s.Name,
+        s.Email,
+        s.Phone,
+        t.TrackName,
+        d.DepartmentName AS BranchName
     FROM Student s
     JOIN StudentTrack st ON st.StudentID = s.StudentID
     JOIN Track t ON t.TrackID = st.TrackID
@@ -39,13 +39,13 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT c.CourseName,
-           e.ExamName,
-           COALESCE(se.TotalGrade, 0) AS TotalGrade,
-           c.MaxDegree,
-           CASE
-               WHEN c.MaxDegree = 0 THEN 0
-               ELSE (COALESCE(se.TotalGrade, 0)::FLOAT / c.MaxDegree::FLOAT) * 100
-           END AS Percentage
+        e.ExamName,
+        COALESCE(se.TotalGrade, 0) AS TotalGrade,
+        c.MaxDegree,
+        CASE
+            WHEN c.MaxDegree = 0 THEN 0
+            ELSE (COALESCE(se.TotalGrade, 0)::FLOAT / c.MaxDegree::FLOAT) * 100
+        END AS Percentage
     FROM StudentExam se
     JOIN Exams e ON e.ExamID = se.ExamID
     JOIN Course c ON c.CourseID = e.CourseID
@@ -68,8 +68,8 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT c.CourseName,
-           t.TrackName,
-           COUNT(DISTINCT st.StudentID) AS StudentCount
+        t.TrackName,
+        COUNT(DISTINCT st.StudentID) AS StudentCount
     FROM InstructorCourse ic
     JOIN Course c ON c.CourseID = ic.CourseID
     JOIN TrackCourse tc ON tc.CourseID = c.CourseID
@@ -95,13 +95,13 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT eq.OrderNo,
-           q.QuestionID,
-           q.QuestionText,
-           q.Type,
-           q.Points,
-           c.OptionID,
-           c.OptionText,
-           c.OptionOrder
+        q.QuestionID,
+        q.QuestionText,
+        q.Type,
+        q.Points,
+        c.OptionID,
+        c.OptionText,
+        c.OptionOrder
     FROM ExamQuestion eq
     JOIN Questions q ON q.QuestionID = eq.QuestionID
     LEFT JOIN Choice c ON c.QuestionID = q.QuestionID
@@ -126,19 +126,19 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT eq.OrderNo,
-           q.QuestionText,
-           c.OptionText AS ChosenOptionText,
-           CASE WHEN sa.ChosenOptionID = ma.CorrectOptionID THEN TRUE ELSE FALSE END AS Correct
+        q.QuestionText,
+        c.OptionText AS ChosenOptionText,
+        CASE WHEN sa.ChosenOptionID = ma.CorrectOptionID THEN TRUE ELSE FALSE END AS Correct
     FROM StudentExam se
     JOIN ExamQuestion eq ON eq.ExamID = se.ExamID
     JOIN Questions q ON q.QuestionID = eq.QuestionID
     LEFT JOIN StudentAnswer sa
         ON sa.StudentExamID = se.StudentExamID
-       AND sa.QuestionID = eq.QuestionID
+    AND sa.QuestionID = eq.QuestionID
     LEFT JOIN Choice c ON c.OptionID = sa.ChosenOptionID
     LEFT JOIN ModelAnswer ma ON ma.QuestionID = q.QuestionID
     WHERE se.ExamID = p_exam_id
-      AND se.StudentID = p_student_id
+    AND se.StudentID = p_student_id
     ORDER BY eq.OrderNo;
 EXCEPTION WHEN OTHERS THEN
     RAISE;

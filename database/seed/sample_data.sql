@@ -40,11 +40,11 @@ INSERT INTO Track (TrackName, DepartmentID) VALUES
 
 -- Courses (10+ with valid Min/Max)
 INSERT INTO Course (CourseName, MinDegree, MaxDegree) VALUES
-('Programming Fundamentals', 0, 100),
-('Data Structures', 20, 100),
-('Databases', 30, 100),
-('Operating Systems', 25, 100),
-('Computer Networks', 20, 100),
+('Programming Fundamentals', 0, 90),
+('Data Structures', 20, 120),
+('Databases', 30, 110),
+('Operating Systems', 25, 150),
+('Computer Networks', 20, 85),
 ('Cloud Computing', 30, 100),
 ('Machine Learning Basics', 40, 100),
 ('Deep Learning Advanced', 50, 100),
@@ -192,16 +192,16 @@ VALUES
 -- StudentExam (10 StudentExam  each Exam taken by 2 Students)
 INSERT INTO StudentExam(StudentID, ExamID, StartTime, EndTime, TotalGrade)
 VALUES 
-    (1, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 0),
-    (2, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 0),
-    (3, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 0),
-    (4, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 0),
-    (5, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 0),
-    (6, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 0),
-    (7, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 0),
-    (8, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 0),
-    (9, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 0),
-    (10, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 0);
+    (1, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 50),
+    (2, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 70),
+    (3, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 90),
+    (4, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 30),
+    (5, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 65),
+    (6, 1, '2026-04-01 10:00:00', '2026-04-01 11:00:00', 88),
+    (7, 2, '2026-04-01 10:05:00', '2026-04-01 11:02:00', 37),
+    (8, 3, '2026-04-02 12:00:00', '2026-04-02 13:15:00', 100),
+    (9, 4, '2026-04-02 12:10:00', '2026-04-02 13:05:00', 33),
+    (10, 5, '2026-04-03 09:00:00', '2026-04-03 10:30:00', 76);
 
 
 -- PROGRAMMING FUNDAMENTALS QUESTIONS
@@ -220,8 +220,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'A storage location' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
+WHERE OptionText = 'A storage location' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
 );
 
 
@@ -231,8 +231,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'A function' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
+WHERE OptionText = 'A function' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a variable?'))
 );
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -259,8 +259,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'For' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
+WHERE OptionText = 'For' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
 );
 
 
@@ -269,8 +269,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'Switch' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
+WHERE OptionText = 'Switch' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which of the following is a loop structure?'))
 );
 
 
@@ -294,8 +294,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'Integrated Development Environment' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'))
+WHERE OptionText = 'Integrated Development Environment' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'))
 );
 
 
@@ -303,8 +303,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'Internal Design Engine' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'))
+WHERE OptionText = 'Internal Design Engine' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What does IDE stand for?'))
 );
 
 
@@ -325,8 +325,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'Integer' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'))
+WHERE OptionText = 'Integer' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'))
 );
 
 
@@ -334,8 +334,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'String' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'))
+WHERE OptionText = 'String' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'Which data type is used for text?'))
 );
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -353,8 +353,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = '1' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'))
+WHERE OptionText = '1' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'))
 );
 
 
@@ -362,8 +362,8 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = '2.5' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'))
+WHERE OptionText = '2.5' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is the output of 5 modulo 2?'))
 );
 
 
@@ -385,15 +385,15 @@ INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 1,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'A reusable block of code' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'))
+WHERE OptionText = 'A reusable block of code' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'))
 );
 INSERT INTO StudentAnswer (StudentExamID, QuestionID, ChosenOptionID) VALUES (
 6,
 (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'),
 (SELECT OptionID FROM Choice 
- WHERE OptionText = 'A reusable block of code' 
- AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'))
+WHERE OptionText = 'A reusable block of code' 
+AND QuestionID = (SELECT QuestionID FROM Questions WHERE QuestionText = 'What is a function?'))
 );
 ------------------------------------------------------------------------------------------------------------------------------------
 

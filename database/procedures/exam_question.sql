@@ -24,7 +24,12 @@ $$;
 -- COMMIT;
 
 
--- SELECT ExamQuestion BY ExamID
+/*
+Purpose: SELECT ExamQuestion BY ExamID
+parameters: p_exam_id INT, ref refcursor
+returns: All data from Table ExamQuestion where ExamID = p_exam_id
+exception raised : 'Exam With ID % does not exist!', p_exam_id;
+*/
 CREATE OR REPLACE PROCEDURE exq_s_eid(IN p_exam_id INT, INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -40,15 +45,29 @@ BEGIN
 	SELECT * 
 	FROM ExamQuestion
 	WHERE ExamID = p_exam_id;
+
+	EXCEPTION WHEN OTHERS
+	THEN
+		RAISE NOTICE 'Error while selecting from ExamQuestion by ExamID: %', SQLERRM;
+		RAISE;
 END;
 $$;
 
+-- BEGIN
 -- 	CALL exq_s_eid(5, 'mycursor');
 -- 	FETCH ALL FROM mycursor;
+-- COMMIT;
 
 
-
--- INSERT INTO ExamQuestion
+/*
+Purpose: INSERT INTO ExamQuestion
+parameters: p_exam_id INT, rp_question_id INT, p_order_no INT
+returns: insert values into ExamQuestion without returning any data
+exception raised : RAISE EXCEPTION 'QuestionID cannot be empty';
+					RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+					RAISE EXCEPTION 'OrderNo must be greater than 0';
+					'Error while inserting into ExamQuestion: %', SQLERRM;
+*/
 CREATE OR REPLACE PROCEDURE eq_i(
 	p_exam_id INT,
 	p_question_id INT,
@@ -70,13 +89,27 @@ BEGIN
 	
 	INSERT INTO ExamQuestion (ExamID, QuestionID, OrderNo)
 	VALUES (p_exam_id, p_question_id, p_order_no);
+
+	EXCEPTION WHEN OTHERS
+	THEN
+		RAISE NOTICE 'Error while inserting into ExamQuestion: %', SQLERRM;
+		RAISE;
 END;
 $$;
 
+-- BEGIN
 -- CALL eq_i(1, 17, 20);
+-- COMMIT;
 
 
--- UPDATE ROW IN ExamQuestion
+/*
+Purpose: UPDATE ROW IN ExamQuestion
+parameters: p_exam_id INT, rp_question_id INT, p_order_no INT DEFAULT NULL
+returns: Updates values in ExamQuestion without returning any data
+exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+					'Question with ID % does not exist', p_question_id;
+					'Error while updating values in ExamQuestion: %', SQLERRM;
+*/
 CREATE OR REPLACE PROCEDURE eq_u(
 	p_exam_id INT,
 	p_question_id INT,
@@ -97,13 +130,28 @@ BEGIN
 	SET
 		OrderNo= COALESCE(p_order_no)
 	WHERE ExamID = p_exam_id AND QuestionID = p_question_id;
+
+	EXCEPTION WHEN OTHERS
+	THEN
+		RAISE NOTICE 'Error while updating values in ExamQuestion: %', SQLERRM;
+		RAISE;
 END;
 $$;
 
+-- BEGIN
 -- CALL eq_u(1, 10, 50);
+-- COMMIT;
 
 
--- DELETE ROW FROM ExamQuestion
+/*
+Purpose: DELETE ROW FROM ExamQuestion
+parameters: p_exam_id INT, rp_question_id INT
+returns: Delete from table ExamQuestion without retutning
+exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+					'Question with ID % does not exist', p_question_id;
+					'Error while deleting from ExamQuestion: %', SQLERRM;
+*/
+-- 
 CREATE OR REPLACE PROCEDURE eq_d(
 	p_exam_id INT,
 	p_question_id INT)
@@ -121,7 +169,14 @@ BEGIN
 	
 	DELETE FROM ExamQuestion 
 	WHERE ExamID = p_exam_id AND QuestionID = p_question_id;
+
+	EXCEPTION WHEN OTHERS
+	THEN
+		RAISE NOTICE 'Error while deleting from ExamQuestion: %', SQLERRM;
+		RAISE;
 END;
 $$;
 
+-- BEGIN
 -- CALL eq_d(1, 10);
+-- COMMIT;
