@@ -106,6 +106,10 @@ BEGIN
     SELECT InstructorID, Name, Email, DepartmentNo 
     FROM Instructor; 
 
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'selection failed. Error: %', SQLERRM;
+
 
 END;
 $$;
@@ -134,6 +138,10 @@ BEGIN
     SELECT InstructorID, Name, Email, DepartmentNo 
     FROM Instructor
     WHERE DepartmentNo = p_DepartmentNo; 
+
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'selection failed. Error: %', SQLERRM;
 
 END; 
 $$;
