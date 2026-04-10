@@ -104,6 +104,10 @@ BEGIN
     SELECT StudentID, Name, Email, Phone 
     FROM Student;
 
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'selection failed. Error: %', SQLERRM;
+
 END; 
 $$;
 
@@ -131,6 +135,10 @@ BEGIN
     SELECT StudentID, Name, Email, Phone 
     FROM Student
     WHERE TrackID = p_TrackID; 
+
+EXCEPTION 
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'selection failed. Error: %', SQLERRM;
 END; 
 $$;
 
