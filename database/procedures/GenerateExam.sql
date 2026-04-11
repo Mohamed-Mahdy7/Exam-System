@@ -45,8 +45,8 @@ BEGIN
         RETURNING ExamID INTO v_exam_id;
 
         -- insert random questions
-        INSERT INTO ExamQuestion (ExamID, QuestionID)
-        SELECT v_exam_id, QuestionID
+        INSERT INTO ExamQuestion (ExamID, QuestionID, OrderNo)
+        SELECT v_exam_id, QuestionID, ROW_NUMBER() OVER() 
         FROM Questions
         WHERE CourseID = p_CourseID
         ORDER BY RANDOM()

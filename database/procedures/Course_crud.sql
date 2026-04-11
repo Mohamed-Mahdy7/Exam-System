@@ -45,7 +45,7 @@ CREATE OR REPLACE PROCEDURE UpdateCourses(
     p_MaxDegree int DEFAULT NULL
 ) LANGUAGE plpgsql
 AS $$
-BEGIN 
+BEGIN
       UPDATE Course
     SET CourseName = COALESCE(p_CourseName, CourseName),
         MinDegree = COALESCE(p_MinDegree, MinDegree),
@@ -56,7 +56,6 @@ BEGIN
         when others then 
             raise notice 'error updating course : % ' , SQLERRM ; 
             raise;
-            end; 
 END
 $$;
 --begin

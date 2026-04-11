@@ -150,19 +150,28 @@ CREATE DATABASE exam_db;
 \i <your path to this repo>/database/schema/constraints.sql
 \i <your path to this repo>/database/schema/indexes.sql
 
--- 5. Create roles
-CREATE ROLE admin_role      WITH LOGIN SUPERUSER;
-CREATE ROLE instructor_role WITH LOGIN;
-CREATE ROLE student_role    WITH LOGIN;
+-- 5. Create roles & GRANT - REVOKE Privileges
+\i <your path to this repo>/database/schema/roles.sql
 
 -- 6. Load seed data
 \i <your path to this repo>/database/seed/sample_data.sql
 
 -- 7. Load all stored procedures
+\i <your path to this repo>/database/procedures/department_crud.sql
+\i <your path to this repo>/database/procedures/Track_crud.sql
+\i <your path to this repo>/database/procedures/Course_crud.sql
+\i <your path to this repo>/database/procedures/TrackCourse_crud.sql
+\i <your path to this repo>/database/procedures/instructor_crud.sql
+\i <your path to this repo>/database/procedures/student_crud.sql
 \i <your path to this repo>/database/procedures/exam_crud.sql
-\i <your path to this repo>/database/procedures/exam_generation.sql
 \i <your path to this repo>/database/procedures/exam_question.sql
-\i <your path to this repo>/database/procedures/...                  # The same for the rest of the tables
+\i <your path to this repo>/database/procedures/student_exam.sql
+\i <your path to this repo>/database/procedures/questions_CRUD.sql
+\i <your path to this repo>/database/procedures/options_CRUD.sql
+\i <your path to this repo>/database/procedures/Answers_CRUD.sql
+\i <your path to this repo>/database/procedures/GenerateExam.sql
+\i <your path to this repo>/database/procedures/CorrectExam.sql
+\i <your path to this repo>/database/procedures/SubmitExamAnswers.sql
 \i <your path to this repo>/database/reports/reports.sql
 ```
 

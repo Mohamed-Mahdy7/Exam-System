@@ -5,7 +5,6 @@ INSERT INTO Departments (DepartmentName, Location) VALUES
 ('Data Science', 'Building C'),
 ('Cyber Security', 'Building D'),
 ('Artificial Intelligence', 'Building E');
-
 -- Tracks (4 per department = 20 total)
 INSERT INTO Track (TrackName, DepartmentID) VALUES
 -- Software Engineering (1)

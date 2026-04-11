@@ -22,9 +22,6 @@ begin
             raise;
             end; 
  end ;  
-BEGIN 
-    INSERT INTO Departments (DepartmentName,Location ) VALUES(p_DepartmentName,p_Location );
-END   
 $$;
 --begin
 -- call InsertDepartment('testing', 'Building b');

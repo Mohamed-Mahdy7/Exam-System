@@ -1,6 +1,6 @@
 -- 1. INSERT: Create a fake instructor (ID 999) and assign them to Course 1
-INSERT INTO Instructor (InstructorID, Name, Email, Phone) 
-VALUES (999, 'Dr. Fake', 'drfake@test.com', '01111111111');
+INSERT INTO Instructor (InstructorID, Name, Email) 
+VALUES (999, 'Dr. Fake', 'drfake@test.com');
 
 INSERT INTO InstructorCourse (InstructorID, CourseID) 
 VALUES (999, 1);
