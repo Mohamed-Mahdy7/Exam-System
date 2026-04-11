@@ -1,6 +1,9 @@
 -- ---------------------------------------------------------------------------
 -- 1. InsertOption
--- Purpose: Insert a new option for a question. Parameters: QuestionID, OptionText, OptionOrder. Returns: OptionID through OUT parameter. Exceptions: missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
+-- Purpose: Insert a new option for a question. 
+-- Parameters: QuestionID, OptionText, OptionOrder. 
+-- Returns: OptionID through OUT parameter. 
+-- Exceptions: missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE InsertOption(
     IN p_question_id INT,
@@ -62,11 +65,20 @@ EXCEPTION
         RAISE;
 END;
 $$;
+---------------------------------- calling example for insertoption ----------------------------------
 
+-- BEGIN;
 
+-- CALL InsertOption(1, 'New Option Text', 1);
+
+-- COMMIT;
 -- ---------------------------------------------------------------------------
 -- 2. UpdateOption
--- Purpose: Update an existing option. Any NULL input keeps the current value (partial update). Parameters: OptionID, QuestionID, OptionText, OptionOrder. Returns: none. Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
+-- Purpose: Update an existing option. 
+-- Any NULL input keeps the current value (partial update). 
+-- Parameters: OptionID, QuestionID, OptionText, OptionOrder. 
+-- Returns: none. 
+-- Exceptions: missing option, missing question, empty text, invalid order, duplicate order, exceeded allowed option count.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateOption(
     IN p_option_id INT,
@@ -161,10 +173,20 @@ EXCEPTION
         RAISE;
 END;
 $$;
+-------------------------------------- calling example for updateoption --------------------------------------
+
+-- BEGIN;
+
+-- CALL UpdateOption(1,NULL,'Updated Option Text',NULL);
+
+-- COMMIT;
 
 -- ---------------------------------------------------------------------------
 -- 3. DeleteOption
--- Purpose: Delete an option by OptionID. Parameters: OptionID. Returns: none. Exceptions: option not found.
+-- Purpose: Delete an option by OptionID. 
+-- Parameters: OptionID. 
+-- Returns: none. 
+-- Exceptions: option not found.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE DeleteOption(
     IN p_option_id INT
@@ -186,3 +208,9 @@ EXCEPTION
         RAISE;
 END;
 $$;
+-------------------------------------- calling example for deleteoption --------------------------------------
+-- BEGIN;
+
+-- CALL DeleteOption(1);
+
+-- COMMIT;
