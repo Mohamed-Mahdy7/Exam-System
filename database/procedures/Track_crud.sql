@@ -12,7 +12,14 @@ CREATE OR REPLACE PROCEDURE InsertTrack(
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
+    begin
     INSERT INTO Track (TrackName,DepartmentID ) VALUES(p_TracktName,p_DepartmentID );
+        raise notice 'track inserted successfully' ;
+     exception 
+        when others then 
+            raise notice 'error inserting track : % ' , SQLERRM ; 
+            raise;
+            end; 
  END   
 $$;
 
@@ -36,10 +43,17 @@ p_trackID int DEFAULT NULL,
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
+    begin
       UPDATE Track
     SET TrackName = COALESCE(p_TracktName, TrackName),
         DepartmentID = COALESCE(p_DepartmentID, DepartmentID)
     WHERE TrackID = p_trackID;
+    raise notice 'track updated successfully' ;
+     exception 
+        when others then 
+            raise notice 'error updating track : % ' , SQLERRM ; 
+            raise;
+            end; 
  END   
 $$;
 -- call UpdateTrack (2, 'java',1 )
@@ -56,8 +70,15 @@ CREATE OR REPLACE PROCEDURE DeleteTrack(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    begin
     DELETE FROM Track
     WHERE TrackID = p_trackID;
+    raise notice 'track deleted successfully' ;
+     exception 
+        when others then 
+            raise notice 'error deleting track : % ' , SQLERRM ; 
+            raise;
+            end; 
 END;
 $$;
 
@@ -75,8 +96,15 @@ CREATE OR REPLACE PROCEDURE SelectTrack(INOUT ref refcursor , p_DepartmentID int
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    begin
     OPEN ref FOR
     SELECT * FROM Track where DepartmentID = p_DepartmentID ;
+    raise notice 'track selected successfully' ;
+     exception 
+        when others then 
+            raise notice 'error selecting track : % ' , SQLERRM ; 
+            raise;
+            end; 
 END;
 $$;
 
