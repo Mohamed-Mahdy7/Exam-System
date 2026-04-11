@@ -26,8 +26,9 @@ EXCEPTION
 END;
 $$;
 
+--BEGIN;
 -- CALL InsertInstructor('DR. Mahmoud Ahmed', 'mahmoud.ahmed@university.com', 1);
-
+-- COMMIT;
 
 -- ==========================================================
 -- Procedure Name: UpdateInstructor
@@ -61,8 +62,9 @@ EXCEPTION
 END;
 $$;
 
+--BEGIN;
 --  CALL UpdateInstructor(17,'DR Mona Ahmed', 'mona.ahmed@university.com',1);
-
+-- COMMIT;
 
 -- ==========================================================
 -- Procedure Name: DeleteInstructor
@@ -86,8 +88,9 @@ EXCEPTION
 END;
 $$;
 
+-- BEGIN;
 -- CALL DeleteInstructor(17);
-
+--COMMIT;
 
 -- ==========================================================
 -- Procedure Name: SelectInstructors
@@ -177,4 +180,6 @@ EXCEPTION
 END; 
 $$;
 
+--BEGIN;
 -- CALL AssignInstructorToCourse(2, 12);  
+-- COMMIT;
