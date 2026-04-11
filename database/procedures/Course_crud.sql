@@ -14,12 +14,19 @@ create or replace procedure InsertCourses(
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
+    begin
     INSERT INTO Course (CourseName,MinDegree,MaxDegree ) VALUES(p_CourseName,p_MinDegree,p_MaxDegree );
+    raise notice 'course inserted successfully' ;
+     exception 
+        when others then 
+            raise notice 'error inserting course : % ' , SQLERRM ; 
+            raise;
+            end; 
 END   
 $$;
-
+--begin
 -- call InsertCourses ('python' , 40, 100 )
-
+--commit
 
 -- ==========================================================
 -- Procedure Name: UpdateCourses
@@ -39,15 +46,23 @@ CREATE OR REPLACE PROCEDURE UpdateCourses(
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
-    UPDATE Course
+      UPDATE Course
     SET CourseName = COALESCE(p_CourseName, CourseName),
         MinDegree = COALESCE(p_MinDegree, MinDegree),
         MaxDegree = COALESCE(p_MaxDegree, MaxDegree)
     WHERE CourseID = p_CourseID;
+        raise notice 'course updated successfully' ;
+     exception 
+        when others then 
+            raise notice 'error updating course : % ' , SQLERRM ; 
+            raise;
+            end; 
 END
 $$;
-
+--begin
 -- call UpdateCourses ( 5 , 'Java', 60, 100)
+--commit
+
 -- ==========================================================
 -- Procedure Name: DeleteCourse
 -- Description: deletes existing course
@@ -60,13 +75,20 @@ CREATE OR REPLACE PROCEDURE DeleteCourse(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    begin
     DELETE FROM Course
     WHERE CourseID = p_CourseID;
+        raise notice 'course deleted successfully' ;
+     exception 
+        when others then 
+            raise notice 'error deleting course : % ' , SQLERRM ; 
+            raise;
+            end; 
 END;
 $$;
-
+--begin
 -- call DeleteCourse(4 )
-
+--begin
 -- ==========================================================
 -- Procedure Name: SelectCoursebyTrackID
 -- Description: selcet Course by Track id 
@@ -78,11 +100,20 @@ CREATE OR REPLACE PROCEDURE SelectCoursebyTrackID(INOUT ref refcursor , p_TrackI
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    begin
     OPEN ref FOR
 SELECT * FROM Course 
 WHERE CourseID IN ( SELECT CourseID  FROM TrackCourse  WHERE TrackID = p_TrackID);
+    raise notice 'course selected successfully' ;
+     exception 
+        when others then 
+            raise notice 'error selecting course : % ' , SQLERRM ; 
+            raise;
+            end; 
     
 END;
 $$;
+--begin
 -- CALL SelectCoursebyTrackID('mycursor',1);
 -- FETCH ALL FROM mycursor;
+--commit

@@ -15,7 +15,7 @@ CREATE OR REPLACE PROCEDURE AssignTrackToCourse(
 LANGUAGE plpgsql
 AS $$
 BEGIN
-
+    begin
     IF NOT EXISTS (
         SELECT 1 FROM Track WHERE TrackID = p_TrackID
     ) THEN
@@ -44,11 +44,17 @@ BEGIN
 
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Error';
+        RAISE NOTICE 'Error  : % ' , SQLERRM  ;
         RAISE;
+    end;
 END;
 $$;
+
+
+--begin
 -- call AssignTrackToCourse(2,4)
+--commit 
+
 -- select * from TrackCourse ;
 
 
