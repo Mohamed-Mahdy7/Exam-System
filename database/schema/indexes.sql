@@ -2,11 +2,11 @@
 CREATE INDEX idx_questions_course ON Questions(CourseID);
 CREATE INDEX idx_choice_question ON Choice(QuestionID);
 
-create index idx_track_department on Track (DepartmentID);
-create index idx_trackcourse_track on TrackCourse (TrackID);
-create index idx_trackcourse_course on TrackCourse (CourseID);
+CREATE index idx_track_department on Track (DepartmentID);
+CREATE index idx_trackcourse_track on TrackCourse (TrackID);
+CREATE index idx_trackcourse_course on TrackCourse (CourseID);
 
-create index idx_instructor_department on Instructor(DepartmentNO);
+CREATE index idx_instructor_department on Instructor(DepartmentNO);
 CREATE INDEX idx_studentTrack_student ON StudentTrack(StudentID);
 CREATE INDEX idx_studentTrack_track ON StudentTrack(TrackID);
 CREATE INDEX idx_instructorCourse_course ON InstructorCourse(CourseID);

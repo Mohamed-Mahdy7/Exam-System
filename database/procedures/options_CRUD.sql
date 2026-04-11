@@ -32,7 +32,7 @@ BEGIN
         SELECT 1
         FROM Choice
         WHERE QuestionID = p_question_id
-          AND OptionOrder = p_option_order
+        AND OptionOrder = p_option_order
     ) THEN
         RAISE EXCEPTION 'Option order % already exists for question %', p_option_order, p_question_id;
     END IF;
@@ -124,8 +124,8 @@ BEGIN
         SELECT 1
         FROM Choice
         WHERE QuestionID = v_final_question_id
-          AND OptionOrder = v_final_option_order
-          AND OptionID <> p_option_id
+        AND OptionOrder = v_final_option_order
+        AND OptionID <> p_option_id
     ) THEN
         RAISE EXCEPTION 'Option order % already exists for question %',
             v_final_option_order, v_final_question_id;
@@ -140,7 +140,7 @@ BEGIN
     INTO v_final_option_count
     FROM Choice
     WHERE QuestionID = v_final_question_id
-      AND OptionID <> p_option_id;
+    AND OptionID <> p_option_id;
 
     v_final_option_count := v_final_option_count + 1; -- Add current option back
 

@@ -1,9 +1,10 @@
-/*
-Purpose: SELECT ALL ExamQuestion
-parameters: ref refcursor
-returns: All data from Table ExamQuestion
-exception raised : 'Error in select from Exams: %'
-*/
+-- ================================================================
+-- Purpose: SELECT ALL ExamQuestion
+-- parameters: ref refcursor
+-- returns: All data from Table ExamQuestion
+-- exception raised : 'Error in select from Exams: %'
+-- ================================================================
+
 CREATE OR REPLACE PROCEDURE exq_sa(INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -24,12 +25,13 @@ $$;
 -- COMMIT;
 
 
-/*
-Purpose: SELECT ExamQuestion BY ExamID
-parameters: p_exam_id INT, ref refcursor
-returns: All data from Table ExamQuestion where ExamID = p_exam_id
-exception raised : 'Exam With ID % does not exist!', p_exam_id;
-*/
+-- ==============================================================================
+-- Purpose: SELECT ExamQuestion BY ExamID
+-- parameters: p_exam_id INT, ref refcursor
+-- returns: All data from Table ExamQuestion where ExamID = p_exam_id
+-- exception raised : 'Exam With ID % does not exist!', p_exam_id;
+-- ==============================================================================
+
 CREATE OR REPLACE PROCEDURE exq_s_eid(IN p_exam_id INT, INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -59,15 +61,16 @@ $$;
 -- COMMIT;
 
 
-/*
-Purpose: INSERT INTO ExamQuestion
-parameters: p_exam_id INT, rp_question_id INT, p_order_no INT
-returns: insert values into ExamQuestion without returning any data
-exception raised : RAISE EXCEPTION 'QuestionID cannot be empty';
-					RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
-					RAISE EXCEPTION 'OrderNo must be greater than 0';
-					'Error while inserting into ExamQuestion: %', SQLERRM;
-*/
+-- ================================================================================
+-- Purpose: INSERT INTO ExamQuestion
+-- parameters: p_exam_id INT, rp_question_id INT, p_order_no INT
+-- returns: insert values into ExamQuestion without returning any data
+-- exception raised : RAISE EXCEPTION 'QuestionID cannot be empty';
+-- 					RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+-- 					RAISE EXCEPTION 'OrderNo must be greater than 0';
+-- 					'Error while inserting into ExamQuestion: %', SQLERRM;
+-- ================================================================================
+
 CREATE OR REPLACE PROCEDURE eq_i(
 	p_exam_id INT,
 	p_question_id INT,
@@ -102,14 +105,15 @@ $$;
 -- COMMIT;
 
 
-/*
-Purpose: UPDATE ROW IN ExamQuestion
-parameters: p_exam_id INT, rp_question_id INT, p_order_no INT DEFAULT NULL
-returns: Updates values in ExamQuestion without returning any data
-exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
-					'Question with ID % does not exist', p_question_id;
-					'Error while updating values in ExamQuestion: %', SQLERRM;
-*/
+-- ===============================================================================
+-- Purpose: UPDATE ROW IN ExamQuestion
+-- parameters: p_exam_id INT, rp_question_id INT, p_order_no INT DEFAULT NULL
+-- returns: Updates values in ExamQuestion without returning any data
+-- exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+-- 					'Question with ID % does not exist', p_question_id;
+-- 					'Error while updating values in ExamQuestion: %', SQLERRM;
+-- ===============================================================================
+
 CREATE OR REPLACE PROCEDURE eq_u(
 	p_exam_id INT,
 	p_question_id INT,
@@ -143,15 +147,15 @@ $$;
 -- COMMIT;
 
 
-/*
-Purpose: DELETE ROW FROM ExamQuestion
-parameters: p_exam_id INT, rp_question_id INT
-returns: Delete from table ExamQuestion without retutning
-exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
-					'Question with ID % does not exist', p_question_id;
-					'Error while deleting from ExamQuestion: %', SQLERRM;
-*/
--- 
+-- ================================================================================
+-- Purpose: DELETE ROW FROM ExamQuestion
+-- parameters: p_exam_id INT, rp_question_id INT
+-- returns: Delete from table ExamQuestion without retutning
+-- exception raised : RAISE EXCEPTION 'Exam with ID % does not exist', p_exam_id;
+-- 					'Question with ID % does not exist', p_question_id;
+-- 					'Error while deleting from ExamQuestion: %', SQLERRM;
+-- ===============================================================================
+
 CREATE OR REPLACE PROCEDURE eq_d(
 	p_exam_id INT,
 	p_question_id INT)

@@ -1,13 +1,11 @@
 --  Add foreign key for Course in Exams table
-
 ALTER TABLE Exams
 ADD CONSTRAINT fk_course
 FOREIGN KEY (CourseID)
 REFERENCES Course(CourseID)
 ON DELETE RESTRICT;
 
--- add foreign key and primary key for ExamQuestion
-
+-- Add foreign key and primary key for ExamQuestion
 ALTER TABLE ExamQuestion
 ADD CONSTRAINT fk_question
 FOREIGN KEY (QuestionID)
@@ -16,8 +14,7 @@ ON DELETE RESTRICT,
 ADD CONSTRAINT  pk_examquestion
 PRIMARY KEY (ExamID, QuestionID);
 
--- add foreign keys for StudentExam
-
+-- Add foreign keys for StudentExam
 ALTER TABLE StudentExam
 ADD CONSTRAINT fk_student
 FOREIGN KEY (StudentID)
@@ -28,7 +25,7 @@ FOREIGN KEY (ExamID)
 REFERENCES Exams(ExamID)
 ON DELETE RESTRICT;
 
--- add foreign key for Question
+-- Add foreign key for Question
 ALTER TABLE Questions 
 ADD CONSTRAINT FK_Questions_Course 
 FOREIGN KEY (CourseID) REFERENCES Course(CourseID) 

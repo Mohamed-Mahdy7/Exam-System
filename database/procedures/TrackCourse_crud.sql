@@ -32,7 +32,7 @@ BEGIN
         SELECT 1 
         FROM TrackCourse 
         WHERE TrackID = p_TrackID 
-          AND CourseID = p_CourseID
+        AND CourseID = p_CourseID
     ) THEN
         RAISE EXCEPTION 'This course is already assigned to this track';
     END IF;
