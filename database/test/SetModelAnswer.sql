@@ -5,7 +5,7 @@
 -- =========================
 BEGIN;
 
--- Valid: option 1 belongs to question 1
+-- Valid
 CALL SetModelAnswer(1, 1);
 
 -- Invalid: option 1 belongs to question 1, NOT question 2 → must raise exception

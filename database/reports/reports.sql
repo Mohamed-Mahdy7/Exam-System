@@ -139,6 +139,13 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $$;
 
+-- BEGIN;
+
+-- CALL Report_ExamQuestions(1, 'exam_q_report');
+-- FETCH ALL FROM exam_q_report;
+
+-- COMMIT;
+
 -- ---------------------------------------------------------------------------
 -- 5. Report_StudentExamAnswers
 -- Purpose: Optional report - return student exam answers with correctness. Parameters: ExamID, StudentID, cursor. Returns: cursor with OrderNo, QuestionText, ChosenOptionText, Correct. Exceptions: none.
@@ -171,3 +178,10 @@ EXCEPTION WHEN OTHERS THEN
     RAISE;
 END;
 $$;
+
+-- BEGIN;
+
+-- CALL Report_StudentExamAnswers(1, 1, 'student_exam_ans_report');
+-- FETCH ALL FROM student_exam_ans_report;
+
+-- COMMIT;

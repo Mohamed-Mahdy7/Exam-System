@@ -1,6 +1,9 @@
 -- ---------------------------------------------------------------------------
 -- 1. InsertQuestion
--- Purpose: Insert a new question. Parameters: CourseID, QuestionText, Type, Points. Returns: QuestionID through OUT parameter. Exceptions: empty text, invalid type, invalid points, missing course.
+-- Purpose: Insert a new question. 
+-- Parameters: CourseID, QuestionText, Type, Points. 
+-- Returns: QuestionID through OUT parameter. 
+-- Exceptions: empty text, invalid type, invalid points, missing course.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE InsertQuestion(
     IN p_course_id INT,
@@ -37,10 +40,21 @@ EXCEPTION
         RAISE;
 END;
 $$;
+------------------------ insert question example ------------------------------
+
+-- BEGIN;
+
+-- CALL InsertQuestion(1, 'What is a variable?', 'MCQ', 2);
+
+-- COMMIT;
 
 -- ---------------------------------------------------------------------------
 -- 2. UpdateQuestion
--- Purpose: Update an existing question partially or fully. Parameters: QuestionID, CourseID, QuestionText, Type, Points. Null parameters keep old values. Returns: none. Exceptions: missing question, missing course, empty text, invalid type, invalid points.
+-- Purpose: Update an existing question partially or fully. 
+-- Parameters: QuestionID, CourseID, QuestionText, Type, Points. 
+-- Null parameters keep old values. 
+-- Returns: none. 
+-- Exceptions: missing question, missing course, empty text, invalid type, invalid points.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE UpdateQuestion(
     IN p_question_id INT,
@@ -100,10 +114,19 @@ BEGIN
     WHERE QuestionID = p_question_id;
 END;
 $$;
+-- ------------------------------ update question example ------------------------------
+-- BEGIN;
 
+-- CALL UpdateQuestion(1, NULL, 'What is a variable?', NULL, NULL);
+
+-- COMMIT;
 -- ---------------------------------------------------------------------------
 -- 3. DeleteQuestion
--- Purpose: Delete a question by QuestionID. Parameters: QuestionID. Returns: none. Exceptions: question not found. Cascading behavior depends on foreign keys.
+-- Purpose: Delete a question by QuestionID. 
+-- Parameters: QuestionID. 
+-- Returns: none. 
+-- Exceptions: question not found. 
+-- Cascading behavior depends on foreign keys.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE DeleteQuestion(IN p_question_id INT)
 LANGUAGE plpgsql
@@ -121,10 +144,20 @@ EXCEPTION
         RAISE;
 END;
 $$;
+------------------------------- delete question example ------------------------------
+
+-- BEGIN;
+
+-- CALL DeleteQuestion(1);
+
+-- COMMIT;
 
 -- ---------------------------------------------------------------------------
 -- 4. SelectQuestion
--- Purpose: Select one question by QuestionID. Parameters: QuestionID, cursor. Returns: cursor with question row. Exceptions: none.
+-- Purpose: Select one question by QuestionID. 
+-- Parameters: QuestionID, cursor. 
+-- Returns: cursor with question row. 
+-- Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectQuestion(
     IN p_question_id INT,
@@ -139,9 +172,21 @@ BEGIN
         WHERE q.QuestionID = p_question_id;
 END;
 $$;
+----------------------------------- select question example ------------------------------
+
+-- BEGIN;
+
+-- CALL SelectQuestion(1, 'my_cursor');
+-- FETCH ALL FROM my_cursor;
+
+-- COMMIT;
+
 -- ---------------------------------------------------------------------------
 -- 5. SelectQuestionsByCourse
--- Purpose: Return all questions for a specific course. Parameters: CourseID, cursor. Returns: cursor with question rows. Exceptions: none.
+-- Purpose: Return all questions for a specific course. 
+-- Parameters: CourseID, cursor. 
+-- Returns: cursor with question rows. 
+-- Exceptions: none.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE SelectQuestionsByCourse(
     IN p_course_id INT,
@@ -160,3 +205,11 @@ EXCEPTION
         RAISE;
 END;
 $$;
+----------------------------------- select questions by course example ------------------------------
+
+-- BEGIN;
+
+-- CALL SelectQuestionsByCourse(1, 'my_cursor');
+-- FETCH ALL FROM my_cursor;
+
+-- COMMIT;
