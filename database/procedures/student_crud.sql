@@ -27,9 +27,9 @@ EXCEPTION
 END;
 $$;
 
-
+--BEGIN;
 -- CALL InsertStudent('Dalia Ahmed', 'Dalia.ahmed@example.com', '01012345678');
-
+-- COMMIT;
 
 -- ==========================================================
 -- Procedure Name: UpdateStudent
@@ -62,7 +62,10 @@ EXCEPTION
 END;
 $$;
 
+-- BEGIN;
 -- CALL UpdateStudent(31,'Mona Ahmed', 'mona.ahmed@example.com', '01012345677');
+-- COMMIT;
+
 
 -- ==========================================================
 -- Procedure Name: DeleteStudent
@@ -88,7 +91,9 @@ EXCEPTION
 END;
 $$;
 
+--BEGIN;
 -- CALL DeleteStudent(31);
+-- COMMIT;
 
 -- ==========================================================
 -- Procedure Name: SelectStudents
@@ -175,5 +180,6 @@ EXCEPTION
 END; 
 $$;
 
+-- BEGIN;
 -- CALL AssignStudentToTrack(1, 7);
-
+-- COMMIT;
