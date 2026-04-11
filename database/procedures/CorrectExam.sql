@@ -2,14 +2,14 @@
 ===============================================================================
 Procedure Name : CorrectExam
 ===============================================================================
- Purpose: This procedure evaluates a student's submitted exam by comparing their answers
+Purpose: This procedure evaluates a student's submitted exam by comparing their answers
 against the correct answers (ModelAnswer).
 -------------------------------------------------------------------------------
 Parameters: p_StudentExamID   INT
 Returns: Updates StudentExam.TotalGrade with the computed score.
 Exceptions:
 - ANY UNEXPECTED ERROR (WHEN OTHERS)
-  Logs error message using RAISE NOTICE
+Logs error message using RAISE NOTICE
 -------------------------------------------------------------------------------
 Transaction
 - Caller must control COMMIT / ROLLBACK
@@ -45,7 +45,7 @@ BEGIN
             ON q.QuestionID = ma.QuestionID
         LEFT JOIN StudentAnswer sa 
             ON sa.QuestionID = q.QuestionID
-           AND sa.StudentExamID = se.StudentExamID
+        AND sa.StudentExamID = se.StudentExamID
         WHERE se.StudentExamID = p_StudentExamID;
 
         UPDATE StudentExam

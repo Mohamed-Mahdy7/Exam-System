@@ -1,11 +1,12 @@
-/*
-Purpose: GENERATE Exam
-parameters: p_CourseID INT, ExamName TEXT, NumMCQ INT, NumTF INT
-returns: Insert Exam Data into Exam Table then Questions into ExamQuestion Table without returning
-exception raised : 'Course with ID % not found!', p_CourseID;
-                    'Exam name cannot be empty';
-                    'Not enough questions';
-*/
+-- ===================================================================================================
+-- Purpose: GENERATE Exam
+-- parameters: p_CourseID INT, ExamName TEXT, NumMCQ INT, NumTF INT
+-- returns: Insert Exam Data into Exam Table then Questions into ExamQuestion Table without returning
+-- exception raised : 'Course with ID % not found!', p_CourseID;
+--                     'Exam name cannot be empty';
+--                     'Not enough questions';
+-- ===================================================================================================
+
 CREATE OR REPLACE PROCEDURE GenerateExam(
     p_CourseID INT,
     ExamName TEXT,

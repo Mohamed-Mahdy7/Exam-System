@@ -1,9 +1,10 @@
-/* 
-Purpose: SELECT ALL EXAMS
-parameters: ref refcursor
-returns: All data from Table Exams
-exception raised : 'Error in select from Exams: %'
-*/
+-- ===========================================================
+-- Purpose: SELECT ALL EXAMS
+-- parameters: ref refcursor
+-- returns: All data from Table Exams
+-- exception raised : 'Error in select from Exams: %'
+-- ===========================================================
+
 CREATE OR REPLACE PROCEDURE ex_sa(INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -24,13 +25,14 @@ $$;
 -- COMMIT;
 
 
-/*
-purpose: SELECT EXAM BY ExamID
-parameters: p_exam_id INT, ref refcursor
-returns: all values from Exams that has the passed ExamID
-exceptions raised: 'Exam With ID % does not exist!', p_exam_id,
-					'Error in ex_S procedure: %', SQLERRM
-*/
+-- ====================================================================
+-- purpose: SELECT EXAM BY ExamID
+-- parameters: p_exam_id INT, ref refcursor
+-- returns: all values from Exams that has the passed ExamID
+-- exceptions raised: 'Exam With ID % does not exist!', p_exam_id,
+--					 'Error in ex_S procedure: %', SQLERRM
+-- ====================================================================
+
 CREATE OR REPLACE PROCEDURE ex_s(IN p_exam_id INT, INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -60,13 +62,14 @@ $$;
 -- COMMIT;
 
 
-/*
-purpose: SELECT EXAM BY CourseID
-parameters: p_course_id INT,  ref refcursor
-returns: all values from Exams that has the passed CourseID
-exceptions raised: 'Course With ID % does not exist!', p_course_id
-					'Error in ex_cid procedure: %', SQLERRM
-*/
+-- =============================================================================
+-- purpose: SELECT EXAM BY CourseID
+-- parameters: p_course_id INT,  ref refcursor
+-- returns: all values from Exams that has the passed CourseID
+-- exceptions raised: 'Course With ID % does not exist!', p_course_id
+--					 'Error in ex_cid procedure: %', SQLERRM
+-- =============================================================================
+
 CREATE OR REPLACE PROCEDURE ex_cid(IN p_course_id INT, INOUT ref refcursor)
 LANGUAGE plpgsql
 AS $$
@@ -96,15 +99,16 @@ $$;
 -- COMMIT;
 
 
-/*
-purpose: INSERT INTO Exams
-parameters: p_exam_name TEXT, p_course_id INT, p_total_questions INT
-returns: Insert values to Exam table without returning
-exceptions raised: 'Exam name cannot be empty';
-					'Course with ID % does not exist', p_course_id;
-					'TotalQuestions must be greater than 0';
-					'Error while inserting into Exams: %', SQLERRM;
-*/
+-- =====================================================================
+-- purpose: INSERT INTO Exams
+-- parameters: p_exam_name TEXT, p_course_id INT, p_total_questions INT
+-- returns: Insert values to Exam table without returning
+-- exceptions raised: 'Exam name cannot be empty';
+-- 					'Course with ID % does not exist', p_course_id;
+-- 					'TotalQuestions must be greater than 0';
+--					 'Error while inserting into Exams: %', SQLERRM;
+-- =====================================================================
+
 CREATE OR REPLACE PROCEDURE ex_i(
 	p_exam_name TEXT,
 	p_course_id INT,
@@ -139,13 +143,17 @@ $$;
 -- COMMIT;
 
 
-/*
-purpose: UPDATE EXAM ROW
-parameters: p_exam_id INT, p_exam_name TEXT DEFAULT NULL, p_course_id INT DEFAULT NULL, p_total_questions INT DEFAULT NULL
-returns: Update the chosen columns without returning
-exceptions raised: 'Exam with ID % does not exist', p_exam_id;
-					'Error while updating into Exams: %', SQLERRM;
-*/
+-- ============================================================================================
+-- purpose: UPDATE EXAM ROW
+-- parameters: p_exam_id INT,
+-- 				p_exam_name TEXT DEFAULT NULL,
+-- 				p_course_id INT DEFAULT NULL,
+-- 				p_total_questions INT DEFAULT NULL
+-- returns: Update the chosen columns without returning
+-- exceptions raised: 'Exam with ID % does not exist', p_exam_id;
+--					'Error while updating into Exams: %', SQLERRM;
+-- ============================================================================================
+
 CREATE OR REPLACE PROCEDURE ex_u(
 	p_exam_id INT,
 	p_exam_name TEXT DEFAULT NULL,
@@ -178,13 +186,14 @@ $$;
 -- COMMIT;
 
 
-/*
-purpose: DELETE ROW FROM EXAM
-parameters: p_exam_id INT
-returns: DELETE the row of the ExamID columns without returning
-exceptions raised: 'Exam with ID % does not exist', p_exam_id;
-					'Error while deleting from Exams: %', SQLERRM;
-*/
+-- ===================================================================
+-- purpose: DELETE ROW FROM EXAM
+-- parameters: p_exam_id INT
+-- returns: DELETE the row of the ExamID columns without returning
+-- exceptions raised: 'Exam with ID % does not exist', p_exam_id;
+--					'Error while deleting from Exams: %', SQLERRM;
+-- ===================================================================
+
 CREATE OR REPLACE PROCEDURE ex_d(p_exam_id INT)
 LANGUAGE plpgsql
 AS $$

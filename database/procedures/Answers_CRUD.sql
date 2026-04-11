@@ -39,7 +39,7 @@ BEGIN
         SELECT 1
         FROM Choice
         WHERE OptionID = v_final_correct_option_id
-          AND QuestionID = p_question_id
+        AND QuestionID = p_question_id
     ) THEN
         RAISE EXCEPTION 'Option % does not belong to question %', v_final_correct_option_id, p_question_id;
     END IF;
@@ -68,11 +68,11 @@ AS $$
 BEGIN
     OPEN p_cur FOR
     SELECT sa.StudentAnswerID,
-           sa.StudentExamID,
-           sa.QuestionID,
-           q.QuestionText,
-           sa.ChosenOptionID,
-           c.OptionText AS ChosenOptionText
+        sa.StudentExamID,
+        sa.QuestionID,
+        q.QuestionText,
+        sa.ChosenOptionID,
+        c.OptionText AS ChosenOptionText
     FROM StudentAnswer sa
     JOIN Questions q ON q.QuestionID = sa.QuestionID
     LEFT JOIN Choice c ON c.OptionID = sa.ChosenOptionID
