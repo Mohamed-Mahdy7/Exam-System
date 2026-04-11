@@ -5,7 +5,7 @@ VALUES (999, 'Fake Student', 'fake@test.com', '01000000000');
 INSERT INTO StudentTrack (StudentID, TrackID) 
 VALUES (999, 1);
 
--- 2. UPDATE: Change the student's name
+-- 2. UPDATE  the student's name
 UPDATE Student 
 SET Name = 'Updated Fake Student' 
 WHERE StudentID = 999;

@@ -5,7 +5,7 @@ VALUES (999, 'Dr. Fake', 'drfake@test.com', '01111111111');
 INSERT INTO InstructorCourse (InstructorID, CourseID) 
 VALUES (999, 1);
 
--- 2. UPDATE: Change the instructor's email
+-- 2. UPDATE the instructor's email
 UPDATE Instructor 
 SET Email = 'new_drfake@test.com' 
 WHERE InstructorID = 999;

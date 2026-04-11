@@ -8,7 +8,7 @@
 CREATE OR REPLACE PROCEDURE InsertDepartment(
     p_DepartmentName text,
     p_Location text
-  
+
 ) LANGUAGE plpgsql
 AS $$
 begin 
@@ -22,6 +22,9 @@ begin
             raise;
             end; 
  end ;  
+BEGIN 
+    INSERT INTO Departments (DepartmentName,Location ) VALUES(p_DepartmentName,p_Location );
+END   
 $$;
 --begin
 -- call InsertDepartment('testing', 'Building b');
@@ -35,9 +38,9 @@ $$;
 --     p_Location : Location  if want dont change insert null
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE UpdateDepartment(
-     p_DepartmentID int default null,
-     p_DepartmentName text default null,
-     p_Location text default null
+    p_DepartmentID int default null,
+    p_DepartmentName text default null,
+    p_Location text default null
 )
 LANGUAGE plpgsql
 AS $$
@@ -67,7 +70,7 @@ $$;
 -- ==========================================================
 
 CREATE OR REPLACE PROCEDURE DeleteDepartment(
-     p_DepartmentID int
+    p_DepartmentID int
 )
 LANGUAGE plpgsql
 AS $$

@@ -8,7 +8,7 @@
 CREATE OR REPLACE PROCEDURE InsertTrack(
     p_TracktName TEXT,
     p_DepartmentID int
-  
+
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
@@ -20,7 +20,7 @@ BEGIN
             raise notice 'error inserting track : % ' , SQLERRM ; 
             raise;
             end; 
- END   
+END   
 $$;
 
 -- call InsertTrack('work', 2);
@@ -39,12 +39,12 @@ CREATE OR REPLACE PROCEDURE UpdateTrack(
 p_trackID int DEFAULT NULL,
     p_TracktName TEXT DEFAULT NULL,
     p_DepartmentID int DEFAULT NULL
-  
+
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
     begin
-      UPDATE Track
+    UPDATE Track
     SET TrackName = COALESCE(p_TracktName, TrackName),
         DepartmentID = COALESCE(p_DepartmentID, DepartmentID)
     WHERE TrackID = p_trackID;
@@ -54,7 +54,7 @@ BEGIN
             raise notice 'error updating track : % ' , SQLERRM ; 
             raise;
             end; 
- END   
+END   
 $$;
 -- call UpdateTrack (2, 'java',1 )
 -- ==========================================================
@@ -65,7 +65,7 @@ $$;
 -- ==========================================================
 
 CREATE OR REPLACE PROCEDURE DeleteTrack(
-     p_trackID INTEGER
+    p_trackID INTEGER
 )
 LANGUAGE plpgsql
 AS $$

@@ -9,8 +9,8 @@
 
 create or replace procedure InsertCourses(
     p_CourseName text,
-	p_MinDegree int , 
-  	p_MaxDegree int 
+    p_MinDegree int , 
+    p_MaxDegree int 
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
@@ -22,7 +22,7 @@ BEGIN
             raise notice 'error inserting course : % ' , SQLERRM ; 
             raise;
             end; 
- END   
+END   
 $$;
 --begin
 -- call InsertCourses ('python' , 40, 100 )
@@ -46,7 +46,6 @@ CREATE OR REPLACE PROCEDURE UpdateCourses(
 ) LANGUAGE plpgsql
 AS $$
 BEGIN 
-    begin
       UPDATE Course
     SET CourseName = COALESCE(p_CourseName, CourseName),
         MinDegree = COALESCE(p_MinDegree, MinDegree),
@@ -58,7 +57,7 @@ BEGIN
             raise notice 'error updating course : % ' , SQLERRM ; 
             raise;
             end; 
- END
+END
 $$;
 --begin
 -- call UpdateCourses ( 5 , 'Java', 60, 100)
@@ -71,7 +70,7 @@ $$;
 -- 		p_CourseID : Course ID of Course to delete 
 -- ==========================================================
 CREATE OR REPLACE PROCEDURE DeleteCourse(
-     p_CourseID int
+    p_CourseID int
 )
 LANGUAGE plpgsql
 AS $$
@@ -103,7 +102,7 @@ AS $$
 BEGIN
     begin
     OPEN ref FOR
- SELECT * FROM Course 
+SELECT * FROM Course 
 WHERE CourseID IN ( SELECT CourseID  FROM TrackCourse  WHERE TrackID = p_TrackID);
     raise notice 'course selected successfully' ;
      exception 
@@ -111,7 +110,7 @@ WHERE CourseID IN ( SELECT CourseID  FROM TrackCourse  WHERE TrackID = p_TrackID
             raise notice 'error selecting course : % ' , SQLERRM ; 
             raise;
             end; 
-	 
+    
 END;
 $$;
 --begin
