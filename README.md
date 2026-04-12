@@ -74,6 +74,20 @@ docs/
 ├── PostgresSQL Project.drawio.png      # ERD export (PNG)
 └── data_dictionary.md                  # Full DB Dictionary (all 15 tables)
 
+static/
+└── test/
+    └── style.css
+
+templates/
+    ├── base.html                    
+    ├── index.html
+    ├── admin.html
+    ├── instructor.html
+    └── student.html
+
+app.py                                  # Backend Logic
+requirements.txt                        # requirements for flask app
+setup.sh                                # setup file for exam_db
 .gitignore
 README.md
 ```
