@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Instructor Dashboard{% endblock %}
+{% block portal_label %}Instructor Portal{% endblock %}
+{% block header %}Course & Exam Administration{% endblock %}
+
+{% block sidebar %}
+<div class="nav-category">Exam Management</div>
+<a href="#" class="nav-link active" onclick="showSection('generate')">🎲 Generate Exam</a>
+<a href="#" class="nav-link" onclick="showSection('questions')">❓ Question Bank</a>
+<a href="#" class="nav-link" onclick="showSection('exams')">📝 View Exams</a>
+<div class="nav-category">Reports</div>
+<a href="#" class="nav-link" onclick="showSection('reports')">📊 Reports</a>
+{% endblock %}
+
+{% block content %}
+<!-- GENERATE EXAM -->
+<div id="sec-generate" class="section-view">
+    <h2 class="h4 fw-bold mb-4">Generate Randomized Exam</h2>
+    <div class="card shadow-sm border-0" style="max-width: 600px;">
+        <div class="card-body p-4">
+            <div id="genMsg" class="alert d-none"></div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">Select Course</label>
+                <select class="form-select" id="genCourse"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">Exam Name</label>
+                <input type="text" class="form-control" id="genName" placeholder="e.g., Midterm 2024">
+            </div>
+            <div class="row mb-4">
+                <div class="col-6">
+                    <label class="form-label fw-bold text-secondary">MCQ Count</label>
+                    <input type="number" class="form-control" id="genMCQ" min="0" value="5">
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-bold text-secondary">T/F Count</label>
+                    <input type="number" class="form-control" id="genTF" min="0" value="5">
+                </div>
+            </div>
+            <button class="btn btn-teal w-100 py-2" onclick="generateExam()">Generate Exam</button>
+        </div>
+    </div>
+</div>
+
+<!-- QUESTION BANK -->
+<div id="sec-questions" class="section-view d-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Question Bank</h2>
+    </div>
+    <div class="mb-3">
+        <select class="form-select" id="qCourseFilter" style="max-width:300px" onchange="loadQuestions()">
+            <option value="">All Courses</option>
+        </select>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Course</th><th>Question</th><th>Type</th><th>Points</th></tr></thead>
+            <tbody id="q-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- VIEW EXAMS -->
+<div id="sec-exams" class="section-view d-none">
+    <h2 class="h4 fw-bold mb-4">All Exams</h2>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Course</th><th>Questions</th><th>Created</th></tr></thead>
+            <tbody id="exam-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- REPORTS -->
+<div id="sec-reports" class="section-view d-none">
+    <h2 class="h4 fw-bold mb-4">Report Downloads</h2>
+    <div class="card shadow-sm border-0 p-4" style="max-width:600px;">
+        <h5 class="mb-3">Students by Department</h5>
+        <div class="input-group mb-3">
+            <input type="number" class="form-control" id="rptDeptId" placeholder="Department ID" min="1">
+            <a class="btn btn-teal" id="rptDeptBtn" href="#" target="_blank">📄 Download PDF</a>
+        </div>
+        <h5 class="mb-3">Student Grades</h5>
+        <div class="input-group mb-3">
+            <input type="number" class="form-control" id="rptStuId" placeholder="Student ID" min="1">
+            <a class="btn btn-teal" id="rptStuBtn" href="#" target="_blank">📄 Download PDF</a>
+        </div>
+        <h5 class="mb-3">Instructor Courses</h5>
+        <div class="input-group mb-3">
+            <input type="number" class="form-control" id="rptInstId" placeholder="Instructor ID" min="1">
+            <a class="btn btn-teal" id="rptInstBtn" href="#" target="_blank">📄 Download PDF</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showSection(name) {
+    document.querySelectorAll('.section-view').forEach(e => e.classList.add('d-none'));
+    document.getElementById('sec-' + name).classList.remove('d-none');
+    document.querySelectorAll('.sidebar .nav-link').forEach(e => e.classList.remove('active'));
+    event.target.classList.add('active');
+    if (name === 'questions') loadQuestions();
+    if (name === 'exams') loadExams();
+}
+
+function loadCourses() {
+    $.getJSON('/api/courses', data => {
+        let opts = data.map(c => `<option value="${c.courseid}">${c.coursename}</option>`).join('');
+        $('#genCourse').html(opts);
+        $('#qCourseFilter').html('<option value="">All Courses</option>' + opts);
+    });
+}
+
+function generateExam() {
+    $.ajax({ url: '/api/exams/generate', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ course_id: +$('#genCourse').val(), exam_name: $('#genName').val(), num_mcq: +$('#genMCQ').val(), num_tf: +$('#genTF').val() }),
+        success: res => $('#genMsg').removeClass('d-none alert-danger').addClass('alert-success').text(res.message),
+        error: xhr => $('#genMsg').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Error')
+    });
+}
+
+function loadQuestions() {
+    let url = '/api/questions';
+    let cid = $('#qCourseFilter').val();
+    if (cid) url += '?course_id=' + cid;
+    $.getJSON(url, data => {
+        $('#q-table').html(data.map(r => `<tr><td>${r.questionid}</td><td>${r.coursename}</td><td>${r.questiontext}</td><td><span class="badge bg-${r.type==='MCQ'?'primary':'warning'}">${r.type}</span></td><td>${r.points}</td></tr>`).join(''));
+    });
+}
+
+function loadExams() {
+    $.getJSON('/api/exams', data => {
+        $('#exam-table').html(data.map(r => `<tr><td>${r.examid}</td><td class="text-teal fw-bold">${r.examname}</td><td>${r.coursename||''}</td><td>${r.totalquestions||0}</td><td>${r.createddate?new Date(r.createddate).toLocaleDateString():''}</td></tr>`).join(''));
+    });
+}
+
+// Report links
+$('#rptDeptId').on('input', function(){ $('#rptDeptBtn').attr('href', '/api/reports/students_by_dept/' + this.value); });
+$('#rptStuId').on('input', function(){ $('#rptStuBtn').attr('href', '/api/reports/student_grades/' + this.value); });
+$('#rptInstId').on('input', function(){ $('#rptInstBtn').attr('href', '/api/reports/instructor_courses/' + this.value); });
+
+$(function(){ loadCourses(); });
+</script>
+{% endblock %}

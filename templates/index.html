@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ITI Exam System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; }
+        .login-card { background: white; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); }
+        .brand-text { color: #2dd4bf; }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100">
+    <div style="max-width: 420px; width: 100%;">
+        <div class="login-card p-5">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold">Welcome to <span class="brand-text">ITI</span></h3>
+                <p class="text-muted small">Exam Management System</p>
+            </div>
+            <div id="errorMsg" class="alert alert-danger d-none small"></div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="e.g. admin@iti.edu" required>
+                    <small class="text-muted">Use 'admin', 'instructor', or any other email</small>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="any password" required>
+                </div>
+                <button type="submit" class="btn btn-teal w-100 py-2 fs-6">Sign In</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#loginForm').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/login', type: 'POST', contentType: 'application/json',
+                data: JSON.stringify({ email: $('#email').val(), password: $('#password').val() }),
+                success: function(res) { window.location.href = res.redirect; },
+                error: function() { $('#errorMsg').removeClass('d-none').text('Login failed.'); }
+            });
+        });
+    </script>
+</body>
+</html>

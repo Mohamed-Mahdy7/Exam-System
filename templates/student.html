@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block portal_label %}Student Portal{% endblock %}
+{% block header %}Assessments & Results{% endblock %}
+
+{% block sidebar %}
+<div class="nav-category">Assessments</div>
+<a href="#" class="nav-link active" onclick="showSection('available')">📋 Available Exams</a>
+<a href="#" class="nav-link" onclick="showSection('take-exam')">✏️ Take Exam</a>
+{% endblock %}
+
+{% block content %}
+<!-- AVAILABLE EXAMS -->
+<div id="sec-available" class="section-view">
+    <h2 class="h4 fw-bold mb-4">Available Exams</h2>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Exam Name</th><th>Course</th><th>Questions</th><th>Action</th></tr></thead>
+            <tbody id="avail-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- TAKE EXAM -->
+<div id="sec-take-exam" class="section-view d-none">
+    <div class="mb-3">
+        <label class="form-label fw-bold">Student ID</label>
+        <input type="number" class="form-control" id="stuId" style="max-width:200px" placeholder="Your Student ID" value="1">
+    </div>
+    <div id="examAlert" class="alert d-none"></div>
+    <div id="examContainer"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentExamId = null, examStartTime = null;
+
+function showSection(name) {
+    document.querySelectorAll('.section-view').forEach(e => e.classList.add('d-none'));
+    document.getElementById('sec-' + name).classList.remove('d-none');
+    document.querySelectorAll('.sidebar .nav-link').forEach(e => e.classList.remove('active'));
+    event.target.classList.add('active');
+    if (name === 'available') loadAvailableExams();
+}
+
+function loadAvailableExams() {
+    $.getJSON('/api/student/exams', data => {
+        $('#avail-table').html(data.map(r => `<tr>
+            <td>${r.examid}</td><td class="text-teal fw-bold">${r.examname}</td><td>${r.coursename}</td><td>${r.totalquestions||'—'}</td>
+            <td><button class="btn btn-teal btn-sm" onclick="startExam(${r.examid}, '${r.examname}')">Start Exam</button></td>
+        </tr>`).join(''));
+    });
+}
+
+function startExam(examId, examName) {
+    currentExamId = examId;
+    examStartTime = new Date().toISOString().slice(0,19).replace('T',' ');
+    showSection('take-exam');
+    $.getJSON('/api/student/exam/' + examId + '/questions', data => {
+        if (!data.length) { $('#examContainer').html('<p class="text-muted">No questions found for this exam.</p>'); return; }
+        let html = `<h2 class="h4 fw-bold mb-1">${examName}</h2><p class="text-muted mb-4">${data.length} questions</p>`;
+        data.forEach((q, i) => {
+            html += `<div class="card shadow-sm border-0 mb-4 p-4" data-qid="${q.question_id}">
+                <h5 class="mb-3">${i+1}. ${q.text} <span class="badge bg-secondary">${q.points} pts</span></h5>`;
+            q.options.forEach(o => {
+                html += `<div class="form-check mb-2 p-3 border rounded">
+                    <input class="form-check-input answer-radio" type="radio" name="q${q.question_id}" value="${o.option_id}" id="opt${o.option_id}">
+                    <label class="form-check-label" for="opt${o.option_id}">${o.text}</label>
+                </div>`;
+            });
+            html += `</div>`;
+        });
+        html += `<div class="text-end"><button class="btn btn-teal px-5 py-2 fs-6" onclick="submitExam()">Submit Exam</button></div>`;
+        $('#examContainer').html(html);
+    });
+}
+
+function submitExam() {
+    let answers = [];
+    $('.card[data-qid]').each(function() {
+        let qid = $(this).data('qid');
+        let chosen = $(this).find('.answer-radio:checked').val();
+        if (chosen) answers.push({ question_id: qid, chosen_option_id: +chosen });
+    });
+    let endTime = new Date().toISOString().slice(0,19).replace('T',' ');
+    $.ajax({
+        url: '/api/submit_exam', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ student_id: +$('#stuId').val(), exam_id: currentExamId, start_time: examStartTime, end_time: endTime, answers: answers }),
+        success: res => { $('#examAlert').removeClass('d-none alert-danger').addClass('alert-success').text(res.message); $('#examContainer').html(''); },
+        error: xhr => { $('#examAlert').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Submission failed'); }
+    });
+}
+
+$(function(){ loadAvailableExams(); });
+</script>
+{% endblock %}

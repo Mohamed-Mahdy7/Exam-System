@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block portal_label %}Administrator Portal{% endblock %}
+{% block header %}System Administration{% endblock %}
+
+{% block sidebar %}
+<div class="nav-category">System Entities</div>
+<a href="#" class="nav-link active" onclick="showSection('departments')">Departments</a>
+<a href="#" class="nav-link" onclick="showSection('tracks')">Tracks</a>
+<a href="#" class="nav-link" onclick="showSection('courses')">Courses</a>
+<div class="nav-category">User Management</div>
+<a href="#" class="nav-link" onclick="showSection('instructors')">Instructors</a>
+<a href="#" class="nav-link" onclick="showSection('students')">Students</a>
+{% endblock %}
+
+{% block content %}
+<!-- DEPARTMENTS SECTION -->
+<div id="sec-departments" class="section-view">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Department Management</h2>
+        <button class="btn btn-teal" onclick="openAddModal('department')">+ Add Department</button>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Location</th><th>Actions</th></tr></thead>
+            <tbody id="dept-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- TRACKS SECTION -->
+<div id="sec-tracks" class="section-view d-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Track Management</h2>
+        <button class="btn btn-teal" onclick="openAddModal('track')">+ Add Track</button>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Actions</th></tr></thead>
+            <tbody id="track-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- COURSES SECTION -->
+<div id="sec-courses" class="section-view d-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Course Management</h2>
+        <button class="btn btn-teal" onclick="openAddModal('course')">+ Add Course</button>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Min Degree</th><th>Max Degree</th><th>Actions</th></tr></thead>
+            <tbody id="course-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- INSTRUCTORS SECTION -->
+<div id="sec-instructors" class="section-view d-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Instructor Management</h2>
+        <button class="btn btn-teal" onclick="openAddModal('instructor')">+ Add Instructor</button>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Actions</th></tr></thead>
+            <tbody id="inst-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- STUDENTS SECTION -->
+<div id="sec-students" class="section-view d-none">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold">Student Management</h2>
+        <button class="btn btn-teal" onclick="openAddModal('student')">+ Add Student</button>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th></tr></thead>
+            <tbody id="stu-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div id="crudModal" class="modal-overlay d-none">
+    <div class="modal-box">
+        <h5 id="modalTitle" class="mb-3 fw-bold"></h5>
+        <form id="crudForm"></form>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-teal" onclick="submitModal()">Save</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentSection = 'departments';
+let modalEntity = '', modalMode = '', modalId = null;
+
+function showSection(name) {
+    document.querySelectorAll('.section-view').forEach(e => e.classList.add('d-none'));
+    document.getElementById('sec-' + name).classList.remove('d-none');
+    document.querySelectorAll('.sidebar .nav-link').forEach(e => e.classList.remove('active'));
+    event.target.classList.add('active');
+    currentSection = name;
+    loadData(name);
+}
+
+function loadData(section) {
+    const loaders = {
+        departments: () => $.getJSON('/api/departments', data => {
+            $('#dept-table').html(data.map(r => `<tr>
+                <td>${r.departmentid}</td><td class="text-teal fw-bold">${r.departmentname}</td><td>${r.location||''}</td>
+                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('department',${r.departmentid},'${esc(r.departmentname)}','${esc(r.location||'')}')">Edit</button>
+                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('departments',${r.departmentid})">Delete</button></td></tr>`).join(''));
+        }),
+        tracks: () => $.getJSON('/api/tracks', data => {
+            $('#track-table').html(data.map(r => `<tr>
+                <td>${r.trackid}</td><td class="text-teal fw-bold">${r.trackname}</td><td>${r.departmentname||''}</td>
+                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('track',${r.trackid},'${esc(r.trackname)}',${r.departmentid})">Edit</button>
+                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('tracks',${r.trackid})">Delete</button></td></tr>`).join(''));
+        }),
+        courses: () => $.getJSON('/api/courses', data => {
+            $('#course-table').html(data.map(r => `<tr>
+                <td>${r.courseid}</td><td class="text-teal fw-bold">${r.coursename}</td><td>${r.mindegree}</td><td>${r.maxdegree}</td>
+                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('course',${r.courseid},'${esc(r.coursename)}',${r.mindegree},${r.maxdegree})">Edit</button>
+                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('courses',${r.courseid})">Delete</button></td></tr>`).join(''));
+        }),
+        instructors: () => $.getJSON('/api/instructors', data => {
+            $('#inst-table').html(data.map(r => `<tr>
+                <td>${r.instructorid}</td><td class="text-teal fw-bold">${r.name}</td><td>${r.email||''}</td><td>${r.departmentname||''}</td>
+                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('instructor',${r.instructorid},'${esc(r.name)}','${esc(r.email||'')}',${r.departmentno||'null'})">Edit</button>
+                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('instructors',${r.instructorid})">Delete</button></td></tr>`).join(''));
+        }),
+        students: () => $.getJSON('/api/students', data => {
+            $('#stu-table').html(data.map(r => `<tr>
+                <td>${r.studentid}</td><td class="text-teal fw-bold">${r.name}</td><td>${r.email||''}</td><td>${r.phone||''}</td>
+                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('student',${r.studentid},'${esc(r.name)}','${esc(r.email||'')}','${esc(r.phone||'')}')">Edit</button>
+                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('students',${r.studentid})">Delete</button></td></tr>`).join(''));
+        }),
+    };
+    if (loaders[section]) loaders[section]();
+}
+
+function esc(s) { return (s||'').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+function openAddModal(entity) {
+    modalEntity = entity; modalMode = 'add'; modalId = null;
+    const forms = {
+        department: `<input class="form-control mb-2" id="f1" placeholder="Department Name" required>
+                     <input class="form-control mb-2" id="f2" placeholder="Location">`,
+        track: `<input class="form-control mb-2" id="f1" placeholder="Track Name" required>
+                <input class="form-control mb-2" id="f2" placeholder="Department ID" type="number" required>`,
+        course: `<input class="form-control mb-2" id="f1" placeholder="Course Name" required>
+                 <input class="form-control mb-2" id="f2" placeholder="Min Degree" type="number" required>
+                 <input class="form-control mb-2" id="f3" placeholder="Max Degree" type="number" required>`,
+        instructor: `<input class="form-control mb-2" id="f1" placeholder="Name" required>
+                     <input class="form-control mb-2" id="f2" placeholder="Email" type="email" required>
+                     <input class="form-control mb-2" id="f3" placeholder="Department ID" type="number" required>`,
+        student: `<input class="form-control mb-2" id="f1" placeholder="Name" required>
+                  <input class="form-control mb-2" id="f2" placeholder="Email" type="email" required>
+                  <input class="form-control mb-2" id="f3" placeholder="Phone">`,
+    };
+    $('#modalTitle').text('Add ' + entity.charAt(0).toUpperCase() + entity.slice(1));
+    $('#crudForm').html(forms[entity]);
+    $('#crudModal').removeClass('d-none');
+}
+
+function openEditModal(entity, id, ...vals) {
+    modalEntity = entity; modalMode = 'edit'; modalId = id;
+    openAddModal(entity);
+    $('#modalTitle').text('Edit ' + entity.charAt(0).toUpperCase() + entity.slice(1));
+    if (vals[0] !== undefined) $('#f1').val(vals[0]);
+    if (vals[1] !== undefined) $('#f2').val(vals[1]);
+    if (vals[2] !== undefined) $('#f3').val(vals[2]);
+}
+
+function closeModal() { $('#crudModal').addClass('d-none'); }
+
+function submitModal() {
+    const payloads = {
+        department: { name: $('#f1').val(), location: $('#f2').val() },
+        track: { name: $('#f1').val(), department_id: +$('#f2').val() },
+        course: { name: $('#f1').val(), min_degree: +$('#f2').val(), max_degree: +$('#f3').val() },
+        instructor: { name: $('#f1').val(), email: $('#f2').val(), department_id: +$('#f3').val() },
+        student: { name: $('#f1').val(), email: $('#f2').val(), phone: $('#f3').val() },
+    };
+    const endpoints = { department:'departments', track:'tracks', course:'courses', instructor:'instructors', student:'students' };
+    let url = '/api/' + endpoints[modalEntity];
+    let method = 'POST';
+    if (modalMode === 'edit') { url += '/' + modalId; method = 'PUT'; }
+    $.ajax({ url, type: method, contentType: 'application/json', data: JSON.stringify(payloads[modalEntity]),
+        success: () => { closeModal(); loadData(endpoints[modalEntity]); },
+        error: (xhr) => alert('Error: ' + (xhr.responseJSON?.message || xhr.statusText))
+    });
+}
+
+function deleteEntity(endpoint, id) {
+    if (!confirm('Are you sure?')) return;
+    $.ajax({ url: '/api/' + endpoint + '/' + id, type: 'DELETE',
+        success: () => loadData(endpoint),
+        error: (xhr) => alert('Error: ' + (xhr.responseJSON?.message || xhr.statusText))
+    });
+}
+
+$(function() { loadData('departments'); });
+</script>
+{% endblock %}
