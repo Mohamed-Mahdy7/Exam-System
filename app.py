@@ -1,11 +1,10 @@
 # app.py
-from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, send_file, redirect, session
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from fpdf import FPDF
-import io
-import json
-import os
+import io, json, os
+
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -29,10 +28,10 @@ def fetch_cursor_results(conn, proc_call, params):
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("BEGIN;")
     cur.execute(proc_call, params)
-    cursor_name = cur.fetchone()
-    if cursor_name:
-        name = list(cursor_name.values())[0]
-        cur.execute(f'FETCH ALL FROM "{name}";')
+    row = cur.fetchone()
+    if row:
+        cursor_name = list(row.values())[0]
+        cur.execute(f'FETCH ALL FROM "{cursor_name}";')
         rows = cur.fetchall()
     else:
         rows = []
@@ -59,11 +58,28 @@ def query_db(sql, params=None, fetchall=True):
         conn.close()
 
 def execute_db(sql, params=None):
+    """Execute a statement (CALL, INSERT, UPDATE, DELETE) with no result set."""
     conn = get_db()
     cur = conn.cursor()
     try:
         cur.execute(sql, params)
         conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        cur.close()
+        conn.close()
+
+def execute_db_returning(sql, params=None):
+    """Execute a CALL with OUT params and return the result row."""
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    try:
+        cur.execute(sql, params)
+        row = cur.fetchone()
+        conn.commit()
+        return row
     except Exception as e:
         conn.rollback()
         raise e
@@ -83,7 +99,6 @@ def login():
     email = data.get('email', '').lower()
     password = data.get('password', '')
 
-    # Role detection from email (as per original mock logic)
     if 'admin' in email:
         role = 'admin'
     elif 'instructor' in email:
@@ -124,19 +139,28 @@ def get_departments():
 @app.route('/api/departments', methods=['POST'])
 def add_department():
     data = request.get_json()
-    execute_db("CALL InsertDepartment(%s, %s);", (data['name'], data.get('location', '')))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertDepartment(%s, %s);", (data['name'], data.get('location', '')))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/departments/<int:dept_id>', methods=['PUT'])
 def update_department(dept_id):
     data = request.get_json()
-    execute_db("CALL UpdateDepartment(%s, %s, %s);", (dept_id, data.get('name'), data.get('location')))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL UpdateDepartment(%s, %s, %s);", (dept_id, data.get('name'), data.get('location')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/departments/<int:dept_id>', methods=['DELETE'])
 def delete_department(dept_id):
-    execute_db("CALL DeleteDepartment(%s);", (dept_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteDepartment(%s);", (dept_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 # ======================== TRACKS CRUD ========================
@@ -152,19 +176,28 @@ def get_tracks():
 @app.route('/api/tracks', methods=['POST'])
 def add_track():
     data = request.get_json()
-    execute_db("CALL InsertTrack(%s, %s);", (data['name'], data['department_id']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertTrack(%s, %s);", (data['name'], data['department_id']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/tracks/<int:track_id>', methods=['PUT'])
 def update_track(track_id):
     data = request.get_json()
-    execute_db("CALL UpdateTrack(%s, %s, %s);", (track_id, data.get('name'), data.get('department_id')))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL UpdateTrack(%s, %s, %s);", (track_id, data.get('name'), data.get('department_id')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/tracks/<int:track_id>', methods=['DELETE'])
 def delete_track(track_id):
-    execute_db("CALL DeleteTrack(%s);", (track_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteTrack(%s);", (track_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 # ======================== COURSES CRUD ========================
@@ -176,19 +209,28 @@ def get_courses():
 @app.route('/api/courses', methods=['POST'])
 def add_course():
     data = request.get_json()
-    execute_db("CALL InsertCourses(%s, %s, %s);", (data['name'], data['min_degree'], data['max_degree']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertCourses(%s, %s, %s);", (data['name'], data['min_degree'], data['max_degree']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/courses/<int:course_id>', methods=['PUT'])
 def update_course(course_id):
     data = request.get_json()
-    execute_db("CALL UpdateCourses(%s, %s, %s, %s);", (course_id, data.get('name'), data.get('min_degree'), data.get('max_degree')))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL UpdateCourses(%s, %s, %s, %s);", (course_id, data.get('name'), data.get('min_degree'), data.get('max_degree')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/courses/<int:course_id>', methods=['DELETE'])
 def delete_course(course_id):
-    execute_db("CALL DeleteCourse(%s);", (course_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteCourse(%s);", (course_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 # ======================== INSTRUCTORS CRUD ========================
@@ -204,19 +246,28 @@ def get_instructors():
 @app.route('/api/instructors', methods=['POST'])
 def add_instructor():
     data = request.get_json()
-    execute_db("CALL InsertInstructor(%s, %s, %s);", (data['name'], data['email'], data['department_id']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertInstructor(%s, %s, %s);", (data['name'], data['email'], data['department_id']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/instructors/<int:inst_id>', methods=['PUT'])
 def update_instructor(inst_id):
     data = request.get_json()
-    execute_db("CALL UpdateInstructor(%s, %s, %s, %s);", (inst_id, data.get('name'), data.get('email'), data.get('department_id')))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL UpdateInstructor(%s, %s, %s, %s);", (inst_id, data.get('name'), data.get('email'), data.get('department_id')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/instructors/<int:inst_id>', methods=['DELETE'])
 def delete_instructor(inst_id):
-    execute_db("CALL DeleteInstructor(%s);", (inst_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteInstructor(%s);", (inst_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 # ======================== STUDENTS CRUD ========================
@@ -228,19 +279,28 @@ def get_students():
 @app.route('/api/students', methods=['POST'])
 def add_student():
     data = request.get_json()
-    execute_db("CALL InsertStudent(%s, %s, %s);", (data['name'], data['email'], data.get('phone', '')))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertStudent(%s, %s, %s);", (data['name'], data['email'], data.get('phone', '')))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/students/<int:stu_id>', methods=['PUT'])
 def update_student(stu_id):
     data = request.get_json()
-    execute_db("CALL UpdateStudent(%s, %s, %s, %s);", (stu_id, data.get('name'), data.get('email'), data.get('phone')))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL UpdateStudent(%s, %s, %s, %s);", (stu_id, data.get('name'), data.get('email'), data.get('phone')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/students/<int:stu_id>', methods=['DELETE'])
 def delete_student(stu_id):
-    execute_db("CALL DeleteStudent(%s);", (stu_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteStudent(%s);", (stu_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 # ======================== EXAMS ========================
@@ -255,10 +315,34 @@ def get_exams():
 
 @app.route('/api/exams/generate', methods=['POST'])
 def generate_exam():
+    """
+    Calls the GenerateExam stored procedure.
+    Expects JSON: { course_id, exam_name, num_mcq, num_tf }
+    The procedure:
+      1. Validates course exists
+      2. Validates exam name not empty
+      3. Checks enough questions exist for the course
+      4. Inserts into Exams table
+      5. Randomly selects questions and inserts into ExamQuestion
+    """
     data = request.get_json()
-    execute_db("CALL GenerateExam(%s, %s, %s, %s);",
-               (data['course_id'], data['exam_name'], data['num_mcq'], data['num_tf']))
-    return jsonify({"status": "success", "message": "Exam generated successfully!"}), 201
+    course_id = data.get('course_id')
+    exam_name = data.get('exam_name', '').strip()
+    num_mcq = data.get('num_mcq', 0)
+    num_tf = data.get('num_tf', 0)
+
+    if not exam_name:
+        return jsonify({"status": "error", "message": "Exam name cannot be empty"}), 400
+    if not course_id:
+        return jsonify({"status": "error", "message": "Course ID is required"}), 400
+
+    try:
+        execute_db("CALL GenerateExam(%s, %s, %s, %s);",
+                    (int(course_id), exam_name, int(num_mcq), int(num_tf)))
+        return jsonify({"status": "success", "message": "Exam generated successfully!"}), 201
+    except Exception as e:
+        msg = str(e).split('\n')[0]
+        return jsonify({"status": "error", "message": msg}), 400
 
 
 # ======================== STUDENT EXAM TAKING ========================
@@ -284,7 +368,7 @@ def get_exam_questions(exam_id):
         WHERE eq.examid = %s
         ORDER BY eq.orderno, c.optionorder;
     """, (exam_id,))
-    
+
     # Group by question
     questions = {}
     for row in rows:
@@ -304,29 +388,105 @@ def get_exam_questions(exam_id):
                 'text': row['optiontext'],
                 'order': row['optionorder']
             })
-    
-    return jsonify(list(questions.values()))
+
+    # Sort by order number
+    sorted_questions = sorted(questions.values(), key=lambda q: q['order'])
+    return jsonify(sorted_questions)
 
 @app.route('/api/submit_exam', methods=['POST'])
 def submit_exam():
+    """
+    Calls SubmitExamAnswers stored procedure then CorrectExam.
+    Expects JSON: { student_id, exam_id, start_time, end_time, answers: [{question_id, chosen_option_id}, ...] }
+
+    SubmitExamAnswers procedure:
+      1. Creates a StudentExam record (StudentID, ExamID, StartTime, EndTime)
+      2. Iterates over JSONB answers array
+      3. Inserts each answer into StudentAnswer (StudentExamID, QuestionID, ChosenOptionID)
+
+    CorrectExam procedure:
+      1. Joins StudentAnswer with ModelAnswer to compare chosen vs correct options
+      2. Sums points for correct answers
+      3. Updates StudentExam.TotalGrade with the computed score
+    """
     data = request.get_json()
-    answers_json = json.dumps(data['answers'])
-    execute_db(
-        "CALL SubmitExamAnswers(%s, %s, %s, %s, %s::jsonb);",
-        (data['student_id'], data['exam_id'], data['start_time'], data['end_time'], answers_json)
-    )
-    # Auto-correct
+    student_id = data.get('student_id')
+    exam_id = data.get('exam_id')
+    start_time = data.get('start_time')
+    end_time = data.get('end_time')
+    answers = data.get('answers', [])
+
+    if not student_id or not exam_id:
+        return jsonify({"status": "error", "message": "Student ID and Exam ID are required"}), 400
+
+    if not answers:
+        return jsonify({"status": "error", "message": "No answers submitted"}), 400
+
+    answers_json = json.dumps(answers)
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-        # Get the latest student_exam_id
-        row = query_db(
-            "SELECT studentexamid FROM studentexam WHERE studentid=%s AND examid=%s ORDER BY studentexamid DESC LIMIT 1;",
-            (data['student_id'], data['exam_id']), fetchall=False
+        # Step 1: Submit exam answers
+        cur.execute(
+            "CALL SubmitExamAnswers(%s, %s, %s, %s, %s::jsonb);",
+            (int(student_id), int(exam_id), start_time, end_time, answers_json)
         )
+        conn.commit()
+
+        # Step 2: Get the StudentExamID that was just created
+        cur.execute(
+            "SELECT studentexamid FROM studentexam WHERE studentid=%s AND examid=%s ORDER BY studentexamid DESC LIMIT 1;",
+            (int(student_id), int(exam_id))
+        )
+        row = cur.fetchone()
+
+        total_grade = None
         if row:
-            execute_db("CALL CorrectExam(%s);", (row['studentexamid'],))
-    except:
-        pass
-    return jsonify({"status": "success", "message": "Exam submitted and corrected!"}), 200
+            student_exam_id = row['studentexamid']
+            # Step 3: Auto-correct the exam
+            cur.execute("CALL CorrectExam(%s);", (student_exam_id,))
+            conn.commit()
+
+            # Step 4: Fetch the grade
+            cur.execute("SELECT totalgrade FROM studentexam WHERE studentexamid=%s;", (student_exam_id,))
+            grade_row = cur.fetchone()
+            if grade_row:
+                total_grade = grade_row['totalgrade']
+
+        return jsonify({
+            "status": "success",
+            "message": f"Exam submitted and corrected! Your score: {total_grade if total_grade is not None else 'N/A'}",
+            "total_grade": total_grade
+        }), 200
+
+    except Exception as e:
+        conn.rollback()
+        msg = str(e).split('\n')[0]
+        return jsonify({"status": "error", "message": msg}), 400
+    finally:
+        cur.close()
+        conn.close()
+
+
+# ======================== STUDENT RESULTS ========================
+@app.route('/api/student/<int:student_id>/results', methods=['GET'])
+def get_student_results(student_id):
+    """Get all exam results for a student."""
+    rows = query_db("""
+        SELECT se.studentexamid, se.examid, e.examname, c.coursename,
+               se.starttime, se.endtime, se.totalgrade, c.maxdegree,
+               CASE WHEN c.maxdegree > 0
+                    THEN ROUND((se.totalgrade::numeric / c.maxdegree::numeric) * 100, 1)
+                    ELSE 0
+               END AS percentage
+        FROM studentexam se
+        JOIN exams e ON e.examid = se.examid
+        JOIN course c ON c.courseid = e.courseid
+        WHERE se.studentid = %s
+        ORDER BY se.studentexamid DESC;
+    """, (student_id,))
+    return jsonify(rows)
 
 
 # ======================== QUESTIONS CRUD ========================
@@ -349,25 +509,40 @@ def get_questions():
 
 @app.route('/api/questions', methods=['POST'])
 def add_question():
+    """
+    Calls InsertQuestion procedure which has an OUT parameter.
+    InsertQuestion(IN p_course_id, IN p_question_text, IN p_type, IN p_points, OUT p_question_id)
+    """
     data = request.get_json()
-    row = query_db(
-        "SELECT * FROM InsertQuestion(%s, %s, %s, %s);",
-        (data['course_id'], data['text'], data['type'], data['points']),
-        fetchall=False
-    )
-    # If the procedure uses OUT param, handle differently
-    # Fallback: direct insert
-    if not row:
-        execute_db(
-            "INSERT INTO questions (courseid, questiontext, type, points) VALUES (%s, %s, %s, %s);",
+    try:
+        # CALL with OUT param — psycopg2 returns it as a result row
+        row = execute_db_returning(
+            "CALL InsertQuestion(%s, %s, %s, %s, NULL);",
             (data['course_id'], data['text'], data['type'], data['points'])
         )
-    return jsonify({"status": "success"}), 201
+        question_id = row.get('p_question_id') if row else None
+        return jsonify({"status": "success", "question_id": question_id}), 201
+    except Exception as e:
+        msg = str(e).split('\n')[0]
+        return jsonify({"status": "error", "message": msg}), 400
+
+@app.route('/api/questions/<int:q_id>', methods=['PUT'])
+def update_question(q_id):
+    data = request.get_json()
+    try:
+        execute_db("CALL UpdateQuestion(%s, %s, %s, %s, %s);",
+                    (q_id, data.get('course_id'), data.get('text'), data.get('type'), data.get('points')))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 @app.route('/api/questions/<int:q_id>', methods=['DELETE'])
 def delete_question(q_id):
-    execute_db("CALL DeleteQuestion(%s);", (q_id,))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL DeleteQuestion(%s);", (q_id,))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 
 # ======================== OPTIONS CRUD ========================
@@ -378,15 +553,26 @@ def get_options(q_id):
 
 @app.route('/api/questions/<int:q_id>/options', methods=['POST'])
 def add_option(q_id):
+    """InsertOption has OUT param: CALL InsertOption(question_id, text, order, NULL)"""
     data = request.get_json()
-    execute_db("CALL InsertOption(%s, %s, %s, NULL);", (q_id, data['text'], data['order']))
-    return jsonify({"status": "success"}), 201
+    try:
+        row = execute_db_returning(
+            "CALL InsertOption(%s, %s, %s, NULL);",
+            (q_id, data['text'], data['order'])
+        )
+        option_id = row.get('p_option_id') if row else None
+        return jsonify({"status": "success", "option_id": option_id}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 @app.route('/api/questions/<int:q_id>/model_answer', methods=['POST'])
 def set_model_answer(q_id):
     data = request.get_json()
-    execute_db("CALL SetModelAnswer(%s, %s);", (q_id, data['correct_option_id']))
-    return jsonify({"status": "success"})
+    try:
+        execute_db("CALL SetModelAnswer(%s, %s);", (q_id, data['correct_option_id']))
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 
 # ======================== REPORTS (PDF) ========================
@@ -395,6 +581,9 @@ def report_students_by_dept(dept_id):
     conn = get_db()
     try:
         rows = fetch_cursor_results(conn, "CALL Report_StudentsByDepartment(%s, 'rpt');", (dept_id,))
+    except Exception as e:
+        conn.close()
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
     finally:
         conn.close()
 
@@ -404,6 +593,8 @@ def report_students_by_dept(dept_id):
     pdf.cell(200, 10, txt=f"Students in Department {dept_id}", ln=True, align='C')
     pdf.ln(10)
     pdf.set_font("Arial", size=10)
+    if not rows:
+        pdf.cell(200, 8, txt="No students found for this department.", ln=True)
     for row in rows:
         line = f"ID: {row.get('studentid','')} | {row.get('name','')} | {row.get('email','')} | Track: {row.get('trackname','')}"
         pdf.cell(200, 8, txt=line, ln=True)
@@ -416,6 +607,9 @@ def report_student_grades(student_id):
     conn = get_db()
     try:
         rows = fetch_cursor_results(conn, "CALL Report_StudentGrades(%s, 'rpt');", (student_id,))
+    except Exception as e:
+        conn.close()
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
     finally:
         conn.close()
 
@@ -425,8 +619,11 @@ def report_student_grades(student_id):
     pdf.cell(200, 10, txt=f"Grades for Student {student_id}", ln=True, align='C')
     pdf.ln(10)
     pdf.set_font("Arial", size=10)
+    if not rows:
+        pdf.cell(200, 8, txt="No grades found for this student.", ln=True)
     for row in rows:
-        line = f"{row.get('coursename','')} - {row.get('examname','')} | Grade: {row.get('totalgrade',0)}/{row.get('maxdegree',0)} ({row.get('percentage',0):.1f}%)"
+        pct = row.get('percentage', 0) or 0
+        line = f"{row.get('coursename','')} - {row.get('examname','')} | Grade: {row.get('totalgrade',0)}/{row.get('maxdegree',0)} ({pct:.1f}%)"
         pdf.cell(200, 8, txt=line, ln=True)
 
     buf = io.BytesIO(pdf.output(dest='S').encode('latin-1'))
@@ -437,6 +634,9 @@ def report_instructor_courses(inst_id):
     conn = get_db()
     try:
         rows = fetch_cursor_results(conn, "CALL Report_InstructorCourses(%s, 'rpt');", (inst_id,))
+    except Exception as e:
+        conn.close()
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
     finally:
         conn.close()
 
@@ -446,6 +646,8 @@ def report_instructor_courses(inst_id):
     pdf.cell(200, 10, txt=f"Courses for Instructor {inst_id}", ln=True, align='C')
     pdf.ln(10)
     pdf.set_font("Arial", size=10)
+    if not rows:
+        pdf.cell(200, 8, txt="No courses found for this instructor.", ln=True)
     for row in rows:
         line = f"{row.get('coursename','')} | Track: {row.get('trackname','')} | Students: {row.get('studentcount',0)}"
         pdf.cell(200, 8, txt=line, ln=True)
@@ -458,22 +660,31 @@ def report_instructor_courses(inst_id):
 @app.route('/api/track_courses', methods=['POST'])
 def assign_track_course():
     data = request.get_json()
-    execute_db("CALL InsertTrackCourse(%s, %s);", (data['track_id'], data['course_id']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL InsertTrackCourse(%s, %s);", (data['track_id'], data['course_id']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 # ======================== STUDENT-TRACK ASSIGNMENT ========================
 @app.route('/api/student_tracks', methods=['POST'])
 def assign_student_track():
     data = request.get_json()
-    execute_db("CALL AssignStudentToTrack(%s, %s);", (data['student_id'], data['track_id']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL AssignStudentToTrack(%s, %s);", (data['student_id'], data['track_id']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 # ======================== INSTRUCTOR-COURSE ASSIGNMENT ========================
 @app.route('/api/instructor_courses', methods=['POST'])
 def assign_instructor_course():
     data = request.get_json()
-    execute_db("CALL AssignInstructorToCourse(%s, %s);", (data['instructor_id'], data['course_id']))
-    return jsonify({"status": "success"}), 201
+    try:
+        execute_db("CALL AssignInstructorToCourse(%s, %s);", (data['instructor_id'], data['course_id']))
+        return jsonify({"status": "success"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e).split('\n')[0]}), 400
 
 
 if __name__ == '__main__':

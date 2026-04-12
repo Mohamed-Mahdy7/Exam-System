@@ -5,8 +5,9 @@
 
 {% block sidebar %}
 <div class="nav-category">Assessments</div>
-<a href="#" class="nav-link active" onclick="showSection('available')">📋 Available Exams</a>
-<a href="#" class="nav-link" onclick="showSection('take-exam')">✏️ Take Exam</a>
+<a href="#" class="nav-link active" onclick="showSection('available')">Available Exams</a>
+<a href="#" class="nav-link" onclick="showSection('take-exam')">Take Exam</a>
+<a href="#" class="nav-link" onclick="showSection('results')">My Results</a>
 {% endblock %}
 
 {% block content %}
@@ -30,6 +31,24 @@
     <div id="examAlert" class="alert d-none"></div>
     <div id="examContainer"></div>
 </div>
+
+<!-- RESULTS -->
+<div id="sec-results" class="section-view d-none">
+    <h2 class="h4 fw-bold mb-4">My Exam Results</h2>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Student ID</label>
+        <div class="input-group" style="max-width:300px">
+            <input type="number" class="form-control" id="resultStuId" placeholder="Your Student ID" value="1">
+            <button class="btn btn-teal" onclick="loadResults()">Load</button>
+        </div>
+    </div>
+    <div class="table-container shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>Exam</th><th>Course</th><th>Grade</th><th>Max</th><th>%</th><th>Date</th></tr></thead>
+            <tbody id="results-table"></tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -42,21 +61,28 @@ function showSection(name) {
     document.querySelectorAll('.sidebar .nav-link').forEach(e => e.classList.remove('active'));
     event.target.classList.add('active');
     if (name === 'available') loadAvailableExams();
+    if (name === 'results') loadResults();
 }
 
 function loadAvailableExams() {
     $.getJSON('/api/student/exams', data => {
         $('#avail-table').html(data.map(r => `<tr>
             <td>${r.examid}</td><td class="text-teal fw-bold">${r.examname}</td><td>${r.coursename}</td><td>${r.totalquestions||'—'}</td>
-            <td><button class="btn btn-teal btn-sm" onclick="startExam(${r.examid}, '${r.examname}')">Start Exam</button></td>
+            <td><button class="btn btn-teal btn-sm" onclick="startExam(${r.examid}, '${esc(r.examname)}')">Start Exam</button></td>
         </tr>`).join(''));
     });
 }
 
+function esc(s) { return (s||'').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
 function startExam(examId, examName) {
     currentExamId = examId;
     examStartTime = new Date().toISOString().slice(0,19).replace('T',' ');
-    showSection('take-exam');
+    // Switch to take-exam section
+    document.querySelectorAll('.section-view').forEach(e => e.classList.add('d-none'));
+    document.getElementById('sec-take-exam').classList.remove('d-none');
+    $('#examAlert').addClass('d-none');
+
     $.getJSON('/api/student/exam/' + examId + '/questions', data => {
         if (!data.length) { $('#examContainer').html('<p class="text-muted">No questions found for this exam.</p>'); return; }
         let html = `<h2 class="h4 fw-bold mb-1">${examName}</h2><p class="text-muted mb-4">${data.length} questions</p>`;
@@ -83,12 +109,48 @@ function submitExam() {
         let chosen = $(this).find('.answer-radio:checked').val();
         if (chosen) answers.push({ question_id: qid, chosen_option_id: +chosen });
     });
+
+    if (answers.length === 0) {
+        $('#examAlert').removeClass('d-none alert-success').addClass('alert-danger').text('Please answer at least one question.');
+        return;
+    }
+
     let endTime = new Date().toISOString().slice(0,19).replace('T',' ');
     $.ajax({
         url: '/api/submit_exam', type: 'POST', contentType: 'application/json',
-        data: JSON.stringify({ student_id: +$('#stuId').val(), exam_id: currentExamId, start_time: examStartTime, end_time: endTime, answers: answers }),
-        success: res => { $('#examAlert').removeClass('d-none alert-danger').addClass('alert-success').text(res.message); $('#examContainer').html(''); },
-        error: xhr => { $('#examAlert').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Submission failed'); }
+        data: JSON.stringify({
+            student_id: +$('#stuId').val(),
+            exam_id: currentExamId,
+            start_time: examStartTime,
+            end_time: endTime,
+            answers: answers
+        }),
+        success: res => {
+            $('#examAlert').removeClass('d-none alert-danger').addClass('alert-success').text(res.message);
+            $('#examContainer').html('');
+        },
+        error: xhr => {
+            $('#examAlert').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Submission failed');
+        }
+    });
+}
+
+function loadResults() {
+    let sid = $('#resultStuId').val();
+    if (!sid) return;
+    $.getJSON('/api/student/' + sid + '/results', data => {
+        if (!data.length) {
+            $('#results-table').html('<tr><td colspan="6" class="text-muted text-center">No results found.</td></tr>');
+            return;
+        }
+        $('#results-table').html(data.map(r => `<tr>
+            <td class="fw-bold">${r.examname}</td>
+            <td>${r.coursename}</td>
+            <td>${r.totalgrade !== null ? r.totalgrade : '—'}</td>
+            <td>${r.maxdegree}</td>
+            <td>${r.percentage !== null ? r.percentage + '%' : '—'}</td>
+            <td>${r.starttime ? new Date(r.starttime).toLocaleDateString() : '—'}</td>
+        </tr>`).join(''));
     });
 }
 

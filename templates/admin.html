@@ -11,6 +11,8 @@
 <div class="nav-category">User Management</div>
 <a href="#" class="nav-link" onclick="showSection('instructors')">Instructors</a>
 <a href="#" class="nav-link" onclick="showSection('students')">Students</a>
+<div class="nav-category">Assignments</div>
+<a href="#" class="nav-link" onclick="showSection('assignments')">Assign Relations</a>
 {% endblock %}
 
 {% block content %}
@@ -84,6 +86,40 @@
     </div>
 </div>
 
+<!-- ASSIGNMENTS SECTION -->
+<div id="sec-assignments" class="section-view d-none">
+    <h2 class="h4 fw-bold mb-4">Assign Relations</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4">
+                <h5 class="fw-bold mb-3">Track ↔ Course</h5>
+                <input class="form-control mb-2" id="asgTrackId" type="number" placeholder="Track ID">
+                <input class="form-control mb-2" id="asgCourseId" type="number" placeholder="Course ID">
+                <button class="btn btn-teal w-100" onclick="assignTrackCourse()">Assign</button>
+                <div id="asgTCMsg" class="mt-2 small"></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4">
+                <h5 class="fw-bold mb-3">Student ↔ Track</h5>
+                <input class="form-control mb-2" id="asgStudentId" type="number" placeholder="Student ID">
+                <input class="form-control mb-2" id="asgStuTrackId" type="number" placeholder="Track ID">
+                <button class="btn btn-teal w-100" onclick="assignStudentTrack()">Assign</button>
+                <div id="asgSTMsg" class="mt-2 small"></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4">
+                <h5 class="fw-bold mb-3">Instructor ↔ Course</h5>
+                <input class="form-control mb-2" id="asgInstId" type="number" placeholder="Instructor ID">
+                <input class="form-control mb-2" id="asgInstCourseId" type="number" placeholder="Course ID">
+                <button class="btn btn-teal w-100" onclick="assignInstructorCourse()">Assign</button>
+                <div id="asgICMsg" class="mt-2 small"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL -->
 <div id="crudModal" class="modal-overlay d-none">
     <div class="modal-box">
@@ -108,7 +144,7 @@ function showSection(name) {
     document.querySelectorAll('.sidebar .nav-link').forEach(e => e.classList.remove('active'));
     event.target.classList.add('active');
     currentSection = name;
-    loadData(name);
+    if (name !== 'assignments') loadData(name);
 }
 
 function loadData(section) {
@@ -116,38 +152,46 @@ function loadData(section) {
         departments: () => $.getJSON('/api/departments', data => {
             $('#dept-table').html(data.map(r => `<tr>
                 <td>${r.departmentid}</td><td class="text-teal fw-bold">${r.departmentname}</td><td>${r.location||''}</td>
-                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('department',${r.departmentid},'${esc(r.departmentname)}','${esc(r.location||'')}')">Edit</button>
-                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('departments',${r.departmentid})">Delete</button></td></tr>`).join(''));
+                <td>
+                    <button class="btn btn-sm btn-link text-success" onclick='openEditModal("department",${r.departmentid},${JSON.stringify(r.departmentname)},${JSON.stringify(r.location||"")})'>Edit</button>
+                    <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('departments',${r.departmentid})">Delete</button>
+                </td></tr>`).join(''));
         }),
         tracks: () => $.getJSON('/api/tracks', data => {
             $('#track-table').html(data.map(r => `<tr>
                 <td>${r.trackid}</td><td class="text-teal fw-bold">${r.trackname}</td><td>${r.departmentname||''}</td>
-                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('track',${r.trackid},'${esc(r.trackname)}',${r.departmentid})">Edit</button>
-                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('tracks',${r.trackid})">Delete</button></td></tr>`).join(''));
+                <td>
+                    <button class="btn btn-sm btn-link text-success" onclick='openEditModal("track",${r.trackid},${JSON.stringify(r.trackname)},${r.departmentid})'>Edit</button>
+                    <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('tracks',${r.trackid})">Delete</button>
+                </td></tr>`).join(''));
         }),
         courses: () => $.getJSON('/api/courses', data => {
             $('#course-table').html(data.map(r => `<tr>
                 <td>${r.courseid}</td><td class="text-teal fw-bold">${r.coursename}</td><td>${r.mindegree}</td><td>${r.maxdegree}</td>
-                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('course',${r.courseid},'${esc(r.coursename)}',${r.mindegree},${r.maxdegree})">Edit</button>
-                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('courses',${r.courseid})">Delete</button></td></tr>`).join(''));
+                <td>
+                    <button class="btn btn-sm btn-link text-success" onclick='openEditModal("course",${r.courseid},${JSON.stringify(r.coursename)},${r.mindegree},${r.maxdegree})'>Edit</button>
+                    <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('courses',${r.courseid})">Delete</button>
+                </td></tr>`).join(''));
         }),
         instructors: () => $.getJSON('/api/instructors', data => {
             $('#inst-table').html(data.map(r => `<tr>
                 <td>${r.instructorid}</td><td class="text-teal fw-bold">${r.name}</td><td>${r.email||''}</td><td>${r.departmentname||''}</td>
-                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('instructor',${r.instructorid},'${esc(r.name)}','${esc(r.email||'')}',${r.departmentno||'null'})">Edit</button>
-                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('instructors',${r.instructorid})">Delete</button></td></tr>`).join(''));
+                <td>
+                    <button class="btn btn-sm btn-link text-success" onclick='openEditModal("instructor",${r.instructorid},${JSON.stringify(r.name)},${JSON.stringify(r.email||"")},${r.departmentno||"null"})'>Edit</button>
+                    <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('instructors',${r.instructorid})">Delete</button>
+                </td></tr>`).join(''));
         }),
         students: () => $.getJSON('/api/students', data => {
             $('#stu-table').html(data.map(r => `<tr>
                 <td>${r.studentid}</td><td class="text-teal fw-bold">${r.name}</td><td>${r.email||''}</td><td>${r.phone||''}</td>
-                <td><button class="btn btn-sm btn-link text-success" onclick="openEditModal('student',${r.studentid},'${esc(r.name)}','${esc(r.email||'')}','${esc(r.phone||'')}')">Edit</button>
-                <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('students',${r.studentid})">Delete</button></td></tr>`).join(''));
+                <td>
+                    <button class="btn btn-sm btn-link text-success" onclick='openEditModal("student",${r.studentid},${JSON.stringify(r.name)},${JSON.stringify(r.email||"")},${JSON.stringify(r.phone||"")})'>Edit</button>
+                    <button class="btn btn-sm btn-link text-danger" onclick="deleteEntity('students',${r.studentid})">Delete</button>
+                </td></tr>`).join(''));
         }),
     };
     if (loaders[section]) loaders[section]();
 }
-
-function esc(s) { return (s||'').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
 
 function openAddModal(entity) {
     modalEntity = entity; modalMode = 'add'; modalId = null;
@@ -173,11 +217,30 @@ function openAddModal(entity) {
 
 function openEditModal(entity, id, ...vals) {
     modalEntity = entity; modalMode = 'edit'; modalId = id;
-    openAddModal(entity);
+    // Build the form first
+    const forms = {
+        department: `<input class="form-control mb-2" id="f1" placeholder="Department Name" required>
+                     <input class="form-control mb-2" id="f2" placeholder="Location">`,
+        track: `<input class="form-control mb-2" id="f1" placeholder="Track Name" required>
+                <input class="form-control mb-2" id="f2" placeholder="Department ID" type="number" required>`,
+        course: `<input class="form-control mb-2" id="f1" placeholder="Course Name" required>
+                 <input class="form-control mb-2" id="f2" placeholder="Min Degree" type="number" required>
+                 <input class="form-control mb-2" id="f3" placeholder="Max Degree" type="number" required>`,
+        instructor: `<input class="form-control mb-2" id="f1" placeholder="Name" required>
+                     <input class="form-control mb-2" id="f2" placeholder="Email" type="email" required>
+                     <input class="form-control mb-2" id="f3" placeholder="Department ID" type="number" required>`,
+        student: `<input class="form-control mb-2" id="f1" placeholder="Name" required>
+                  <input class="form-control mb-2" id="f2" placeholder="Email" type="email" required>
+                  <input class="form-control mb-2" id="f3" placeholder="Phone">`,
+    };
     $('#modalTitle').text('Edit ' + entity.charAt(0).toUpperCase() + entity.slice(1));
-    if (vals[0] !== undefined) $('#f1').val(vals[0]);
-    if (vals[1] !== undefined) $('#f2').val(vals[1]);
-    if (vals[2] !== undefined) $('#f3').val(vals[2]);
+    $('#crudForm').html(forms[entity]);
+    $('#crudModal').removeClass('d-none');
+
+    // Now populate with current values
+    if (vals[0] !== undefined && vals[0] !== null) $('#f1').val(vals[0]);
+    if (vals[1] !== undefined && vals[1] !== null) $('#f2').val(vals[1]);
+    if (vals[2] !== undefined && vals[2] !== null) $('#f3').val(vals[2]);
 }
 
 function closeModal() { $('#crudModal').addClass('d-none'); }
@@ -205,6 +268,29 @@ function deleteEntity(endpoint, id) {
     $.ajax({ url: '/api/' + endpoint + '/' + id, type: 'DELETE',
         success: () => loadData(endpoint),
         error: (xhr) => alert('Error: ' + (xhr.responseJSON?.message || xhr.statusText))
+    });
+}
+
+// Assignment functions
+function assignTrackCourse() {
+    $.ajax({ url: '/api/track_courses', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ track_id: +$('#asgTrackId').val(), course_id: +$('#asgCourseId').val() }),
+        success: () => { $('#asgTCMsg').html('<span class="text-success">✓ Assigned!</span>'); },
+        error: xhr => { $('#asgTCMsg').html('<span class="text-danger">✗ ' + (xhr.responseJSON?.message || 'Error') + '</span>'); }
+    });
+}
+function assignStudentTrack() {
+    $.ajax({ url: '/api/student_tracks', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ student_id: +$('#asgStudentId').val(), track_id: +$('#asgStuTrackId').val() }),
+        success: () => { $('#asgSTMsg').html('<span class="text-success">✓ Assigned!</span>'); },
+        error: xhr => { $('#asgSTMsg').html('<span class="text-danger">✗ ' + (xhr.responseJSON?.message || 'Error') + '</span>'); }
+    });
+}
+function assignInstructorCourse() {
+    $.ajax({ url: '/api/instructor_courses', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ instructor_id: +$('#asgInstId').val(), course_id: +$('#asgInstCourseId').val() }),
+        success: () => { $('#asgICMsg').html('<span class="text-success">✓ Assigned!</span>'); },
+        error: xhr => { $('#asgICMsg').html('<span class="text-danger">✗ ' + (xhr.responseJSON?.message || 'Error') + '</span>'); }
     });
 }
 

@@ -134,46 +134,46 @@ Departments ──< Track ──< TrackCourse >── Course ──< Questions �
 - PostgreSQL 14 or higher
 - `psql` CLI or pgAdmin / DBeaver
 
-### Setup (run in order)
+### Setup (Bash)
 
-```sql
--- 1. Create the database
-CREATE DATABASE exam_db;
-
--- 2. Connect to it
-\c exam_db
-
--- 3. Create tables
-\i <your path to this repo>/database/schema/tables.sql
-
--- 4. Apply constraints and indexes
-\i <your path to this repo>/database/schema/constraints.sql
-\i <your path to this repo>/database/schema/indexes.sql
-
--- 5. Create roles & GRANT - REVOKE Privileges
-\i <your path to this repo>/database/schema/roles.sql
-
--- 6. Load seed data
-\i <your path to this repo>/database/seed/sample_data.sql
-
--- 7. Load all stored procedures
-\i <your path to this repo>/database/procedures/department_crud.sql
-\i <your path to this repo>/database/procedures/Track_crud.sql
-\i <your path to this repo>/database/procedures/Course_crud.sql
-\i <your path to this repo>/database/procedures/TrackCourse_crud.sql
-\i <your path to this repo>/database/procedures/instructor_crud.sql
-\i <your path to this repo>/database/procedures/student_crud.sql
-\i <your path to this repo>/database/procedures/exam_crud.sql
-\i <your path to this repo>/database/procedures/exam_question.sql
-\i <your path to this repo>/database/procedures/student_exam.sql
-\i <your path to this repo>/database/procedures/questions_CRUD.sql
-\i <your path to this repo>/database/procedures/options_CRUD.sql
-\i <your path to this repo>/database/procedures/Answers_CRUD.sql
-\i <your path to this repo>/database/procedures/GenerateExam.sql
-\i <your path to this repo>/database/procedures/CorrectExam.sql
-\i <your path to this repo>/database/procedures/SubmitExamAnswers.sql
-\i <your path to this repo>/database/reports/reports.sql
+```bash
+run setup.sh as source from the repo path
+. ./setup.sh
 ```
+---
+
+## GUI Setup Instructions
+
+### 1. Install Python Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configure Database Connection
+Set environment variables (or edit `app.py` defaults):
+```bash
+export DB_HOST=localhost
+export DB_PORT=5432
+export DB_NAME=exam_db
+export DB_USER=postgres
+export DB_PASSWORD=<Your DB Password>
+```
+
+### 4. Run the Application
+```bash
+python app.py
+```
+Visit `http://localhost:5000`
+
+## Login
+- Type **admin** in email → Admin Dashboard
+- Type **instructor** in email → Instructor Dashboard
+- Any other email → Student Dashboard
+
+## Features
+- **Admin**: Full CRUD for Departments, Tracks, Courses, Instructors, Students
+- **Instructor**: Generate exams, view question bank, download PDF reports
+- **Student**: Browse available exams, take exams with MCQ/TF, auto-correction
 
 ---
 

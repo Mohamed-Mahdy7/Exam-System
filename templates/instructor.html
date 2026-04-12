@@ -5,11 +5,12 @@
 
 {% block sidebar %}
 <div class="nav-category">Exam Management</div>
-<a href="#" class="nav-link active" onclick="showSection('generate')">🎲 Generate Exam</a>
-<a href="#" class="nav-link" onclick="showSection('questions')">❓ Question Bank</a>
-<a href="#" class="nav-link" onclick="showSection('exams')">📝 View Exams</a>
+<a href="#" class="nav-link active" onclick="showSection('generate')">Generate Exam</a>
+<a href="#" class="nav-link" onclick="showSection('questions')">Question Bank</a>
+<a href="#" class="nav-link" onclick="showSection('add-question')">Add Question</a>
+<a href="#" class="nav-link" onclick="showSection('exams')">View Exams</a>
 <div class="nav-category">Reports</div>
-<a href="#" class="nav-link" onclick="showSection('reports')">📊 Reports</a>
+<a href="#" class="nav-link" onclick="showSection('reports')">Reports</a>
 {% endblock %}
 
 {% block content %}
@@ -42,6 +43,43 @@
     </div>
 </div>
 
+<!-- ADD QUESTION -->
+<div id="sec-add-question" class="section-view d-none">
+    <h2 class="h4 fw-bold mb-4">Add New Question</h2>
+    <div class="card shadow-sm border-0" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <div id="addQMsg" class="alert d-none"></div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">Course</label>
+                <select class="form-select" id="addQCourse"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">Question Text</label>
+                <textarea class="form-control" id="addQText" rows="2" placeholder="Enter question text"></textarea>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label fw-bold text-secondary">Type</label>
+                    <select class="form-select" id="addQType" onchange="updateOptionFields()">
+                        <option value="MCQ">MCQ (4 options)</option>
+                        <option value="TF">True/False (2 options)</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-bold text-secondary">Points</label>
+                    <input type="number" class="form-control" id="addQPoints" min="1" value="1">
+                </div>
+            </div>
+            <div id="optionFields"></div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">Correct Answer (Option #)</label>
+                <select class="form-select" id="addQCorrect"></select>
+            </div>
+            <button class="btn btn-teal w-100 py-2" onclick="addFullQuestion()">Add Question with Options & Answer</button>
+        </div>
+    </div>
+</div>
+
 <!-- QUESTION BANK -->
 <div id="sec-questions" class="section-view d-none">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -54,7 +92,7 @@
     </div>
     <div class="table-container shadow-sm">
         <table class="table table-hover mb-0">
-            <thead><tr><th>ID</th><th>Course</th><th>Question</th><th>Type</th><th>Points</th></tr></thead>
+            <thead><tr><th>ID</th><th>Course</th><th>Question</th><th>Type</th><th>Points</th><th>Actions</th></tr></thead>
             <tbody id="q-table"></tbody>
         </table>
     </div>
@@ -103,22 +141,114 @@ function showSection(name) {
     event.target.classList.add('active');
     if (name === 'questions') loadQuestions();
     if (name === 'exams') loadExams();
+    if (name === 'add-question') updateOptionFields();
 }
 
 function loadCourses() {
     $.getJSON('/api/courses', data => {
         let opts = data.map(c => `<option value="${c.courseid}">${c.coursename}</option>`).join('');
         $('#genCourse').html(opts);
+        $('#addQCourse').html(opts);
         $('#qCourseFilter').html('<option value="">All Courses</option>' + opts);
     });
 }
 
 function generateExam() {
+    let name = $('#genName').val().trim();
+    if (!name) { $('#genMsg').removeClass('d-none alert-success').addClass('alert-danger').text('Exam name is required'); return; }
     $.ajax({ url: '/api/exams/generate', type: 'POST', contentType: 'application/json',
-        data: JSON.stringify({ course_id: +$('#genCourse').val(), exam_name: $('#genName').val(), num_mcq: +$('#genMCQ').val(), num_tf: +$('#genTF').val() }),
+        data: JSON.stringify({
+            course_id: +$('#genCourse').val(),
+            exam_name: name,
+            num_mcq: +$('#genMCQ').val(),
+            num_tf: +$('#genTF').val()
+        }),
         success: res => $('#genMsg').removeClass('d-none alert-danger').addClass('alert-success').text(res.message),
-        error: xhr => $('#genMsg').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Error')
+        error: xhr => $('#genMsg').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Error generating exam')
     });
+}
+
+function updateOptionFields() {
+    let type = $('#addQType').val();
+    let count = type === 'MCQ' ? 4 : 2;
+    let html = '<label class="form-label fw-bold text-secondary">Options</label>';
+    for (let i = 1; i <= count; i++) {
+        let placeholder = type === 'TF' ? (i === 1 ? 'True' : 'False') : `Option ${i}`;
+        let defaultVal = type === 'TF' ? (i === 1 ? 'True' : 'False') : '';
+        html += `<input class="form-control mb-2 opt-input" id="opt${i}" placeholder="${placeholder}" value="${defaultVal}">`;
+    }
+    $('#optionFields').html(html);
+    let correctOpts = '';
+    for (let i = 1; i <= count; i++) {
+        correctOpts += `<option value="${i}">Option ${i}</option>`;
+    }
+    $('#addQCorrect').html(correctOpts);
+}
+
+function addFullQuestion() {
+    let courseId = +$('#addQCourse').val();
+    let text = $('#addQText').val().trim();
+    let type = $('#addQType').val();
+    let points = +$('#addQPoints').val();
+    let correctOrder = +$('#addQCorrect').val();
+
+    if (!text) { showQMsg('Question text is required', 'danger'); return; }
+
+    let options = [];
+    $('.opt-input').each(function(i) {
+        let val = $(this).val().trim();
+        if (val) options.push({ text: val, order: i + 1 });
+    });
+
+    let expectedCount = type === 'MCQ' ? 4 : 2;
+    if (options.length < expectedCount) { showQMsg(`Please fill all ${expectedCount} options`, 'danger'); return; }
+
+    // Step 1: Create question
+    $.ajax({
+        url: '/api/questions', type: 'POST', contentType: 'application/json',
+        data: JSON.stringify({ course_id: courseId, text: text, type: type, points: points }),
+        success: function(res) {
+            let qid = res.question_id;
+            if (!qid) { showQMsg('Question created but could not get ID', 'warning'); return; }
+
+            // Step 2: Add options one by one, then set model answer
+            let optionPromises = options.map(opt =>
+                $.ajax({
+                    url: '/api/questions/' + qid + '/options', type: 'POST', contentType: 'application/json',
+                    data: JSON.stringify({ text: opt.text, order: opt.order })
+                })
+            );
+
+            Promise.all(optionPromises).then(results => {
+                // Find the option_id that matches correctOrder
+                let correctOptionId = null;
+                results.forEach((r, i) => {
+                    if (options[i].order === correctOrder && r.option_id) {
+                        correctOptionId = r.option_id;
+                    }
+                });
+
+                if (correctOptionId) {
+                    // Step 3: Set model answer
+                    $.ajax({
+                        url: '/api/questions/' + qid + '/model_answer', type: 'POST', contentType: 'application/json',
+                        data: JSON.stringify({ correct_option_id: correctOptionId }),
+                        success: () => showQMsg('Question, options, and model answer added successfully!', 'success'),
+                        error: xhr => showQMsg('Question & options added, but model answer failed: ' + (xhr.responseJSON?.message || ''), 'warning')
+                    });
+                } else {
+                    showQMsg('Question & options added, but could not determine correct option ID for model answer.', 'warning');
+                }
+            }).catch(() => {
+                showQMsg('Question created but some options failed to add.', 'warning');
+            });
+        },
+        error: xhr => showQMsg(xhr.responseJSON?.message || 'Error creating question', 'danger')
+    });
+}
+
+function showQMsg(msg, type) {
+    $('#addQMsg').removeClass('d-none alert-danger alert-success alert-warning').addClass('alert-' + type).text(msg);
 }
 
 function loadQuestions() {
@@ -126,13 +256,32 @@ function loadQuestions() {
     let cid = $('#qCourseFilter').val();
     if (cid) url += '?course_id=' + cid;
     $.getJSON(url, data => {
-        $('#q-table').html(data.map(r => `<tr><td>${r.questionid}</td><td>${r.coursename}</td><td>${r.questiontext}</td><td><span class="badge bg-${r.type==='MCQ'?'primary':'warning'}">${r.type}</span></td><td>${r.points}</td></tr>`).join(''));
+        $('#q-table').html(data.map(r => `<tr>
+            <td>${r.questionid}</td><td>${r.coursename}</td>
+            <td>${r.questiontext}</td>
+            <td><span class="badge bg-${r.type==='MCQ'?'primary':'warning'}">${r.type}</span></td>
+            <td>${r.points}</td>
+            <td><button class="btn btn-sm btn-link text-danger" onclick="deleteQuestion(${r.questionid})">Delete</button></td>
+        </tr>`).join(''));
+    });
+}
+
+function deleteQuestion(qid) {
+    if (!confirm('Delete this question?')) return;
+    $.ajax({
+        url: '/api/questions/' + qid, type: 'DELETE',
+        success: () => loadQuestions(),
+        error: xhr => alert(xhr.responseJSON?.message || 'Error')
     });
 }
 
 function loadExams() {
     $.getJSON('/api/exams', data => {
-        $('#exam-table').html(data.map(r => `<tr><td>${r.examid}</td><td class="text-teal fw-bold">${r.examname}</td><td>${r.coursename||''}</td><td>${r.totalquestions||0}</td><td>${r.createddate?new Date(r.createddate).toLocaleDateString():''}</td></tr>`).join(''));
+        $('#exam-table').html(data.map(r => `<tr>
+            <td>${r.examid}</td><td class="text-teal fw-bold">${r.examname}</td>
+            <td>${r.coursename||''}</td><td>${r.totalquestions||0}</td>
+            <td>${r.createddate?new Date(r.createddate).toLocaleDateString():''}</td>
+        </tr>`).join(''));
     });
 }
 
