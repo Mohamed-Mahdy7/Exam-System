@@ -39,11 +39,11 @@ INSERT INTO Track (TrackName, DepartmentID) VALUES
 
 -- Courses (10+ with valid Min/Max)
 INSERT INTO Course (CourseName, MinDegree, MaxDegree) VALUES
-('Programming Fundamentals', 0, 90),
-('Data Structures', 20, 120),
-('Databases', 30, 110),
-('Operating Systems', 25, 150),
-('Computer Networks', 20, 85),
+('Programming Fundamentals', 0, 60),
+('Data Structures', 20, 60),
+('Databases', 30, 100),
+('Operating Systems', 25, 100),
+('Computer Networks', 20, 100),
 ('Cloud Computing', 30, 100),
 ('Machine Learning Basics', 40, 100),
 ('Deep Learning Advanced', 50, 100),
